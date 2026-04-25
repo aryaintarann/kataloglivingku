@@ -41,7 +41,7 @@ export default function Footer() {
           </ul>
         </div>
         <div className="legal">
-          <span>© 2025 Partner Livingku. Dibuat dengan ♥ di Indonesia.</span>
+          <span>© 2026 Partner Livingku. Dibuat dengan ♥ di Indonesia.</span>
           <div className="links">
             <Link href="/privacy-policy">Privacy Policy</Link>
             <Link href="/terms-of-service">Syarat &amp; Ketentuan</Link>

@@ -112,51 +112,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ========== CITIES ========== */}
-        <section className="section" id="cities">
-          <div className="container">
-            <div className="section-head reveal">
-              <span className="eyebrow">Sebaran Layanan</span>
-              <h2>Tersedia di Kota-Kota Besar Indonesia</h2>
-              <p>Pilih kota tujuanmu — kami sudah menyiapkan ratusan listing terverifikasi di lokasi strategis dekat kampus, perkantoran, dan transportasi umum.</p>
-            </div>
-
-            <div className="city-grid reveal-stagger">
-              <a href="#services" className="city-card">
-                <div className="bg bg-jkt" />
-                <span className="badge">142 listing</span>
-                <div className="info"><h3>Jakarta</h3><span>Pusat · Selatan · Barat</span></div>
-              </a>
-              <a href="#services" className="city-card">
-                <div className="bg bg-bdg" />
-                <span className="badge">96 listing</span>
-                <div className="info"><h3>Bandung</h3><span>Dago · Cihampelas · Setiabudi</span></div>
-              </a>
-              <a href="#services" className="city-card">
-                <div className="bg bg-sby" />
-                <span className="badge">78 listing</span>
-                <div className="info"><h3>Surabaya</h3><span>Gubeng · Wonokromo</span></div>
-              </a>
-              <a href="#services" className="city-card">
-                <div className="bg bg-bali" />
-                <span className="badge">64 listing</span>
-                <div className="info"><h3>Bali</h3><span>Seminyak · Canggu · Ubud</span></div>
-              </a>
-              <a href="#services" className="city-card">
-                <div className="bg bg-jog" />
-                <span className="badge">88 listing</span>
-                <div className="info"><h3>Yogyakarta</h3><span>Catur Tunggal · Sleman</span></div>
-              </a>
-              <a href="#services" className="city-card">
-                <div className="bg bg-mdn" />
-                <span className="badge">52 listing</span>
-                <div className="info"><h3>Medan</h3><span>Helvetia · Polonia</span></div>
-              </a>
-            </div>
-          </div>
-        </section>
-
-        <div className="container"><div className="gold-line" /></div>
 
         {/* ========== ABOUT ========== */}
         <section className="section about" id="about">
@@ -255,7 +210,17 @@ export default function Home() {
 
             <div className="listing-grid" id="listingGrid">
 
-              <article className="listing reveal" data-cat="kost">
+              <article className="listing reveal" data-cat="kost"
+                data-title="Kost Eksklusif Menteng"
+                data-loc="Jakarta Pusat"
+                data-type="Kost Eksklusif"
+                data-price="Rp 2.500.000"
+                data-period="bln"
+                data-facilities="AC,WiFi,KM Dalam,Parkir"
+                data-desc="Kost eksklusif di jantung Jakarta Pusat, dekat pusat perbelanjaan dan stasiun MRT. Kamar luas dengan interior modern dan furnitur premium, cocok untuk profesional muda yang menginginkan hunian berkelas tanpa kompromi."
+                data-photos="ph-1,ph-3,ph-5"
+                data-wa="Halo,%20saya%20tertarik%20Kost%20Eksklusif%20Menteng%20(JKT-001)"
+              >
                 <div className="photo">
                   <div className="ph ph-1" />
                   <span className="badge-type">Kost Eksklusif</span>
@@ -272,13 +237,23 @@ export default function Home() {
                     <span className="listing-code">JKT-001</span>
                   </div>
                   <div className="actions">
-                    <a href="#contact" className="btn btn-outline">Detail</a>
+                    <button className="btn btn-outline btn-detail">Detail</button>
                     <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Eksklusif%20Menteng`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
                   </div>
                 </div>
               </article>
 
-              <article className="listing reveal" data-cat="apartemen">
+              <article className="listing reveal" data-cat="apartemen"
+                data-title="Apartemen Studio Dago"
+                data-loc="Dago, Bandung"
+                data-type="Apartemen Studio"
+                data-price="Rp 3.200.000"
+                data-period="bln"
+                data-facilities="AC,WiFi,Dapur,Balkon"
+                data-desc="Apartemen studio modern di kawasan Dago yang sejuk dengan pemandangan kota Bandung. Dilengkapi dapur mini dan balkon pribadi, ideal untuk pasangan muda atau profesional yang suka memasak dan bersantai di udara segar."
+                data-photos="ph-2,ph-4,ph-6"
+                data-wa="Halo,%20saya%20tertarik%20Apartemen%20Studio%20Dago%20(BDG-014)"
+              >
                 <div className="photo">
                   <div className="ph ph-2" />
                   <span className="badge-type">Apartemen Studio</span>
@@ -295,13 +270,23 @@ export default function Home() {
                     <span className="listing-code">BDG-014</span>
                   </div>
                   <div className="actions">
-                    <a href="#contact" className="btn btn-outline">Detail</a>
+                    <button className="btn btn-outline btn-detail">Detail</button>
                     <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Apartemen%20Studio%20Dago`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
                   </div>
                 </div>
               </article>
 
-              <article className="listing reveal" data-cat="kost">
+              <article className="listing reveal" data-cat="kost"
+                data-title="Kost Putri Tidar"
+                data-loc="Tidar, Surabaya"
+                data-type="Kost Putri"
+                data-price="Rp 1.200.000"
+                data-period="bln"
+                data-facilities="WiFi,KM Dalam,Laundry"
+                data-desc="Kost putri nyaman dan aman di kawasan Tidar Surabaya, dekat dengan berbagai kampus dan pusat kuliner. Lingkungan kondusif untuk mahasiswi dengan penjaga 24 jam dan peraturan yang tertib."
+                data-photos="ph-3,ph-1,ph-5"
+                data-wa="Halo,%20saya%20tertarik%20Kost%20Putri%20Tidar%20(SBY-022)"
+              >
                 <div className="photo">
                   <div className="ph ph-3" />
                   <span className="badge-type">Kost Putri</span>
@@ -318,13 +303,23 @@ export default function Home() {
                     <span className="listing-code">SBY-022</span>
                   </div>
                   <div className="actions">
-                    <a href="#contact" className="btn btn-outline">Detail</a>
+                    <button className="btn btn-outline btn-detail">Detail</button>
                     <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Putri%20Tidar`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
                   </div>
                 </div>
               </article>
 
-              <article className="listing reveal" data-cat="harian">
+              <article className="listing reveal" data-cat="harian"
+                data-title="Kost Harian Seminyak"
+                data-loc="Seminyak, Bali"
+                data-type="Kost Harian"
+                data-price="Rp 250.000"
+                data-period="hari"
+                data-facilities="AC,WiFi,Pool Access"
+                data-desc="Hunian harian bergaya resort di Seminyak Bali, hanya 5 menit berjalan kaki ke pantai. Akses kolam renang bersama tersedia sepanjang hari — pilihan sempurna untuk liburan singkat maupun workation di Pulau Dewata."
+                data-photos="ph-4,ph-2,ph-6"
+                data-wa="Halo,%20saya%20tertarik%20Kost%20Harian%20Seminyak%20(BLI-007)"
+              >
                 <div className="photo">
                   <div className="ph ph-4" />
                   <span className="badge-type">Kost Harian</span>
@@ -341,13 +336,23 @@ export default function Home() {
                     <span className="listing-code">BLI-007</span>
                   </div>
                   <div className="actions">
-                    <a href="#contact" className="btn btn-outline">Detail</a>
+                    <button className="btn btn-outline btn-detail">Detail</button>
                     <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Harian%20Seminyak`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
                   </div>
                 </div>
               </article>
 
-              <article className="listing reveal" data-cat="kost">
+              <article className="listing reveal" data-cat="kost"
+                data-title="Kost Campur Condongcatur"
+                data-loc="Condongcatur, Yogyakarta"
+                data-type="Kost Campur"
+                data-price="Rp 800.000"
+                data-period="bln"
+                data-facilities="WiFi,Dapur Bersama"
+                data-desc="Kost campur ramah kantong di Condongcatur Yogyakarta, strategis dekat UGM, UNY, dan kawasan Seturan. Suasana kekeluargaan dengan dapur bersama yang lengkap — cocok untuk mahasiswa yang ingin hemat tanpa kehilangan kenyamanan."
+                data-photos="ph-5,ph-3,ph-1"
+                data-wa="Halo,%20saya%20tertarik%20Kost%20Campur%20Condongcatur%20(JOG-031)"
+              >
                 <div className="photo">
                   <div className="ph ph-5" />
                   <span className="badge-type">Kost Campur</span>
@@ -364,13 +369,23 @@ export default function Home() {
                     <span className="listing-code">JOG-031</span>
                   </div>
                   <div className="actions">
-                    <a href="#contact" className="btn btn-outline">Detail</a>
+                    <button className="btn btn-outline btn-detail">Detail</button>
                     <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Campur%20Condongcatur`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
                   </div>
                 </div>
               </article>
 
-              <article className="listing reveal" data-cat="apartemen">
+              <article className="listing reveal" data-cat="apartemen"
+                data-title="Apartemen 1BR Helvetia"
+                data-loc="Helvetia, Medan"
+                data-type="Apartemen 1BR"
+                data-price="Rp 4.500.000"
+                data-period="bln"
+                data-facilities="AC,WiFi,Gym,Security 24h"
+                data-desc="Apartemen satu kamar tidur modern di kawasan Helvetia Medan dengan fasilitas lengkap bintang empat. Dilengkapi gym, keamanan 24 jam, dan lobby yang representatif — pilihan premium untuk profesional dan ekspatriat."
+                data-photos="ph-6,ph-2,ph-4"
+                data-wa="Halo,%20saya%20tertarik%20Apartemen%201BR%20Helvetia%20(MDN-009)"
+              >
                 <div className="photo">
                   <div className="ph ph-6" />
                   <span className="badge-type">Apartemen 1BR</span>
@@ -387,7 +402,7 @@ export default function Home() {
                     <span className="listing-code">MDN-009</span>
                   </div>
                   <div className="actions">
-                    <a href="#contact" className="btn btn-outline">Detail</a>
+                    <button className="btn btn-outline btn-detail">Detail</button>
                     <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Apartemen%201BR%20Helvetia`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
                   </div>
                 </div>
@@ -470,17 +485,6 @@ export default function Home() {
             <div className="faq-list reveal-stagger" id="faqList">
               <div className="faq-item">
                 <button className="faq-q" aria-expanded="false">
-                  <span>Berapa harga kost di Jakarta per bulan?</span>
-                  <span className="ico">+</span>
-                </button>
-                <div className="faq-a">
-                  <div className="faq-a-inner">
-                    Rentang harga kost di Jakarta sangat bervariasi tergantung lokasi dan fasilitas. Untuk kost standar mulai dari Rp 1.200.000/bulan, kost menengah Rp 2–3 juta, dan kost eksklusif di kawasan premium seperti Menteng atau SCBD bisa di kisaran Rp 3,5–6 juta/bulan.
-                  </div>
-                </div>
-              </div>
-              <div className="faq-item">
-                <button className="faq-q" aria-expanded="false">
                   <span>Apakah layanan ini gratis untuk pencari kost?</span>
                   <span className="ico">+</span>
                 </button>
@@ -509,17 +513,6 @@ export default function Home() {
                 <div className="faq-a">
                   <div className="faq-a-inner">
                     Ya. Setiap listing yang tampil di Partner Livingku telah melalui proses verifikasi: pengecekan dokumen properti, kunjungan tim lapangan untuk dokumentasi foto, dan validasi identitas owner.
-                  </div>
-                </div>
-              </div>
-              <div className="faq-item">
-                <button className="faq-q" aria-expanded="false">
-                  <span>Kota apa saja yang tersedia di Partner Livingku?</span>
-                  <span className="ico">+</span>
-                </button>
-                <div className="faq-a">
-                  <div className="faq-a-inner">
-                    Saat ini kami melayani 20+ kota besar di Indonesia, termasuk Jakarta, Bandung, Surabaya, Bali (Denpasar/Seminyak/Canggu), Yogyakarta, Medan, Semarang, Malang, Makassar, dan terus berkembang. Belum ada kotamu? Hubungi tim kami untuk request.
                   </div>
                 </div>
               </div>
@@ -561,6 +554,35 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* ========== LISTING MODAL ========== */}
+        <div className="modal-overlay" id="listingModal" aria-modal="true" role="dialog" aria-label="Detail Hunian">
+          <div className="modal-box">
+            <button className="modal-close" id="modalClose" aria-label="Tutup">✕</button>
+
+            {/* Photo slider */}
+            <div className="modal-slider" id="modalSlider">
+              <div className="slider-track" id="sliderTrack" />
+              <button className="slider-btn slider-prev" id="sliderPrev" aria-label="Foto sebelumnya">‹</button>
+              <button className="slider-btn slider-next" id="sliderNext" aria-label="Foto berikutnya">›</button>
+              <div className="slider-dots" id="sliderDots" />
+              <div className="slider-counter" id="sliderCounter" />
+            </div>
+
+            {/* Content */}
+            <div className="modal-content">
+              <div className="modal-badges" id="modalBadges" />
+              <h2 className="modal-title" id="modalTitle" />
+              <div className="modal-loc" id="modalLoc" />
+              <div className="modal-price" id="modalPrice" />
+              <p className="modal-section-label">Fasilitas</p>
+              <div className="modal-facilities" id="modalFacilities" />
+              <hr className="modal-divider" />
+              <p className="modal-desc" id="modalDesc" />
+              <div className="modal-actions" id="modalActions" />
+            </div>
+          </div>
+        </div>
 
       </main>
 
@@ -604,7 +626,7 @@ export default function Home() {
             </ul>
           </div>
           <div className="legal">
-            <span>© 2025 Partner Livingku.</span>
+            <span>© 2026 Partner Livingku.</span>
             <div className="links">
               <a href="/privacy-policy">Privacy Policy</a>
               <a href="/terms-of-service">Syarat &amp; Ketentuan</a>

@@ -91,14 +91,6 @@ const jsonLd = {
       mainEntity: [
         {
           "@type": "Question",
-          name: "Berapa harga kost di Jakarta per bulan?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Harga kost di Jakarta bervariasi mulai dari Rp 1.200.000 hingga Rp 6.000.000 per bulan tergantung lokasi, tipe, dan fasilitas.",
-          },
-        },
-        {
-          "@type": "Question",
           name: "Apakah layanan Partner Livingku gratis untuk pencari kost?",
           acceptedAnswer: {
             "@type": "Answer",
