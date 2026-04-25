@@ -1,0 +1,28 @@
+# Partner Livingku
+
+> Direktori kost-kostan dan apartemen terpercaya di Indonesia.
+
+## Tentang Kami
+
+Partner Livingku adalah platform pencarian hunian (kost dan apartemen) di seluruh
+Indonesia. Kami menyediakan daftar hunian terverifikasi dengan harga transparan,
+foto real, dan kemudahan kontak langsung ke owner via WhatsApp.
+
+## Layanan
+
+- Kost eksklusif, kost putri, kost pria, kost campur
+- Apartemen studio, 1BR, dan 2BR
+- Sewa harian, mingguan, dan bulanan
+- Tersedia di: Jakarta, Bandung, Surabaya, Bali, Yogyakarta, Medan, dan kota lainnya
+
+## Cara Menggunakan
+
+Pengguna dapat mencari listing hunian di halaman /services, memfilter berdasarkan
+kota dan tipe, lalu menghubungi kami via WhatsApp untuk informasi lebih lanjut.
+
+## Kontak
+
+- WhatsApp: https://wa.me/6281234567890
+- Website: https://partnerlivingku.id
+- Email: halo@partnerlivingku.id
+- Jam Operasional: Senin–Minggu, 08.00–21.00 WIB
