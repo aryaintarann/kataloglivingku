@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 
-// ── Types ────────────────────────────────────────────────────────────────────
+// â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type HeroWidget = { pill: string; name: string; loc: string; price: string; period: string; photo: string };
 type Listing = {
@@ -27,7 +27,7 @@ const EMPTY_LISTING: Listing = {
 };
 const EMPTY_FAQ: Faq = { q: "", a: "" };
 
-// ── Styles ───────────────────────────────────────────────────────────────────
+// â”€â”€ Styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 const S = {
   page: {
@@ -137,7 +137,7 @@ const S = {
   loginError: { color: "#dc2626", fontSize: "13px", marginTop: "10px" },
 };
 
-// ── Shared helpers ────────────────────────────────────────────────────────────
+// â”€â”€ Shared helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
@@ -161,7 +161,7 @@ async function uploadPhoto(file: File, folder: "listings" | "hero", token: strin
   return data.url ?? null;
 }
 
-// ── Photo Grid (shared untuk listing & widget) ────────────────────────────────
+// â”€â”€ Photo Grid (shared untuk listing & widget) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function PhotoGrid({
   photos, onRemove, onAdd, maxPhotos = 6, uploading, token, folder,
@@ -206,13 +206,13 @@ function PhotoGrid({
             type="button"
             onClick={() => onRemove(i)}
             style={{ position: "absolute", top: "4px", right: "4px", background: "rgba(0,0,0,.65)", color: "#fff", border: "none", borderRadius: "50%", width: "22px", height: "22px", cursor: "pointer", fontSize: "13px", lineHeight: 1, padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
-          >✕</button>
+          >âœ•</button>
         </div>
       ))}
       {photos.length < maxPhotos && (
         <label style={{ width: "110px", height: "80px", borderRadius: "8px", border: "2px dashed #d1d5db", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: isBusy ? "default" : "pointer", color: "#9ca3af", fontSize: "12px", gap: "4px", flexShrink: 0 }}>
-          <span style={{ fontSize: "20px", lineHeight: 1 }}>{isBusy ? "⏳" : "+"}</span>
-          <span>{isBusy ? "Uploading…" : "Tambah Foto"}</span>
+          <span style={{ fontSize: "20px", lineHeight: 1 }}>{isBusy ? "â³" : "+"}</span>
+          <span>{isBusy ? "Uploadingâ€¦" : "Tambah Foto"}</span>
           <input type="file" accept="image/*" multiple={maxPhotos > 1} style={{ display: "none" }} onChange={handleFiles} disabled={isBusy} />
         </label>
       )}
@@ -220,7 +220,7 @@ function PhotoGrid({
   );
 }
 
-// ── Login Screen ─────────────────────────────────────────────────────────────
+// â”€â”€ Login Screen â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
   const [pw, setPw] = useState("");
@@ -252,7 +252,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
         <div style={S.loginTitle}>
           <span style={S.gold}>Partner</span> Livingku
         </div>
-        <div style={S.loginSub}>Admin Panel — masuk untuk mengelola konten</div>
+        <div style={S.loginSub}>Admin Panel â€” masuk untuk mengelola konten</div>
         <form onSubmit={submit}>
           <Field label="Password Admin">
             <input
@@ -266,7 +266,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
           </Field>
           {err && <div style={S.loginError}>{err}</div>}
           <button style={S.loginBtn} type="submit" disabled={loading}>
-            {loading ? "Memverifikasi…" : "Masuk →"}
+            {loading ? "Memverifikasiâ€¦" : "Masuk â†’"}
           </button>
         </form>
       </div>
@@ -274,7 +274,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
   );
 }
 
-// ── Listing Form ──────────────────────────────────────────────────────────────
+// â”€â”€ Listing Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function ListingForm({
   initial, onSave, onCancel, token,
@@ -334,7 +334,7 @@ function ListingForm({
       <Field label="Deskripsi">
         <textarea style={S.textarea} value={f.desc} onChange={(e) => set("desc", e.target.value)} rows={3} />
       </Field>
-      <Field label="Foto (maks 6 foto, maks 5 MB/foto — JPG, PNG, WebP)">
+      <Field label="Foto (maks 6 foto, maks 5 MB/foto â€” JPG, PNG, WebP)">
         <PhotoGrid
           photos={f.photos}
           onRemove={(i) => set("photos", f.photos.filter((_, j) => j !== i))}
@@ -345,9 +345,9 @@ function ListingForm({
           folder="listings"
         />
         <p style={{ color: "#9ca3af", fontSize: "11px", marginTop: "8px", lineHeight: 1.5 }}>
-          ud83dudcd0 <b style={{ color: "#6b7280" }}>Ukuran ideal: 16:9 landscape u2014 min. 800u00d7450px, disarankan 1200u00d7675px.</b><br />
-          Foto tampil di kartu listing (366u00d7220px) dan modal detail (680u00d7300px), keduanya crop tengah.
-          Foto portrait atau square akan terpotong signifikan di sisi kiriu2013kanan.
+          📐 <b style={{ color: "#6b7280" }}>Ukuran ideal: 16:9 landscape — min. 800×450px, disarankan 1200×675px.</b><br />
+          Foto tampil di kartu listing (366Ã—220px) dan modal detail (680Ã—300px), keduanya crop tengah.
+          Foto portrait atau square akan terpotong signifikan di sisi kiriâ€“kanan.
         </p>
       </Field>
       <Field label="Pesan WhatsApp (URL-encoded, tanpa tanda tanya awal)">
@@ -371,7 +371,7 @@ function ListingForm({
   );
 }
 
-// ── FAQ Form ──────────────────────────────────────────────────────────────────
+// â”€â”€ FAQ Form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function FaqForm({
   initial, onSave, onCancel,
@@ -394,7 +394,7 @@ function FaqForm({
   );
 }
 
-// ── Hero Widget Editor ────────────────────────────────────────────────────────
+// â”€â”€ Hero Widget Editor â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 function WidgetEditor({
   label, widget, onChange, token, saving,
@@ -428,7 +428,7 @@ function WidgetEditor({
       <Field label="Periode (contoh: bulan, hari)">
         <input style={{ ...S.input, maxWidth: "200px" }} value={widget.period} onChange={(e) => set("period", e.target.value)} />
       </Field>
-      <Field label="Foto Hero Card (opsional, maks 5 MB u2014 JPG, PNG, WebP)">
+      <Field label="Foto Hero Card (opsional, maks 5 MB — JPG, PNG, WebP)">
         <PhotoGrid
           photos={widget.photo ? [widget.photo] : []}
           onRemove={() => set("photo", "")}
@@ -439,15 +439,15 @@ function WidgetEditor({
           folder="hero"
         />
         <p style={{ color: "#9ca3af", fontSize: "11px", marginTop: "8px", lineHeight: 1.5 }}>
-          ud83dudcd0 <b style={{ color: "#6b7280" }}>Ukuran ideal: 2:1 landscape u2014 min. 680u00d7340px, recommended 1200u00d7600px.</b><br />
-          Widget 1 tampil 340u00d7170px u00b7 Widget 2 tampil 260u00d7120px (crop tengah). Foto portrait akan tercrop banyak.
+          📐 <b style={{ color: "#6b7280" }}>Ukuran ideal: 2:1 landscape — min. 680×340px, disarankan 1200×600px.</b><br />
+          Widget 1 tampil 340×170px · Widget 2 tampil 260×120px (crop tengah). Foto portrait akan tercrop banyak.
         </p>
       </Field>
     </div>
   );
 }
 
-// ── Main Admin Page ───────────────────────────────────────────────────────────
+// â”€â”€ Main Admin Page â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type Tab = "whatsapp" | "hero" | "listings" | "faq" | "contact";
 
@@ -524,7 +524,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div style={S.loginWrap}>
-        <div style={{ color: "#9ca3af", fontSize: "15px" }}>Memuat…</div>
+        <div style={{ color: "#9ca3af", fontSize: "15px" }}>Memuatâ€¦</div>
       </div>
     );
   }
@@ -554,7 +554,7 @@ export default function AdminPage() {
     <div style={S.page}>
       <header style={S.header}>
         <div style={S.brand}>
-          <span style={S.gold}>Partner</span> Livingku — Admin
+          <span style={S.gold}>Partner</span> Livingku â€” Admin
         </div>
         <button style={S.logoutBtn} onClick={handleLogout}>Logout</button>
       </header>
@@ -574,13 +574,13 @@ export default function AdminPage() {
             rel="noopener noreferrer"
             style={{ ...S.navBtn(false), display: "block", textDecoration: "none", color: "#6b7280" }}
           >
-            ↗ Lihat Website
+            â†— Lihat Website
           </a>
         </aside>
 
         <main style={S.main}>
 
-          {/* ── WhatsApp Tab ────────────────────────────────────────────── */}
+          {/* â”€â”€ WhatsApp Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {tab === "whatsapp" && (
             <div>
               <h2 style={{ fontSize: "18px", fontWeight: 800, marginBottom: "20px" }}>Nomor WhatsApp</h2>
@@ -602,13 +602,13 @@ export default function AdminPage() {
                   disabled={saving}
                   onClick={() => save(content)}
                 >
-                  {saving ? "Menyimpan…" : "Simpan"}
+                  {saving ? "Menyimpanâ€¦" : "Simpan"}
                 </button>
               </div>
             </div>
           )}
 
-          {/* ── Hero Widgets Tab ────────────────────────────────────────── */}
+          {/* â”€â”€ Hero Widgets Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {tab === "hero" && (
             <div>
               <h2 style={{ fontSize: "18px", fontWeight: 800, marginBottom: "20px" }}>Hero Widgets</h2>
@@ -616,14 +616,14 @@ export default function AdminPage() {
                 Dua kartu mini yang tampil di hero section sebagai contoh listing unggulan.
               </p>
               <WidgetEditor
-                label="Widget 1 — Kartu Utama (depan)"
+                label="Widget 1 â€” Kartu Utama (depan)"
                 widget={content.hero.widget1}
                 onChange={(w) => setC({ hero: { ...content.hero, widget1: w } })}
                 token={token}
                 saving={saving}
               />
               <WidgetEditor
-                label="Widget 2 — Kartu Kecil (belakang)"
+                label="Widget 2 â€” Kartu Kecil (belakang)"
                 widget={content.hero.widget2}
                 onChange={(w) => setC({ hero: { ...content.hero, widget2: w } })}
                 token={token}
@@ -634,12 +634,12 @@ export default function AdminPage() {
                 disabled={saving}
                 onClick={() => save(content)}
               >
-                {saving ? "Menyimpan…" : "Simpan Perubahan Hero"}
+                {saving ? "Menyimpanâ€¦" : "Simpan Perubahan Hero"}
               </button>
             </div>
           )}
 
-          {/* ── Listings Tab ────────────────────────────────────────────── */}
+          {/* â”€â”€ Listings Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {tab === "listings" && (
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
@@ -690,7 +690,7 @@ export default function AdminPage() {
                             <span style={{ color: "#9ca3af", fontSize: "12px" }}>{l.id}</span>
                           </div>
                           <div style={{ color: "#6b7280", fontSize: "12px", display: "flex", alignItems: "center", gap: "12px" }}>
-                            <span>📍 {l.loc}</span>
+                            <span>ðŸ“ {l.loc}</span>
                             <span>{l.price}/{l.period}</span>
                             <span>{l.photos.length} foto</span>
                           </div>
@@ -716,7 +716,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* ── FAQ Tab ─────────────────────────────────────────────────── */}
+          {/* â”€â”€ FAQ Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {tab === "faq" && (
             <div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
@@ -760,7 +760,7 @@ export default function AdminPage() {
                       <div style={S.listItem}>
                         <div style={{ flex: 1, paddingRight: "16px" }}>
                           <div style={{ fontWeight: 600, marginBottom: "4px" }}>{f.q}</div>
-                          <div style={{ color: "#6b7280", fontSize: "12px" }}>{f.a.slice(0, 100)}{f.a.length > 100 ? "…" : ""}</div>
+                          <div style={{ color: "#6b7280", fontSize: "12px" }}>{f.a.slice(0, 100)}{f.a.length > 100 ? "â€¦" : ""}</div>
                         </div>
                         <div style={{ flexShrink: 0 }}>
                           <button style={S.editBtn} onClick={() => setFaqEdit(i)}>Edit</button>
@@ -783,7 +783,7 @@ export default function AdminPage() {
             </div>
           )}
 
-          {/* ── Contact Tab ─────────────────────────────────────────────── */}
+          {/* â”€â”€ Contact Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {tab === "contact" && (
             <div>
               <h2 style={{ fontSize: "18px", fontWeight: 800, marginBottom: "20px" }}>Informasi Kontak</h2>
@@ -819,7 +819,7 @@ export default function AdminPage() {
                   disabled={saving}
                   onClick={() => save(content)}
                 >
-                  {saving ? "Menyimpan…" : "Simpan"}
+                  {saving ? "Menyimpanâ€¦" : "Simpan"}
                 </button>
               </div>
             </div>
@@ -838,3 +838,4 @@ export default function AdminPage() {
     </div>
   );
 }
+
