@@ -344,6 +344,11 @@ function ListingForm({
           token={token}
           folder="listings"
         />
+        <p style={{ color: "#9ca3af", fontSize: "11px", marginTop: "8px", lineHeight: 1.5 }}>
+          ud83dudcd0 <b style={{ color: "#6b7280" }}>Ukuran ideal: 16:9 landscape u2014 min. 800u00d7450px, disarankan 1200u00d7675px.</b><br />
+          Foto tampil di kartu listing (366u00d7220px) dan modal detail (680u00d7300px), keduanya crop tengah.
+          Foto portrait atau square akan terpotong signifikan di sisi kiriu2013kanan.
+        </p>
       </Field>
       <Field label="Pesan WhatsApp (URL-encoded, tanpa tanda tanya awal)">
         <input
@@ -423,7 +428,7 @@ function WidgetEditor({
       <Field label="Periode (contoh: bulan, hari)">
         <input style={{ ...S.input, maxWidth: "200px" }} value={widget.period} onChange={(e) => set("period", e.target.value)} />
       </Field>
-      <Field label="Foto Hero Card (opsional, maks 5 MB)">
+      <Field label="Foto Hero Card (opsional, maks 5 MB u2014 JPG, PNG, WebP)">
         <PhotoGrid
           photos={widget.photo ? [widget.photo] : []}
           onRemove={() => set("photo", "")}
@@ -433,9 +438,10 @@ function WidgetEditor({
           token={token}
           folder="hero"
         />
-        {widget.photo && (
-          <p style={{ fontSize: "11px", color: "#9ca3af", marginTop: "6px" }}>Foto ini tampil sebagai background kartu hero di website.</p>
-        )}
+        <p style={{ color: "#9ca3af", fontSize: "11px", marginTop: "8px", lineHeight: 1.5 }}>
+          ud83dudcd0 <b style={{ color: "#6b7280" }}>Ukuran ideal: 2:1 landscape u2014 min. 680u00d7340px, recommended 1200u00d7600px.</b><br />
+          Widget 1 tampil 340u00d7170px u00b7 Widget 2 tampil 260u00d7120px (crop tengah). Foto portrait akan tercrop banyak.
+        </p>
       </Field>
     </div>
   );
