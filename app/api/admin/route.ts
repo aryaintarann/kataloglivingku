@@ -94,7 +94,7 @@ export async function GET(req: NextRequest) {
     listings: (listings ?? []).map((l) => ({
       id: l.id, cat: l.cat, title: l.title, loc: l.loc, type: l.type,
       price: l.price, period: l.period, facilities: l.facilities,
-      desc: l.desc, photos: l.photos, wa: l.wa,
+      desc: l.description, photos: l.photos, wa: l.wa,
     })),
     faqs: (faqs ?? []).map((f) => ({ q: f.question, a: f.answer })),
     contact: settings?.contact ?? {},
@@ -164,7 +164,7 @@ export async function PUT(req: NextRequest) {
   await db.from("listings").delete().neq("id", "");
   if (listings.length > 0) {
     const { error: listErr } = await db.from("listings").insert(
-      listings.map((l, i) => ({ ...l, sort_order: i }))
+      listings.map((l, i) => ({ ...l, description: l.desc, desc: undefined, sort_order: i }))
     );
     if (listErr) return NextResponse.json({ error: listErr.message }, { status: 500 });
   }

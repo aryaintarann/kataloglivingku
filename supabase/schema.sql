@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS listings (
   price       TEXT    NOT NULL DEFAULT '',
   period      TEXT    NOT NULL DEFAULT 'bln',
   facilities  TEXT[]  NOT NULL DEFAULT '{}',
-  desc        TEXT    NOT NULL DEFAULT '',
+  description TEXT    NOT NULL DEFAULT '',
   photos      TEXT[]  NOT NULL DEFAULT '{}',
   wa          TEXT    NOT NULL DEFAULT '',
   sort_order  INTEGER NOT NULL DEFAULT 0
@@ -50,7 +50,7 @@ VALUES (
 )
 ON CONFLICT (id) DO NOTHING;
 
-INSERT INTO listings (id, cat, title, loc, type, price, period, facilities, desc, photos, wa, sort_order) VALUES
+INSERT INTO listings (id, cat, title, loc, type, price, period, facilities, description, photos, wa, sort_order) VALUES
   ('JKT-001', 'kost',      'Kost Eksklusif Menteng',    'Jakarta Pusat',         'Kost Eksklusif',   'Rp 2.500.000', 'bln',  ARRAY['AC','WiFi','KM Dalam','Parkir'],    'Kost eksklusif di jantung Jakarta Pusat, dekat pusat perbelanjaan dan stasiun MRT.',        ARRAY['ph-1','ph-3','ph-5'], 'Halo,%20saya%20tertarik%20Kost%20Eksklusif%20Menteng%20(JKT-001)',        0),
   ('BDG-014', 'apartemen', 'Apartemen Studio Dago',     'Dago, Bandung',          'Apartemen Studio', 'Rp 3.200.000', 'bln',  ARRAY['AC','WiFi','Dapur','Balkon'],       'Apartemen studio modern di kawasan Dago yang sejuk dengan pemandangan kota Bandung.',       ARRAY['ph-2','ph-4','ph-6'], 'Halo,%20saya%20tertarik%20Apartemen%20Studio%20Dago%20(BDG-014)',         1),
   ('SBY-022', 'kost',      'Kost Putri Tidar',          'Tidar, Surabaya',        'Kost Putri',       'Rp 1.200.000', 'bln',  ARRAY['WiFi','KM Dalam','Laundry'],        'Kost putri nyaman dan aman di kawasan Tidar Surabaya, dekat berbagai kampus.',              ARRAY['ph-3','ph-1','ph-5'], 'Halo,%20saya%20tertarik%20Kost%20Putri%20Tidar%20(SBY-022)',              2),

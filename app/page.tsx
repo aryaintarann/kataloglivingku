@@ -46,7 +46,7 @@ async function getContent(): Promise<Content> {
       listings: (listings ?? []).map((l) => ({
         id: l.id, cat: l.cat, title: l.title, loc: l.loc, type: l.type,
         price: l.price, period: l.period, facilities: l.facilities,
-        desc: l.desc, photos: l.photos, wa: l.wa,
+        desc: l.description, photos: l.photos, wa: l.wa,
       })),
       faqs: (faqs ?? []).map((f) => ({ q: f.question, a: f.answer })),
       contact: settings.contact,
