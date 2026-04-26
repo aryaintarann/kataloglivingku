@@ -780,9 +780,12 @@ p { margin: 0; }
   color: var(--muted);
 }
 
-/* City select dropdown */
-.city-select { position: relative; display: inline-block; }
-.city-select-trigger {
+/* City select dropdown u2014 use ID selectors for max specificity */
+#citySelect {
+  position: relative;
+  display: inline-block;
+}
+#citySelectTrigger {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -799,50 +802,66 @@ p { margin: 0; }
   justify-content: space-between;
   transition: border-color .2s, box-shadow .2s;
 }
-.city-select-trigger:hover { border-color: var(--primary); }
-.city-select.open .city-select-trigger {
+#citySelectTrigger:hover { border-color: var(--primary); }
+#citySelect.open #citySelectTrigger {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(27,58,75,.1);
 }
-.city-select.open .city-select-trigger svg { transform: rotate(180deg); }
-.city-select-trigger svg { transition: transform .2s ease; flex-shrink: 0; stroke: var(--muted); }
+#citySelectTrigger svg {
+  transition: transform .2s ease;
+  flex-shrink: 0;
+  stroke: var(--muted);
+}
+#citySelect.open #citySelectTrigger svg { transform: rotate(180deg); }
 
-.city-select-list {
+#citySelectList {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
   z-index: 200;
+  list-style: none;
+  margin: 0;
+  min-width: 180px;
+  scrollbar-width: thin;
+  /* hidden state u2014 no display:none to avoid style loss */
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  list-style: none;
-  padding: 6px;
-  margin: 0;
-  min-width: 180px;
-  max-height: 220px;
-  overflow-y: auto;
-  display: none;
-  scrollbar-width: thin;
+  padding: 0 6px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
 }
-.city-select.open .city-select-list { display: block; animation: cityIn .18s ease; }
+#citySelect.open #citySelectList {
+  padding: 6px;
+  max-height: 240px;
+  overflow-y: auto;
+  opacity: 1;
+  pointer-events: auto;
+}
 @keyframes cityIn {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: none; }
 }
 
-.city-select-item {
+#citySelectList li {
+  display: block;
   padding: 9px 12px;
   border-radius: var(--radius-sm);
   font-size: .87rem;
   font-family: var(--sans);
+  font-weight: 500;
   color: var(--ink-2);
   cursor: pointer;
-  transition: background .15s, color .15s;
   white-space: nowrap;
+  transition: background .15s, color .15s;
+  list-style: none;
 }
-.city-select-item:hover { background: var(--accent); color: var(--primary); }
-.city-select-item.active {
+#citySelectList li:hover { background: var(--accent); color: var(--primary); }
+#citySelectList li.active {
   background: var(--primary);
   color: #fff;
   font-weight: 600;
