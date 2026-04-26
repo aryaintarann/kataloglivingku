@@ -814,39 +814,60 @@ p { margin: 0; }
 }
 #citySelect.open #citySelectTrigger svg { transform: rotate(180deg); }
 
-#citySelectList {
+/* City dropdown wrapper — animated container */
+#cityDropdown {
   position: absolute;
   top: calc(100% + 6px);
   left: 0;
   z-index: 200;
-  list-style: none;
-  margin: 0;
-  min-width: 180px;
-  scrollbar-width: thin;
-  /* hidden state u2014 no display:none to avoid style loss */
+  min-width: 200px;
   background: #fff;
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 0 6px;
   max-height: 0;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: max-height .22s ease, opacity .18s ease, padding .22s ease;
+  transition: max-height .24s ease, opacity .2s ease;
 }
-#citySelect.open #citySelectList {
-  padding: 6px;
-  max-height: 240px;
-  overflow-y: auto;
+#citySelect.open #cityDropdown {
+  max-height: 320px;
   opacity: 1;
   pointer-events: auto;
-}
-@keyframes cityIn {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: none; }
+  overflow: visible;
 }
 
+/* City search bar */
+.city-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 6px;
+  border-bottom: 1px solid var(--line);
+}
+.city-search-wrap svg { flex-shrink: 0; stroke: var(--muted); }
+#citySearchInput {
+  flex: 1;
+  border: 0;
+  outline: none;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: .86rem;
+  color: var(--ink);
+  padding: 2px 0;
+}
+#citySearchInput::placeholder { color: var(--muted); }
+
+/* City list */
+#citySelectList {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
 #citySelectList li {
   display: block;
   padding: 9px 12px;
@@ -865,6 +886,16 @@ p { margin: 0; }
   background: var(--primary);
   color: #fff;
   font-weight: 600;
+}
+
+/* No results message */
+#cityNoResults {
+  display: none;
+  padding: 10px 14px;
+  font-size: .83rem;
+  font-family: var(--sans);
+  color: var(--muted);
+  text-align: center;
 }
 
 .filter-panel .fp-price-opts { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -909,6 +940,43 @@ p { margin: 0; }
 .filter-panel .fp-reset:hover { color: var(--ink); border-color: var(--ink-2); }
 
 .listing-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
+
+/* Empty state for units section */
+.units-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 24px;
+  text-align: center;
+}
+.units-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+}
+.units-empty h3 {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
+}
+.units-empty p {
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--muted);
+  margin: 0;
+  letter-spacing: .04em;
+  font-weight: 500;
+}
 .listing {
   background: #fff;
   border-radius: var(--radius-lg);

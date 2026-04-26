@@ -203,11 +203,24 @@ export default function ClientInteractions() {
     const cityTrigger   = document.getElementById("citySelectTrigger");
     const cityLabel     = document.getElementById("citySelectLabel");
     const cityList      = document.getElementById("citySelectList");
+    const citySearchInput = document.getElementById("citySearchInput") as HTMLInputElement | null;
+    const cityNoResults = document.getElementById("cityNoResults");
+
+    const clearCitySearch = () => {
+      if (citySearchInput) citySearchInput.value = "";
+      cityList?.querySelectorAll<HTMLElement>("li").forEach((li) => { li.style.display = ""; });
+      if (cityNoResults) cityNoResults.style.display = "none";
+    };
 
     const toggleCityDropdown = (force?: boolean) => {
       const open = force ?? !citySelect?.classList.contains("open");
       citySelect?.classList.toggle("open", open);
       cityTrigger?.setAttribute("aria-expanded", open ? "true" : "false");
+      if (open) {
+        setTimeout(() => citySearchInput?.focus(), 60);
+      } else {
+        clearCitySearch();
+      }
     };
 
     const selectCity = (city: string, label: string) => {
@@ -218,6 +231,7 @@ export default function ClientInteractions() {
         item.classList.toggle("active", sel);
         item.setAttribute("aria-selected", sel ? "true" : "false");
       });
+      clearCitySearch();
       toggleCityDropdown(false);
       applyFilters();
     };
@@ -236,6 +250,18 @@ export default function ClientInteractions() {
       cityList.appendChild(makeItem("all", "Semua Kota"));
       cities.forEach((city) => cityList.appendChild(makeItem(city, city)));
     }
+
+    // City search filter
+    citySearchInput?.addEventListener("input", () => {
+      const q = citySearchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+      cityList?.querySelectorAll<HTMLElement>("li").forEach((li) => {
+        const match = !q || (li.textContent ?? "").toLowerCase().includes(q);
+        li.style.display = match ? "" : "none";
+        if (match) visibleCount++;
+      });
+      if (cityNoResults) cityNoResults.style.display = visibleCount === 0 ? "" : "none";
+    });
 
     cityTrigger?.addEventListener("click", (e) => { e.stopPropagation(); toggleCityDropdown(); });
     document.addEventListener("click", (e) => {
