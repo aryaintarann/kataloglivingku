@@ -398,59 +398,84 @@ export default async function Home() {
               <p>Pilih kategori sesuai kebutuhan — semua sudah terverifikasi dan siap dihubungi langsung ke owner.</p>
             </div>
 
-            <div className="filter-row reveal">
-              <div className="filter-tabs" role="tablist" aria-label="Filter tipe hunian">
-                <button className="active" data-filter="all" role="tab" aria-selected="true">Semua</button>
-                <button data-filter="kost" role="tab" aria-selected="false">Kost</button>
-                <button data-filter="apartemen" role="tab" aria-selected="false">Apartemen</button>
-                <button data-filter="harian" role="tab" aria-selected="false">Harian</button>
-              </div>
-              <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label="Filter lanjutan">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
-                  <line x1="4" y1="6" x2="20" y2="6" />
-                  <line x1="8" y1="12" x2="16" y2="12" />
-                  <line x1="11" y1="18" x2="13" y2="18" />
-                </svg>
-                Filter
-                <span className="filter-badge" id="filterBadge" />
-              </button>
-            </div>
-
-            <div className="filter-panel" id="filterPanel">
-              <div className="fp-section">
-                <div className="fp-label">Kota</div>
-                <div className="city-select" id="citySelect">
-                  <button className="city-select-trigger" id="citySelectTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-                    <span id="citySelectLabel">Semua Kota</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" aria-hidden="true">
-                      <polyline points="6 9 12 15 18 9" />
+            {c.listings.length > 0 ? (
+              <>
+                <div className="filter-row reveal">
+                  <div className="filter-tabs" role="tablist" aria-label="Filter tipe hunian">
+                    <button className="active" data-filter="all" role="tab" aria-selected="true">Semua</button>
+                    <button data-filter="kost" role="tab" aria-selected="false">Kost</button>
+                    <button data-filter="apartemen" role="tab" aria-selected="false">Apartemen</button>
+                    <button data-filter="harian" role="tab" aria-selected="false">Harian</button>
+                  </div>
+                  <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label="Filter lanjutan">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
+                      <line x1="4" y1="6" x2="20" y2="6" />
+                      <line x1="8" y1="12" x2="16" y2="12" />
+                      <line x1="11" y1="18" x2="13" y2="18" />
                     </svg>
-                  </button>
-                  <ul className="city-select-list" id="citySelectList" role="listbox" aria-label="Pilih kota" />
-                </div>
-              </div>
-              <div className="fp-section">
-                <div className="fp-label">Urutkan Harga</div>
-                <div className="fp-price-opts" id="fpPriceOpts">
-                  <button className="fp-opt active" data-sort="default">Default</button>
-                  <button className="fp-opt" data-sort="asc">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="18 15 12 9 6 15" /></svg>
-                    Terendah
-                  </button>
-                  <button className="fp-opt" data-sort="desc">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
-                    Tertinggi
+                    Filter
+                    <span className="filter-badge" id="filterBadge" />
                   </button>
                 </div>
-              </div>
-              <button className="fp-reset" id="fpReset">Reset Filter</button>
-            </div>
 
-            <div className="listing-grid" id="listingGrid">
-              {c.listings.map((l) => (
-                <ListingCard key={l.id} l={l} waBase={WA_BASE} />
-              ))}
-            </div>
+                <div className="filter-panel" id="filterPanel">
+                  <div className="fp-section">
+                    <div className="fp-label">Kota</div>
+                    <div className="city-select" id="citySelect">
+                      <button className="city-select-trigger" id="citySelectTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                        <span id="citySelectLabel">Semua Kota</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" aria-hidden="true">
+                          <polyline points="6 9 12 15 18 9" />
+                        </svg>
+                      </button>
+                      <div className="city-dropdown" id="cityDropdown">
+                        <div className="city-search-wrap">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                          </svg>
+                          <input type="text" id="citySearchInput" placeholder="Cari kota..." autoComplete="off" />
+                        </div>
+                        <ul id="citySelectList" role="listbox" aria-label="Pilih kota" />
+                        <p className="city-no-results" id="cityNoResults">Kota tidak ditemukan</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="fp-section">
+                    <div className="fp-label">Urutkan Harga</div>
+                    <div className="fp-price-opts" id="fpPriceOpts">
+                      <button className="fp-opt active" data-sort="default">Default</button>
+                      <button className="fp-opt" data-sort="asc">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="18 15 12 9 6 15" /></svg>
+                        Terendah
+                      </button>
+                      <button className="fp-opt" data-sort="desc">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
+                        Tertinggi
+                      </button>
+                    </div>
+                  </div>
+                  <button className="fp-reset" id="fpReset">Reset Filter</button>
+                </div>
+
+                <div className="listing-grid" id="listingGrid">
+                  {c.listings.map((l) => (
+                    <ListingCard key={l.id} l={l} waBase={WA_BASE} />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="units-empty">
+                <div className="units-empty-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="32" height="32" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                  </svg>
+                </div>
+                <p className="units-empty-title">On Progress</p>
+                <p className="units-empty-sub">Coming Soon!</p>
+              </div>
+            )}
           </div>
         </section>
 
