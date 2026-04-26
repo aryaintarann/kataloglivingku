@@ -99,7 +99,7 @@ export async function GET(req: NextRequest) {
     listings = results[1].data as Record<string, unknown>[];
     faqs = results[2].data as Record<string, unknown>[];
   } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
+    const msg = (e as { message?: string })?.message ?? JSON.stringify(e);
     return NextResponse.json({ error: `Database error: ${msg}` }, { status: 500 });
   }
 
