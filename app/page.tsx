@@ -398,11 +398,44 @@ export default async function Home() {
               <p>Pilih kategori sesuai kebutuhan — semua sudah terverifikasi dan siap dihubungi langsung ke owner.</p>
             </div>
 
-            <div className="filter-tabs reveal" role="tablist" aria-label="Filter tipe hunian">
-              <button className="active" data-filter="all" role="tab" aria-selected="true">Semua</button>
-              <button data-filter="kost" role="tab" aria-selected="false">Kost</button>
-              <button data-filter="apartemen" role="tab" aria-selected="false">Apartemen</button>
-              <button data-filter="harian" role="tab" aria-selected="false">Harian</button>
+            <div className="filter-row reveal">
+              <div className="filter-tabs" role="tablist" aria-label="Filter tipe hunian">
+                <button className="active" data-filter="all" role="tab" aria-selected="true">Semua</button>
+                <button data-filter="kost" role="tab" aria-selected="false">Kost</button>
+                <button data-filter="apartemen" role="tab" aria-selected="false">Apartemen</button>
+                <button data-filter="harian" role="tab" aria-selected="false">Harian</button>
+              </div>
+              <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label="Filter lanjutan">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
+                  <line x1="4" y1="6" x2="20" y2="6" />
+                  <line x1="8" y1="12" x2="16" y2="12" />
+                  <line x1="11" y1="18" x2="13" y2="18" />
+                </svg>
+                Filter
+                <span className="filter-badge" id="filterBadge" />
+              </button>
+            </div>
+
+            <div className="filter-panel" id="filterPanel">
+              <div className="fp-section">
+                <div className="fp-label">Kota</div>
+                <div className="fp-cities" id="fpCities" />
+              </div>
+              <div className="fp-section">
+                <div className="fp-label">Urutkan Harga</div>
+                <div className="fp-price-opts" id="fpPriceOpts">
+                  <button className="fp-opt active" data-sort="default">Default</button>
+                  <button className="fp-opt" data-sort="asc">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="18 15 12 9 6 15" /></svg>
+                    Terendah
+                  </button>
+                  <button className="fp-opt" data-sort="desc">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
+                    Tertinggi
+                  </button>
+                </div>
+              </div>
+              <button className="fp-reset" id="fpReset">Reset Filter</button>
             </div>
 
             <div className="listing-grid" id="listingGrid">

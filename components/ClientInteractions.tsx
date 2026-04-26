@@ -121,36 +121,144 @@ export default function ClientInteractions() {
     );
     document.querySelectorAll(".counter[data-count]").forEach((el) => countObs.observe(el));
 
-    // Filter tabs
+    // ── Filter: category + city + price ──────────────────────────────────
+
+    const parsePrice = (raw: string): number => {
+      const s = raw.replace(/[Rp\s]/gi, "");
+      if (/jt/i.test(s)) return parseFloat(s.replace(/jt.*/i, "").replace(",", ".")) * 1_000_000;
+      return parseInt(s.split("/")[0].replace(/\./g, ""), 10) || 0;
+    };
+    const extractCity = (loc: string) => loc.split("·")[0].split(",")[0].trim();
+
+    const grid = document.getElementById("listingGrid");
+    const allCards = Array.from(document.querySelectorAll<HTMLElement>("#listingGrid .listing"));
+    const originalOrder = [...allCards];
+
+    let activeCategory = "all";
+    let activeCity = "all";
+    let priceSort = "default";
+
+    const updateBadge = () => {
+      const badge = document.getElementById("filterBadge");
+      const count = (activeCity !== "all" ? 1 : 0) + (priceSort !== "default" ? 1 : 0);
+      if (badge) {
+        badge.textContent = count > 0 ? String(count) : "";
+        badge.classList.toggle("show", count > 0);
+      }
+      document.getElementById("filterBtn")?.classList.toggle("has-filter", count > 0);
+    };
+
+    const applyFilters = () => {
+      let visible = allCards.filter((c) => {
+        const catMatch = activeCategory === "all" || c.dataset.cat === activeCategory;
+        const cityMatch = activeCity === "all" || extractCity(c.dataset.loc ?? "") === activeCity;
+        return catMatch && cityMatch;
+      });
+
+      if (priceSort !== "default") {
+        visible = [...visible].sort((a, b) => {
+          const pa = parsePrice(a.dataset.price ?? "0");
+          const pb = parsePrice(b.dataset.price ?? "0");
+          return priceSort === "asc" ? pa - pb : pb - pa;
+        });
+        if (grid) visible.forEach((el) => grid.appendChild(el));
+      } else {
+        if (grid) originalOrder.forEach((el) => grid.appendChild(el));
+      }
+
+      allCards.forEach((c) => {
+        const show = visible.includes(c);
+        if (show) {
+          c.style.display = "";
+          requestAnimationFrame(() => { c.style.opacity = "1"; c.style.transform = "none"; });
+        } else {
+          c.style.opacity = "0";
+          c.style.transform = "translateY(10px)";
+          setTimeout(() => { if (!visible.includes(c)) c.style.display = "none"; }, 200);
+        }
+      });
+
+      updateBadge();
+    };
+
+    allCards.forEach((c) => { c.style.transition = "opacity .25s ease, transform .25s ease"; });
+
+    // Category tabs
     const tabs = document.querySelectorAll(".filter-tabs button");
-    const cards = document.querySelectorAll<HTMLElement>("#listingGrid .listing");
-    cards.forEach((c) => {
-      c.style.transition = "opacity .25s ease, transform .25s ease";
-    });
     tabs.forEach((t) => {
       t.addEventListener("click", () => {
-        tabs.forEach((x) => {
-          x.classList.remove("active");
-          x.setAttribute("aria-selected", "false");
-        });
+        tabs.forEach((x) => { x.classList.remove("active"); x.setAttribute("aria-selected", "false"); });
         t.classList.add("active");
         t.setAttribute("aria-selected", "true");
-        const f = (t as HTMLElement).dataset.filter;
-        cards.forEach((c) => {
-          const match = f === "all" || c.dataset.cat === f;
-          if (match) {
-            c.style.display = "";
-            requestAnimationFrame(() => {
-              c.style.opacity = "1";
-              c.style.transform = "none";
-            });
-          } else {
-            c.style.opacity = "0";
-            c.style.transform = "translateY(10px)";
-            setTimeout(() => { c.style.display = "none"; }, 200);
-          }
-        });
+        activeCategory = (t as HTMLElement).dataset.filter ?? "all";
+        applyFilters();
       });
+    });
+
+    // Build city buttons from listing data
+    const cities = [...new Set(
+      allCards.map((c) => extractCity(c.dataset.loc ?? "")).filter(Boolean)
+    )].sort();
+    const fpCities = document.getElementById("fpCities");
+    if (fpCities && cities.length > 0) {
+      const allCityBtn = document.createElement("button");
+      allCityBtn.className = "fp-city-btn active";
+      allCityBtn.textContent = "Semua Kota";
+      allCityBtn.addEventListener("click", () => {
+        fpCities.querySelectorAll(".fp-city-btn").forEach((b) => b.classList.remove("active"));
+        allCityBtn.classList.add("active");
+        activeCity = "all";
+        applyFilters();
+      });
+      fpCities.appendChild(allCityBtn);
+      cities.forEach((city) => {
+        const btn = document.createElement("button");
+        btn.className = "fp-city-btn";
+        btn.textContent = city;
+        btn.addEventListener("click", () => {
+          fpCities.querySelectorAll(".fp-city-btn").forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          activeCity = city;
+          applyFilters();
+        });
+        fpCities.appendChild(btn);
+      });
+    }
+
+    // Price sort
+    const priceOpts = document.querySelectorAll<HTMLElement>("#fpPriceOpts .fp-opt");
+    priceOpts.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        priceOpts.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        priceSort = btn.dataset.sort ?? "default";
+        applyFilters();
+      });
+    });
+
+    // Filter panel toggle
+    const filterBtn = document.getElementById("filterBtn");
+    const filterPanel = document.getElementById("filterPanel");
+    const togglePanel = (force?: boolean) => {
+      const open = force ?? !filterPanel?.classList.contains("open");
+      filterPanel?.classList.toggle("open", open);
+      filterBtn?.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+    filterBtn?.addEventListener("click", (e) => { e.stopPropagation(); togglePanel(); });
+    document.addEventListener("click", (e) => {
+      if (!filterPanel?.contains(e.target as Node) && e.target !== filterBtn) togglePanel(false);
+    });
+
+    // Reset all filters
+    document.getElementById("fpReset")?.addEventListener("click", () => {
+      activeCategory = "all";
+      activeCity = "all";
+      priceSort = "default";
+      tabs.forEach((t, i) => { t.classList.toggle("active", i === 0); t.setAttribute("aria-selected", i === 0 ? "true" : "false"); });
+      fpCities?.querySelectorAll(".fp-city-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
+      priceOpts.forEach((b, i) => b.classList.toggle("active", i === 0));
+      applyFilters();
+      togglePanel(false);
     });
 
     // FAQ accordion
