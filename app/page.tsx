@@ -1,8 +1,47 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import ClientInteractions from "@/components/ClientInteractions";
 
-const WA_NUMBER = "6281234567890";
-const WA_BASE = `https://wa.me/${WA_NUMBER}`;
-const WA_DEFAULT = `${WA_BASE}?text=Halo%20Partner%20Livingku%2C%20saya%20ingin%20mencari%20hunian`;
+export const dynamic = "force-dynamic";
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+type HeroWidget = { pill: string; name: string; loc: string; price: string; period: string };
+type Listing = {
+  id: string; cat: string; title: string; loc: string; type: string;
+  price: string; period: string; facilities: string[]; desc: string;
+  photos: string[]; wa: string;
+};
+type Faq = { q: string; a: string };
+type Content = {
+  whatsapp: string;
+  hero: { widget1: HeroWidget; widget2: HeroWidget };
+  listings: Listing[];
+  faqs: Faq[];
+  contact: { phone: string; email: string; coverage: string };
+};
+
+const DEFAULT: Content = {
+  whatsapp: "6281234567890",
+  hero: {
+    widget1: { pill: "Kost Eksklusif", name: "Kost Menteng Premium", loc: "Jakarta Pusat · 5 menit ke MRT", price: "Rp 2.500.000", period: "bulan" },
+    widget2: { pill: "Apartemen", name: "Studio Dago View", loc: "Bandung", price: "Rp 3,2 jt", period: "bulan" },
+  },
+  listings: [],
+  faqs: [],
+  contact: { phone: "+62 812-3456-7890", email: "halo@partnerlivingku.id", coverage: "20+ Kota di Indonesia" },
+};
+
+function getContent(): Content {
+  try {
+    const raw = readFileSync(join(process.cwd(), "data/content.json"), "utf-8");
+    return JSON.parse(raw);
+  } catch {
+    return DEFAULT;
+  }
+}
+
+// ── Helpers ────────────────────────────────────────────────────────────────────
 
 function WhatsAppIcon({ size = 16 }: { size?: number }) {
   return (
@@ -12,7 +51,53 @@ function WhatsAppIcon({ size = 16 }: { size?: number }) {
   );
 }
 
+function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
+  const waText = `Halo,%20saya%20tertarik%20${encodeURIComponent(l.title)}`;
+  return (
+    <article
+      className="listing reveal"
+      data-cat={l.cat}
+      data-title={l.title}
+      data-loc={l.loc}
+      data-type={l.type}
+      data-price={l.price}
+      data-period={l.period}
+      data-facilities={l.facilities.join(",")}
+      data-desc={l.desc}
+      data-photos={l.photos.join(",")}
+      data-wa={l.wa || waText}
+    >
+      <div className="photo">
+        <div className={`ph ${l.photos[0] ?? "ph-1"}`} />
+        <span className="badge-type">{l.type}</span>
+        <span className="badge-verified">✓ Verified</span>
+      </div>
+      <div className="body">
+        <h3>{l.title}</h3>
+        <div className="loc">📍 {l.loc}</div>
+        <div className="facilities">
+          {l.facilities.map((f) => <span key={f}>{f}</span>)}
+        </div>
+        <div className="price-row">
+          <div className="price">{l.price}<small>/{l.period}</small></div>
+          <span className="listing-code">{l.id}</span>
+        </div>
+        <div className="actions">
+          <button className="btn btn-outline btn-detail">Detail</button>
+          <a href={`${waBase}?text=${l.wa || waText}`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+// ── Page ───────────────────────────────────────────────────────────────────────
+
 export default function Home() {
+  const c = getContent();
+  const WA_BASE = `https://wa.me/${c.whatsapp}`;
+  const WA_DEFAULT = `${WA_BASE}?text=Halo%20Partner%20Livingku%2C%20saya%20ingin%20mencari%20hunian`;
+
   return (
     <>
       <ClientInteractions />
@@ -89,23 +174,23 @@ export default function Home() {
             <div className="hero-visual reveal" aria-hidden="true">
               <article className="hero-card main">
                 <div className="ph">
-                  <span className="pill">Kost Eksklusif</span>
+                  <span className="pill">{c.hero.widget1.pill}</span>
                   <span className="heart">♥</span>
                 </div>
                 <div className="meta">
-                  <div className="name">Kost Menteng Premium</div>
-                  <div className="loc">📍 Jakarta Pusat · 5 menit ke MRT</div>
-                  <div className="price">Rp 2.500.000 <small>/bulan</small></div>
+                  <div className="name">{c.hero.widget1.name}</div>
+                  <div className="loc">📍 {c.hero.widget1.loc}</div>
+                  <div className="price">{c.hero.widget1.price} <small>/{c.hero.widget1.period}</small></div>
                 </div>
               </article>
               <article className="hero-card alt">
                 <div className="ph">
-                  <span className="pill">Apartemen</span>
+                  <span className="pill">{c.hero.widget2.pill}</span>
                 </div>
                 <div className="meta">
-                  <div className="name">Studio Dago View</div>
-                  <div className="loc">📍 Bandung</div>
-                  <div className="price">Rp 3,2 jt <small>/bulan</small></div>
+                  <div className="name">{c.hero.widget2.name}</div>
+                  <div className="loc">📍 {c.hero.widget2.loc}</div>
+                  <div className="price">{c.hero.widget2.price} <small>/{c.hero.widget2.period}</small></div>
                 </div>
               </article>
             </div>
@@ -209,205 +294,9 @@ export default function Home() {
             </div>
 
             <div className="listing-grid" id="listingGrid">
-
-              <article className="listing reveal" data-cat="kost"
-                data-title="Kost Eksklusif Menteng"
-                data-loc="Jakarta Pusat"
-                data-type="Kost Eksklusif"
-                data-price="Rp 2.500.000"
-                data-period="bln"
-                data-facilities="AC,WiFi,KM Dalam,Parkir"
-                data-desc="Kost eksklusif di jantung Jakarta Pusat, dekat pusat perbelanjaan dan stasiun MRT. Kamar luas dengan interior modern dan furnitur premium, cocok untuk profesional muda yang menginginkan hunian berkelas tanpa kompromi."
-                data-photos="ph-1,ph-3,ph-5"
-                data-wa="Halo,%20saya%20tertarik%20Kost%20Eksklusif%20Menteng%20(JKT-001)"
-              >
-                <div className="photo">
-                  <div className="ph ph-1" />
-                  <span className="badge-type">Kost Eksklusif</span>
-                  <span className="badge-verified">✓ Verified</span>
-                </div>
-                <div className="body">
-                  <h3>Kost Eksklusif Menteng</h3>
-                  <div className="loc">📍 Jakarta Pusat</div>
-                  <div className="facilities">
-                    <span>AC</span><span>WiFi</span><span>KM Dalam</span><span>Parkir</span>
-                  </div>
-                  <div className="price-row">
-                    <div className="price">Rp 2.500.000<small>/bln</small></div>
-                    <span className="listing-code">JKT-001</span>
-                  </div>
-                  <div className="actions">
-                    <button className="btn btn-outline btn-detail">Detail</button>
-                    <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Eksklusif%20Menteng`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
-                  </div>
-                </div>
-              </article>
-
-              <article className="listing reveal" data-cat="apartemen"
-                data-title="Apartemen Studio Dago"
-                data-loc="Dago, Bandung"
-                data-type="Apartemen Studio"
-                data-price="Rp 3.200.000"
-                data-period="bln"
-                data-facilities="AC,WiFi,Dapur,Balkon"
-                data-desc="Apartemen studio modern di kawasan Dago yang sejuk dengan pemandangan kota Bandung. Dilengkapi dapur mini dan balkon pribadi, ideal untuk pasangan muda atau profesional yang suka memasak dan bersantai di udara segar."
-                data-photos="ph-2,ph-4,ph-6"
-                data-wa="Halo,%20saya%20tertarik%20Apartemen%20Studio%20Dago%20(BDG-014)"
-              >
-                <div className="photo">
-                  <div className="ph ph-2" />
-                  <span className="badge-type">Apartemen Studio</span>
-                  <span className="badge-verified">✓ Verified</span>
-                </div>
-                <div className="body">
-                  <h3>Apartemen Studio Dago</h3>
-                  <div className="loc">📍 Bandung</div>
-                  <div className="facilities">
-                    <span>AC</span><span>WiFi</span><span>Dapur</span><span>Balkon</span>
-                  </div>
-                  <div className="price-row">
-                    <div className="price">Rp 3.200.000<small>/bln</small></div>
-                    <span className="listing-code">BDG-014</span>
-                  </div>
-                  <div className="actions">
-                    <button className="btn btn-outline btn-detail">Detail</button>
-                    <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Apartemen%20Studio%20Dago`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
-                  </div>
-                </div>
-              </article>
-
-              <article className="listing reveal" data-cat="kost"
-                data-title="Kost Putri Tidar"
-                data-loc="Tidar, Surabaya"
-                data-type="Kost Putri"
-                data-price="Rp 1.200.000"
-                data-period="bln"
-                data-facilities="WiFi,KM Dalam,Laundry"
-                data-desc="Kost putri nyaman dan aman di kawasan Tidar Surabaya, dekat dengan berbagai kampus dan pusat kuliner. Lingkungan kondusif untuk mahasiswi dengan penjaga 24 jam dan peraturan yang tertib."
-                data-photos="ph-3,ph-1,ph-5"
-                data-wa="Halo,%20saya%20tertarik%20Kost%20Putri%20Tidar%20(SBY-022)"
-              >
-                <div className="photo">
-                  <div className="ph ph-3" />
-                  <span className="badge-type">Kost Putri</span>
-                  <span className="badge-verified">✓ Verified</span>
-                </div>
-                <div className="body">
-                  <h3>Kost Putri Tidar</h3>
-                  <div className="loc">📍 Surabaya</div>
-                  <div className="facilities">
-                    <span>WiFi</span><span>KM Dalam</span><span>Laundry</span>
-                  </div>
-                  <div className="price-row">
-                    <div className="price">Rp 1.200.000<small>/bln</small></div>
-                    <span className="listing-code">SBY-022</span>
-                  </div>
-                  <div className="actions">
-                    <button className="btn btn-outline btn-detail">Detail</button>
-                    <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Putri%20Tidar`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
-                  </div>
-                </div>
-              </article>
-
-              <article className="listing reveal" data-cat="harian"
-                data-title="Kost Harian Seminyak"
-                data-loc="Seminyak, Bali"
-                data-type="Kost Harian"
-                data-price="Rp 250.000"
-                data-period="hari"
-                data-facilities="AC,WiFi,Pool Access"
-                data-desc="Hunian harian bergaya resort di Seminyak Bali, hanya 5 menit berjalan kaki ke pantai. Akses kolam renang bersama tersedia sepanjang hari — pilihan sempurna untuk liburan singkat maupun workation di Pulau Dewata."
-                data-photos="ph-4,ph-2,ph-6"
-                data-wa="Halo,%20saya%20tertarik%20Kost%20Harian%20Seminyak%20(BLI-007)"
-              >
-                <div className="photo">
-                  <div className="ph ph-4" />
-                  <span className="badge-type">Kost Harian</span>
-                  <span className="badge-verified">✓ Verified</span>
-                </div>
-                <div className="body">
-                  <h3>Kost Harian Seminyak</h3>
-                  <div className="loc">📍 Bali</div>
-                  <div className="facilities">
-                    <span>AC</span><span>WiFi</span><span>Pool Access</span>
-                  </div>
-                  <div className="price-row">
-                    <div className="price">Rp 250.000<small>/hari</small></div>
-                    <span className="listing-code">BLI-007</span>
-                  </div>
-                  <div className="actions">
-                    <button className="btn btn-outline btn-detail">Detail</button>
-                    <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Harian%20Seminyak`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
-                  </div>
-                </div>
-              </article>
-
-              <article className="listing reveal" data-cat="kost"
-                data-title="Kost Campur Condongcatur"
-                data-loc="Condongcatur, Yogyakarta"
-                data-type="Kost Campur"
-                data-price="Rp 800.000"
-                data-period="bln"
-                data-facilities="WiFi,Dapur Bersama"
-                data-desc="Kost campur ramah kantong di Condongcatur Yogyakarta, strategis dekat UGM, UNY, dan kawasan Seturan. Suasana kekeluargaan dengan dapur bersama yang lengkap — cocok untuk mahasiswa yang ingin hemat tanpa kehilangan kenyamanan."
-                data-photos="ph-5,ph-3,ph-1"
-                data-wa="Halo,%20saya%20tertarik%20Kost%20Campur%20Condongcatur%20(JOG-031)"
-              >
-                <div className="photo">
-                  <div className="ph ph-5" />
-                  <span className="badge-type">Kost Campur</span>
-                  <span className="badge-verified">✓ Verified</span>
-                </div>
-                <div className="body">
-                  <h3>Kost Campur Condongcatur</h3>
-                  <div className="loc">📍 Yogyakarta</div>
-                  <div className="facilities">
-                    <span>WiFi</span><span>Dapur Bersama</span>
-                  </div>
-                  <div className="price-row">
-                    <div className="price">Rp 800.000<small>/bln</small></div>
-                    <span className="listing-code">JOG-031</span>
-                  </div>
-                  <div className="actions">
-                    <button className="btn btn-outline btn-detail">Detail</button>
-                    <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Kost%20Campur%20Condongcatur`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
-                  </div>
-                </div>
-              </article>
-
-              <article className="listing reveal" data-cat="apartemen"
-                data-title="Apartemen 1BR Helvetia"
-                data-loc="Helvetia, Medan"
-                data-type="Apartemen 1BR"
-                data-price="Rp 4.500.000"
-                data-period="bln"
-                data-facilities="AC,WiFi,Gym,Security 24h"
-                data-desc="Apartemen satu kamar tidur modern di kawasan Helvetia Medan dengan fasilitas lengkap bintang empat. Dilengkapi gym, keamanan 24 jam, dan lobby yang representatif — pilihan premium untuk profesional dan ekspatriat."
-                data-photos="ph-6,ph-2,ph-4"
-                data-wa="Halo,%20saya%20tertarik%20Apartemen%201BR%20Helvetia%20(MDN-009)"
-              >
-                <div className="photo">
-                  <div className="ph ph-6" />
-                  <span className="badge-type">Apartemen 1BR</span>
-                  <span className="badge-verified">✓ Verified</span>
-                </div>
-                <div className="body">
-                  <h3>Apartemen 1BR Helvetia</h3>
-                  <div className="loc">📍 Medan</div>
-                  <div className="facilities">
-                    <span>AC</span><span>WiFi</span><span>Gym</span><span>Security 24h</span>
-                  </div>
-                  <div className="price-row">
-                    <div className="price">Rp 4.500.000<small>/bln</small></div>
-                    <span className="listing-code">MDN-009</span>
-                  </div>
-                  <div className="actions">
-                    <button className="btn btn-outline btn-detail">Detail</button>
-                    <a href={`${WA_BASE}?text=Halo,%20saya%20tertarik%20Apartemen%201BR%20Helvetia`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
-                  </div>
-                </div>
-              </article>
-
+              {c.listings.map((l) => (
+                <ListingCard key={l.id} l={l} waBase={WA_BASE} />
+              ))}
             </div>
           </div>
         </section>
@@ -483,44 +372,22 @@ export default function Home() {
             </div>
 
             <div className="faq-list reveal-stagger" id="faqList">
-              <div className="faq-item">
-                <button className="faq-q" aria-expanded="false">
-                  <span>Apakah layanan ini gratis untuk pencari kost?</span>
-                  <span className="ico">+</span>
-                </button>
-                <div className="faq-a">
-                  <div className="faq-a-inner">
-                    Ya, sepenuhnya gratis. Kamu tidak perlu membayar biaya apapun untuk mencari, melihat, atau dihubungkan ke owner. Pembayaran dilakukan langsung antara kamu dan owner sesuai harga yang tertera.
+              {c.faqs.map((f, i) => (
+                <div className="faq-item" key={i}>
+                  <button className="faq-q" aria-expanded="false">
+                    <span>{f.q}</span>
+                    <span className="ico">+</span>
+                  </button>
+                  <div className="faq-a">
+                    <div className="faq-a-inner">{f.a}</div>
                   </div>
                 </div>
-              </div>
-              <div className="faq-item">
-                <button className="faq-q" aria-expanded="false">
-                  <span>Bagaimana cara menghubungi owner listing?</span>
-                  <span className="ico">+</span>
-                </button>
-                <div className="faq-a">
-                  <div className="faq-a-inner">
-                    Setiap listing memiliki tombol &quot;Chat WA&quot; yang langsung membuka WhatsApp dengan pesan template. Tim kami akan menghubungkan kamu ke owner atau admin yang menangani properti tersebut.
-                  </div>
-                </div>
-              </div>
-              <div className="faq-item">
-                <button className="faq-q" aria-expanded="false">
-                  <span>Apakah semua listing sudah diverifikasi?</span>
-                  <span className="ico">+</span>
-                </button>
-                <div className="faq-a">
-                  <div className="faq-a-inner">
-                    Ya. Setiap listing yang tampil di Partner Livingku telah melalui proses verifikasi: pengecekan dokumen properti, kunjungan tim lapangan untuk dokumentasi foto, dan validasi identitas owner.
-                  </div>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ========== CTA ========== */}
+        {/* ========== CTA / CONTACT ========== */}
         <section className="section cta" id="contact">
           <div className="container reveal">
             <span className="eyebrow">Mulai Sekarang</span>
@@ -535,21 +402,21 @@ export default function Home() {
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92Z" />
                 </svg>
-                +62 812-3456-7890
+                {c.contact.phone}
               </span>
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <rect x="2" y="4" width="20" height="16" rx="2" />
                   <path d="m2 7 10 6 10-6" />
                 </svg>
-                halo@partnerlivingku.id
+                {c.contact.email}
               </span>
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                20+ Kota di Indonesia
+                {c.contact.coverage}
               </span>
             </div>
           </div>
@@ -560,7 +427,6 @@ export default function Home() {
           <div className="modal-box">
             <button className="modal-close" id="modalClose" aria-label="Tutup">✕</button>
 
-            {/* Photo slider */}
             <div className="modal-slider" id="modalSlider">
               <div className="slider-track" id="sliderTrack" />
               <button className="slider-btn slider-prev" id="sliderPrev" aria-label="Foto sebelumnya">‹</button>
@@ -569,7 +435,6 @@ export default function Home() {
               <div className="slider-counter" id="sliderCounter" />
             </div>
 
-            {/* Content */}
             <div className="modal-content">
               <div className="modal-badges" id="modalBadges" />
               <h2 className="modal-title" id="modalTitle" />
@@ -608,11 +473,11 @@ export default function Home() {
           <div>
             <h5>Kota Populer</h5>
             <ul>
-              <li><a href="#cities">Jakarta</a></li>
-              <li><a href="#cities">Bandung</a></li>
-              <li><a href="#cities">Surabaya</a></li>
-              <li><a href="#cities">Bali</a></li>
-              <li><a href="#cities">Yogyakarta</a></li>
+              <li><a href="#services">Jakarta</a></li>
+              <li><a href="#services">Bandung</a></li>
+              <li><a href="#services">Surabaya</a></li>
+              <li><a href="#services">Bali</a></li>
+              <li><a href="#services">Yogyakarta</a></li>
             </ul>
           </div>
           <div>

@@ -1,0 +1,118 @@
+{
+  "whatsapp": "6281234567890",
+  "hero": {
+    "widget1": {
+      "pill": "Kost Eksklusif",
+      "name": "Kost Menteng Premium",
+      "loc": "Jakarta Pusat · 5 menit ke MRT",
+      "price": "Rp 2.500.000",
+      "period": "bulan"
+    },
+    "widget2": {
+      "pill": "Apartemen",
+      "name": "Studio Dago View",
+      "loc": "Bandung",
+      "price": "Rp 3,2 jt",
+      "period": "bulan"
+    }
+  },
+  "listings": [
+    {
+      "id": "JKT-001",
+      "cat": "kost",
+      "title": "Kost Eksklusif Menteng",
+      "loc": "Jakarta Pusat",
+      "type": "Kost Eksklusif",
+      "price": "Rp 2.500.000",
+      "period": "bln",
+      "facilities": ["AC", "WiFi", "KM Dalam", "Parkir"],
+      "desc": "Kost eksklusif di jantung Jakarta Pusat, dekat pusat perbelanjaan dan stasiun MRT. Kamar luas dengan interior modern dan furnitur premium, cocok untuk profesional muda yang menginginkan hunian berkelas tanpa kompromi.",
+      "photos": ["ph-1", "ph-3", "ph-5"],
+      "wa": "Halo,%20saya%20tertarik%20Kost%20Eksklusif%20Menteng%20(JKT-001)"
+    },
+    {
+      "id": "BDG-014",
+      "cat": "apartemen",
+      "title": "Apartemen Studio Dago",
+      "loc": "Dago, Bandung",
+      "type": "Apartemen Studio",
+      "price": "Rp 3.200.000",
+      "period": "bln",
+      "facilities": ["AC", "WiFi", "Dapur", "Balkon"],
+      "desc": "Apartemen studio modern di kawasan Dago yang sejuk dengan pemandangan kota Bandung. Dilengkapi dapur mini dan balkon pribadi, ideal untuk pasangan muda atau profesional yang suka memasak dan bersantai di udara segar.",
+      "photos": ["ph-2", "ph-4", "ph-6"],
+      "wa": "Halo,%20saya%20tertarik%20Apartemen%20Studio%20Dago%20(BDG-014)"
+    },
+    {
+      "id": "SBY-022",
+      "cat": "kost",
+      "title": "Kost Putri Tidar",
+      "loc": "Tidar, Surabaya",
+      "type": "Kost Putri",
+      "price": "Rp 1.200.000",
+      "period": "bln",
+      "facilities": ["WiFi", "KM Dalam", "Laundry"],
+      "desc": "Kost putri nyaman dan aman di kawasan Tidar Surabaya, dekat dengan berbagai kampus dan pusat kuliner. Lingkungan kondusif untuk mahasiswi dengan penjaga 24 jam dan peraturan yang tertib.",
+      "photos": ["ph-3", "ph-1", "ph-5"],
+      "wa": "Halo,%20saya%20tertarik%20Kost%20Putri%20Tidar%20(SBY-022)"
+    },
+    {
+      "id": "BLI-007",
+      "cat": "harian",
+      "title": "Kost Harian Seminyak",
+      "loc": "Seminyak, Bali",
+      "type": "Kost Harian",
+      "price": "Rp 250.000",
+      "period": "hari",
+      "facilities": ["AC", "WiFi", "Pool Access"],
+      "desc": "Hunian harian bergaya resort di Seminyak Bali, hanya 5 menit berjalan kaki ke pantai. Akses kolam renang bersama tersedia sepanjang hari — pilihan sempurna untuk liburan singkat maupun workation di Pulau Dewata.",
+      "photos": ["ph-4", "ph-2", "ph-6"],
+      "wa": "Halo,%20saya%20tertarik%20Kost%20Harian%20Seminyak%20(BLI-007)"
+    },
+    {
+      "id": "JOG-031",
+      "cat": "kost",
+      "title": "Kost Campur Condongcatur",
+      "loc": "Condongcatur, Yogyakarta",
+      "type": "Kost Campur",
+      "price": "Rp 800.000",
+      "period": "bln",
+      "facilities": ["WiFi", "Dapur Bersama"],
+      "desc": "Kost campur ramah kantong di Condongcatur Yogyakarta, strategis dekat UGM, UNY, dan kawasan Seturan. Suasana kekeluargaan dengan dapur bersama yang lengkap — cocok untuk mahasiswa yang ingin hemat tanpa kehilangan kenyamanan.",
+      "photos": ["ph-5", "ph-3", "ph-1"],
+      "wa": "Halo,%20saya%20tertarik%20Kost%20Campur%20Condongcatur%20(JOG-031)"
+    },
+    {
+      "id": "MDN-009",
+      "cat": "apartemen",
+      "title": "Apartemen 1BR Helvetia",
+      "loc": "Helvetia, Medan",
+      "type": "Apartemen 1BR",
+      "price": "Rp 4.500.000",
+      "period": "bln",
+      "facilities": ["AC", "WiFi", "Gym", "Security 24h"],
+      "desc": "Apartemen satu kamar tidur modern di kawasan Helvetia Medan dengan fasilitas lengkap bintang empat. Dilengkapi gym, keamanan 24 jam, dan lobby yang representatif — pilihan premium untuk profesional dan ekspatriat.",
+      "photos": ["ph-6", "ph-2", "ph-4"],
+      "wa": "Halo,%20saya%20tertarik%20Apartemen%201BR%20Helvetia%20(MDN-009)"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Apakah layanan ini gratis untuk pencari kost?",
+      "a": "Ya, sepenuhnya gratis. Kamu tidak perlu membayar biaya apapun untuk mencari, melihat, atau dihubungkan ke owner. Pembayaran dilakukan langsung antara kamu dan owner sesuai harga yang tertera."
+    },
+    {
+      "q": "Bagaimana cara menghubungi owner listing?",
+      "a": "Setiap listing memiliki tombol \"Chat WA\" yang langsung membuka WhatsApp dengan pesan template. Tim kami akan menghubungkan kamu ke owner atau admin yang menangani properti tersebut."
+    },
+    {
+      "q": "Apakah semua listing sudah diverifikasi?",
+      "a": "Ya. Setiap listing yang tampil di Partner Livingku telah melalui proses verifikasi: pengecekan dokumen properti, kunjungan tim lapangan untuk dokumentasi foto, dan validasi identitas owner."
+    }
+  ],
+  "contact": {
+    "phone": "+62 812-3456-7890",
+    "email": "halo@partnerlivingku.id",
+    "coverage": "20+ Kota di Indonesia"
+  }
+}
