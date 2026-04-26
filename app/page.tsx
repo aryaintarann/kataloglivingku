@@ -138,6 +138,7 @@ export default async function Home() {
             <ul className="nav-links">
               <li><a href="#top" className="active">Home</a></li>
               <li><a href="#about">About Us</a></li>
+              <li><a href="#units">Our Units</a></li>
               <li><a href="#services">Our Services</a></li>
               <li><a href="#testimoni">Testimoni</a></li>
               <li><a href="#contact">Contact</a></li>
@@ -160,6 +161,7 @@ export default async function Home() {
       <aside className="drawer" id="drawer" aria-label="Menu navigasi mobile">
         <a href="#top">Home</a>
         <a href="#about">About Us</a>
+        <a href="#units">Our Units</a>
         <a href="#services">Our Services</a>
         <a href="#testimoni">Testimoni</a>
         <a href="#contact">Contact</a>
@@ -182,7 +184,7 @@ export default async function Home() {
               <h1>Temukan Kost &amp; Apartemen <em>Terbaik</em> di Indonesia</h1>
               <p className="hero-sub">Dari Sabang sampai Merauke — pilihan hunian terverifikasi, harga transparan, dan langsung hubungi owner tanpa perantara.</p>
               <div className="hero-actions">
-                <a href="#services" className="btn btn-primary btn-lg">Lihat Katalog →</a>
+                <a href="#units" className="btn btn-primary btn-lg">Lihat Katalog →</a>
                 <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-lg">
                   <WhatsAppIcon size={16} />
                   Chat WhatsApp
@@ -307,8 +309,88 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ========== SERVICES / LISTINGS ========== */}
-        <section className="section services" id="services">
+        {/* ========== OUR SERVICES ========== */}
+        <section className="section svc-section" id="services">
+          <div className="batik-bg" aria-hidden="true" />
+          <div className="container">
+            <div className="section-head reveal">
+              <span className="eyebrow">Layanan Kami</span>
+              <h2>Our Services</h2>
+              <p>Solusi manajemen properti komprehensif — dari operasional harian hingga pemasaran digital dan manajemen tenant.</p>
+            </div>
+
+            <div className="svc-grid">
+              <div className="svc-card reveal">
+                <div className="svc-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+                  </svg>
+                </div>
+                <div className="svc-num-bg" aria-hidden="true">01</div>
+                <h3 className="svc-cat">Operational Management</h3>
+                <ul className="svc-list">
+                  <li>Housekeeping &amp; Cleaning Management</li>
+                  <li>Maintenance &amp; Perbaikan</li>
+                  <li>Vendor &amp; Staff Coordination</li>
+                </ul>
+              </div>
+
+              <div className="svc-card reveal">
+                <div className="svc-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <line x1="12" y1="1" x2="12" y2="23" />
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                  </svg>
+                </div>
+                <div className="svc-num-bg" aria-hidden="true">02</div>
+                <h3 className="svc-cat">Financial Management</h3>
+                <ul className="svc-list">
+                  <li>Rent Collection &amp; Monitoring</li>
+                  <li>Monthly Financial Report</li>
+                  <li>Expenses Tracking &amp; Cost Efficiency</li>
+                  <li>Transparent Profit Tracking</li>
+                  <li>Optimize Occupancy Rate</li>
+                </ul>
+              </div>
+
+              <div className="svc-card reveal">
+                <div className="svc-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                  </svg>
+                </div>
+                <div className="svc-num-bg" aria-hidden="true">03</div>
+                <h3 className="svc-cat">Listing &amp; Market Management</h3>
+                <ul className="svc-list">
+                  <li>Property Branding</li>
+                  <li>Digital Marketing (Instagram &amp; TikTok)</li>
+                  <li>Professional Photo &amp; Video</li>
+                </ul>
+              </div>
+
+              <div className="svc-card reveal">
+                <div className="svc-icon-wrap">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                  </svg>
+                </div>
+                <div className="svc-num-bg" aria-hidden="true">04</div>
+                <h3 className="svc-cat">Tenant Management</h3>
+                <ul className="svc-list">
+                  <li>Rent Agreement &amp; Legal Administration</li>
+                  <li>Handling Check In &amp; Check Out</li>
+                  <li>Customer Service &amp; Complaint Handling</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========== OUR UNITS / LISTINGS ========== */}
+        <section className="section units" id="units">
           <div className="container">
             <div className="section-head reveal">
               <span className="eyebrow">Listing Pilihan</span>
@@ -495,6 +577,7 @@ export default async function Home() {
             <ul>
               <li><a href="#top">Home</a></li>
               <li><a href="#about">About Us</a></li>
+              <li><a href="#units">Our Units</a></li>
               <li><a href="#services">Our Services</a></li>
               <li><a href="#testimoni">Testimoni</a></li>
               <li><a href="#contact">Contact</a></li>
@@ -503,21 +586,21 @@ export default async function Home() {
           <div>
             <h5>Kota Populer</h5>
             <ul>
-              <li><a href="#services">Jakarta</a></li>
-              <li><a href="#services">Bandung</a></li>
-              <li><a href="#services">Surabaya</a></li>
-              <li><a href="#services">Bali</a></li>
-              <li><a href="#services">Yogyakarta</a></li>
+              <li><a href="#units">Jakarta</a></li>
+              <li><a href="#units">Bandung</a></li>
+              <li><a href="#units">Surabaya</a></li>
+              <li><a href="#units">Bali</a></li>
+              <li><a href="#units">Yogyakarta</a></li>
             </ul>
           </div>
           <div>
             <h5>Tipe Hunian</h5>
             <ul>
-              <li><a href="#services">Kost Putra</a></li>
-              <li><a href="#services">Kost Putri</a></li>
-              <li><a href="#services">Kost Campur</a></li>
-              <li><a href="#services">Apartemen Studio</a></li>
-              <li><a href="#services">Sewa Harian</a></li>
+              <li><a href="#units">Kost Putra</a></li>
+              <li><a href="#units">Kost Putri</a></li>
+              <li><a href="#units">Kost Campur</a></li>
+              <li><a href="#units">Apartemen Studio</a></li>
+              <li><a href="#units">Sewa Harian</a></li>
             </ul>
           </div>
           <div className="legal">

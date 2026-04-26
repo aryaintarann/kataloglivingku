@@ -553,9 +553,126 @@ p { margin: 0; }
 .floating-quote .src { font-family: var(--mono); font-size: .7rem; color: var(--muted); margin-top: 8px; text-transform: uppercase; letter-spacing: .1em; }
 
 /* =========================================================
-   LISTINGS / SERVICES
+   OUR UNITS (LISTINGS)
    ========================================================= */
-.services { background: var(--bg); position: relative; }
+.units { background: var(--bg); position: relative; }
+
+/* =========================================================
+   OUR SERVICES — MANAGEMENT
+   ========================================================= */
+.svc-section { background: var(--surface); position: relative; }
+
+.svc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.svc-card {
+  position: relative;
+  background: var(--primary);
+  border-radius: var(--radius-lg);
+  padding: 44px 42px 48px;
+  overflow: hidden;
+  border: 1px solid rgba(201,168,76,.15);
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+  display: flex;
+  flex-direction: column;
+}
+.svc-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 32px 64px -20px rgba(13,34,48,.55), 0 6px 14px rgba(13,34,48,.12);
+  border-color: rgba(201,168,76,.45);
+}
+.svc-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 42px;
+  right: 42px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--secondary), var(--secondary-soft), transparent);
+  opacity: .7;
+  border-radius: 0 0 2px 2px;
+}
+
+.svc-num-bg {
+  position: absolute;
+  bottom: -24px;
+  right: 20px;
+  font-family: var(--serif);
+  font-size: 130px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  opacity: .04;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -.04em;
+}
+
+.svc-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: rgba(201,168,76,.12);
+  border: 1px solid rgba(201,168,76,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 22px;
+  color: var(--secondary);
+  flex-shrink: 0;
+  transition: background .3s, border-color .3s;
+}
+.svc-card:hover .svc-icon-wrap {
+  background: rgba(201,168,76,.22);
+  border-color: rgba(201,168,76,.5);
+}
+.svc-icon-wrap svg { width: 22px; height: 22px; }
+
+.svc-cat {
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+}
+
+.svc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.svc-list li {
+  font-family: var(--sans);
+  font-size: .9rem;
+  color: rgba(255,255,255,.7);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.45;
+  transition: color .25s;
+}
+.svc-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 1px;
+  background: var(--secondary);
+  opacity: .8;
+}
+.svc-card:hover .svc-list li { color: rgba(255,255,255,.88); }
+
+/* =========================================================
+   LISTINGS
+   ========================================================= */
 .filter-tabs {
   display: inline-flex;
   gap: 4px;
@@ -1313,6 +1430,8 @@ footer .legal .links { display: flex; gap: 24px; }
 @media (max-width:1024px) {
   .city-grid { grid-template-columns: repeat(3,1fr); }
   .listing-grid { grid-template-columns: repeat(2,1fr); }
+  .svc-grid { grid-template-columns: 1fr; }
+  .svc-card { padding: 36px 32px 40px; }
   .testi-grid { grid-template-columns: 1fr; max-width: 600px; margin-inline: auto; }
   .hero .container { grid-template-columns: 1fr; gap: 40px; }
   .hero-visual { height: 480px; max-width: 520px; margin-inline: auto; width: 100%; }
@@ -1331,6 +1450,7 @@ footer .legal .links { display: flex; gap: 24px; }
   .city-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
   .city-card { height: 220px; }
   .listing-grid { grid-template-columns: 1fr; }
+  .svc-num-bg { font-size: 100px; }
   .features { grid-template-columns: 1fr; }
   .stat-grid { grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
   .hero { padding-top: 120px; }
