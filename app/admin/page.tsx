@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
-type HeroWidget = { pill: string; name: string; loc: string; price: string; period: string };
+type HeroWidget = { pill: string; name: string; loc: string; price: string; period: string; photo: string };
 type Listing = {
   id: string; cat: string; title: string; loc: string; type: string;
   price: string; period: string; facilities: string[]; desc: string;
@@ -20,12 +20,12 @@ type Content = {
   contact: Contact;
 };
 
+const EMPTY_WIDGET: HeroWidget = { pill: "", name: "", loc: "", price: "", period: "", photo: "" };
 const EMPTY_LISTING: Listing = {
   id: "", cat: "kost", title: "", loc: "", type: "", price: "", period: "bln",
-  facilities: [], desc: "", photos: ["ph-1"], wa: "",
+  facilities: [], desc: "", photos: [], wa: "",
 };
 const EMPTY_FAQ: Faq = { q: "", a: "" };
-const PHOTO_OPTIONS = ["ph-1", "ph-2", "ph-3", "ph-4", "ph-5", "ph-6"];
 
 // ── Styles ───────────────────────────────────────────────────────────────────
 
@@ -79,7 +79,6 @@ const S = {
     fontSize: "14px", background: "#fafafa", boxSizing: "border-box" as const,
   } as React.CSSProperties,
   row: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "14px" } as React.CSSProperties,
-  row3: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "14px", marginBottom: "14px" } as React.CSSProperties,
   field: { marginBottom: "14px" } as React.CSSProperties,
   saveBtn: {
     background: "#c9a84c", color: "#fff", border: "none", padding: "10px 24px",
@@ -120,16 +119,6 @@ const S = {
     color: cat === "kost" ? "#854d0e" : cat === "apartemen" ? "#1d4ed8" : "#9d174d",
   }),
   divider: { borderTop: "1px solid #e5e7eb", margin: "20px 0" } as React.CSSProperties,
-  photoCheckbox: {
-    display: "flex", flexWrap: "wrap" as const, gap: "8px",
-  },
-  photoChip: (active: boolean): React.CSSProperties => ({
-    padding: "5px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "12px", fontWeight: 600,
-    border: active ? "2px solid #c9a84c" : "2px solid #e5e7eb",
-    background: active ? "#fdf6e3" : "#f9fafb",
-    color: active ? "#c9a84c" : "#6b7280",
-  }),
-
   // Login
   loginWrap: {
     minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
@@ -148,13 +137,85 @@ const S = {
   loginError: { color: "#dc2626", fontSize: "13px", marginTop: "10px" },
 };
 
-// ── Shared field helpers ──────────────────────────────────────────────────────
+// ── Shared helpers ────────────────────────────────────────────────────────────
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div style={S.field}>
       <label style={S.label}>{label}</label>
       {children}
+    </div>
+  );
+}
+
+async function uploadPhoto(file: File, folder: "listings" | "hero", token: string): Promise<string | null> {
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("folder", folder);
+  const res = await fetch("/api/admin/upload", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: fd,
+  });
+  const data = await res.json();
+  return data.url ?? null;
+}
+
+// ── Photo Grid (shared untuk listing & widget) ────────────────────────────────
+
+function PhotoGrid({
+  photos, onRemove, onAdd, maxPhotos = 6, uploading, token, folder,
+}: {
+  photos: string[];
+  onRemove: (i: number) => void;
+  onAdd: (urls: string[]) => void;
+  maxPhotos?: number;
+  uploading: boolean;
+  token: string;
+  folder: "listings" | "hero";
+}) {
+  const [busy, setBusy] = useState(false);
+
+  const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files ?? []);
+    if (!files.length) return;
+    setBusy(true);
+    const remaining = maxPhotos - photos.length;
+    const toUpload = files.slice(0, remaining);
+    const urls: string[] = [];
+    for (const f of toUpload) {
+      const url = await uploadPhoto(f, folder, token);
+      if (url) urls.push(url);
+    }
+    onAdd(urls);
+    setBusy(false);
+    e.target.value = "";
+  };
+
+  const isBusy = busy || uploading;
+
+  return (
+    <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+      {photos.map((p, i) => (
+        <div key={i} style={{ position: "relative", width: "110px", height: "80px", borderRadius: "8px", overflow: "hidden", background: "#e5e7eb", flexShrink: 0 }}>
+          <img src={p.startsWith("http") ? p : undefined} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", display: p.startsWith("http") ? "block" : "none" }} />
+          {!p.startsWith("http") && (
+            <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#6b7280", fontWeight: 600 }}>{p}</div>
+          )}
+          <button
+            type="button"
+            onClick={() => onRemove(i)}
+            style={{ position: "absolute", top: "4px", right: "4px", background: "rgba(0,0,0,.65)", color: "#fff", border: "none", borderRadius: "50%", width: "22px", height: "22px", cursor: "pointer", fontSize: "13px", lineHeight: 1, padding: 0, display: "flex", alignItems: "center", justifyContent: "center" }}
+          >✕</button>
+        </div>
+      ))}
+      {photos.length < maxPhotos && (
+        <label style={{ width: "110px", height: "80px", borderRadius: "8px", border: "2px dashed #d1d5db", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: isBusy ? "default" : "pointer", color: "#9ca3af", fontSize: "12px", gap: "4px", flexShrink: 0 }}>
+          <span style={{ fontSize: "20px", lineHeight: 1 }}>{isBusy ? "⏳" : "+"}</span>
+          <span>{isBusy ? "Uploading…" : "Tambah Foto"}</span>
+          <input type="file" accept="image/*" multiple={maxPhotos > 1} style={{ display: "none" }} onChange={handleFiles} disabled={isBusy} />
+        </label>
+      )}
     </div>
   );
 }
@@ -213,30 +274,13 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
   );
 }
 
-// ── Photo picker ─────────────────────────────────────────────────────────────
-
-function PhotoPicker({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
-  const toggle = (p: string) => {
-    if (value.includes(p)) onChange(value.filter((x) => x !== p));
-    else onChange([...value, p]);
-  };
-  return (
-    <div style={S.photoCheckbox}>
-      {PHOTO_OPTIONS.map((p) => (
-        <button key={p} type="button" style={S.photoChip(value.includes(p))} onClick={() => toggle(p)}>
-          {p}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 // ── Listing Form ──────────────────────────────────────────────────────────────
 
 function ListingForm({
-  initial, onSave, onCancel,
-}: { initial: Listing; onSave: (l: Listing) => void; onCancel: () => void }) {
+  initial, onSave, onCancel, token,
+}: { initial: Listing; onSave: (l: Listing) => void; onCancel: () => void; token: string }) {
   const [f, setF] = useState<Listing>(initial);
+  const [saving, setSaving] = useState(false);
   const set = (k: keyof Listing, v: unknown) => setF((prev) => ({ ...prev, [k]: v }));
 
   return (
@@ -263,7 +307,7 @@ function ListingForm({
         </Field>
       </div>
       <div style={S.row}>
-        <Field label="Lokasi (singkat)">
+        <Field label="Lokasi">
           <input style={S.input} value={f.loc} onChange={(e) => set("loc", e.target.value)} placeholder="Jakarta Pusat" />
         </Field>
         <Field label="Harga">
@@ -290,8 +334,16 @@ function ListingForm({
       <Field label="Deskripsi">
         <textarea style={S.textarea} value={f.desc} onChange={(e) => set("desc", e.target.value)} rows={3} />
       </Field>
-      <Field label="Foto (pilih 1–6 slot, urutan = urutan tampil)">
-        <PhotoPicker value={f.photos} onChange={(v) => set("photos", v)} />
+      <Field label="Foto (maks 6 foto, maks 5 MB/foto — JPG, PNG, WebP)">
+        <PhotoGrid
+          photos={f.photos}
+          onRemove={(i) => set("photos", f.photos.filter((_, j) => j !== i))}
+          onAdd={(urls) => set("photos", [...f.photos, ...urls].slice(0, 6))}
+          maxPhotos={6}
+          uploading={saving}
+          token={token}
+          folder="listings"
+        />
       </Field>
       <Field label="Pesan WhatsApp (URL-encoded, tanpa tanda tanya awal)">
         <input
@@ -303,7 +355,12 @@ function ListingForm({
       </Field>
       <div style={{ marginTop: "6px" }}>
         <button style={S.cancelBtn} type="button" onClick={onCancel}>Batal</button>
-        <button style={S.saveBtn} type="button" onClick={() => onSave(f)}>Simpan Listing</button>
+        <button
+          style={{ ...S.saveBtn, ...(saving ? S.saveBtnDisabled : {}) }}
+          type="button"
+          disabled={saving}
+          onClick={() => { setSaving(true); onSave(f); }}
+        >Simpan Listing</button>
       </div>
     </div>
   );
@@ -332,6 +389,58 @@ function FaqForm({
   );
 }
 
+// ── Hero Widget Editor ────────────────────────────────────────────────────────
+
+function WidgetEditor({
+  label, widget, onChange, token, saving,
+}: {
+  label: string;
+  widget: HeroWidget;
+  onChange: (w: HeroWidget) => void;
+  token: string;
+  saving: boolean;
+}) {
+  const set = (k: keyof HeroWidget, v: string) => onChange({ ...widget, [k]: v });
+  return (
+    <div style={S.card}>
+      <div style={S.cardTitle}>{label}</div>
+      <div style={S.row}>
+        <Field label="Label / Tipe (pill)">
+          <input style={S.input} value={widget.pill} onChange={(e) => set("pill", e.target.value)} />
+        </Field>
+        <Field label="Nama Hunian">
+          <input style={S.input} value={widget.name} onChange={(e) => set("name", e.target.value)} />
+        </Field>
+      </div>
+      <div style={S.row}>
+        <Field label="Lokasi">
+          <input style={S.input} value={widget.loc} onChange={(e) => set("loc", e.target.value)} />
+        </Field>
+        <Field label="Harga">
+          <input style={S.input} value={widget.price} onChange={(e) => set("price", e.target.value)} />
+        </Field>
+      </div>
+      <Field label="Periode (contoh: bulan, hari)">
+        <input style={{ ...S.input, maxWidth: "200px" }} value={widget.period} onChange={(e) => set("period", e.target.value)} />
+      </Field>
+      <Field label="Foto Hero Card (opsional, maks 5 MB)">
+        <PhotoGrid
+          photos={widget.photo ? [widget.photo] : []}
+          onRemove={() => set("photo", "")}
+          onAdd={(urls) => set("photo", urls[0] ?? "")}
+          maxPhotos={1}
+          uploading={saving}
+          token={token}
+          folder="hero"
+        />
+        {widget.photo && (
+          <p style={{ fontSize: "11px", color: "#9ca3af", marginTop: "6px" }}>Foto ini tampil sebagai background kartu hero di website.</p>
+        )}
+      </Field>
+    </div>
+  );
+}
+
 // ── Main Admin Page ───────────────────────────────────────────────────────────
 
 type Tab = "whatsapp" | "hero" | "listings" | "faq" | "contact";
@@ -344,13 +453,8 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ type: "ok" | "err"; text: string } | null>(null);
 
-  // Listing CRUD state
   const [listingEdit, setListingEdit] = useState<number | "new" | null>(null);
-  const [listingForm, setListingForm] = useState<Listing>(EMPTY_LISTING);
-
-  // FAQ CRUD state
   const [faqEdit, setFaqEdit] = useState<number | "new" | null>(null);
-  const [faqForm, setFaqForm] = useState<Faq>(EMPTY_FAQ);
 
   const showToast = (type: "ok" | "err", text: string) => {
     setToast({ type, text });
@@ -362,10 +466,13 @@ export default function AdminPage() {
       headers: { Authorization: `Bearer ${tok}` },
     });
     if (!res.ok) { showToast("err", "Gagal memuat data"); return; }
-    setContent(await res.json());
+    const data = await res.json();
+    // Pastikan hero widgets selalu punya field photo
+    if (data.hero?.widget1 && data.hero.widget1.photo === undefined) data.hero.widget1.photo = "";
+    if (data.hero?.widget2 && data.hero.widget2.photo === undefined) data.hero.widget2.photo = "";
+    setContent(data);
   }, []);
 
-  // On mount: check sessionStorage token
   useEffect(() => {
     const stored = sessionStorage.getItem("adminToken");
     if (stored) {
@@ -396,22 +503,21 @@ export default function AdminPage() {
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(updated),
     });
+    const data = await res.json();
     setSaving(false);
     if (res.ok) {
       setContent(updated);
       showToast("ok", "Tersimpan!");
     } else {
-      showToast("err", "Gagal menyimpan");
+      showToast("err", data.error ?? "Gagal menyimpan");
     }
   };
 
   const setC = (patch: Partial<Content>) => setContent((c) => c ? { ...c, ...patch } : c);
 
-  // ── Render: loading / login ──────────────────────────────────────────────
-
   if (loading) {
     return (
-      <div style={{ ...S.loginWrap }}>
+      <div style={S.loginWrap}>
         <div style={{ color: "#9ca3af", fontSize: "15px" }}>Memuat…</div>
       </div>
     );
@@ -430,8 +536,6 @@ export default function AdminPage() {
     );
   }
 
-  // ── Render: Admin UI ────────────────────────────────────────────────────
-
   const TAB_LABELS: { key: Tab; label: string }[] = [
     { key: "whatsapp", label: "WhatsApp" },
     { key: "hero", label: "Hero Widgets" },
@@ -442,7 +546,6 @@ export default function AdminPage() {
 
   return (
     <div style={S.page}>
-      {/* Header */}
       <header style={S.header}>
         <div style={S.brand}>
           <span style={S.gold}>Partner</span> Livingku — Admin
@@ -451,7 +554,6 @@ export default function AdminPage() {
       </header>
 
       <div style={S.layout}>
-        {/* Sidebar */}
         <aside style={S.sidebar}>
           <div style={S.sideLabel}>Menu</div>
           {TAB_LABELS.map(({ key, label }) => (
@@ -470,7 +572,6 @@ export default function AdminPage() {
           </a>
         </aside>
 
-        {/* Main content */}
         <main style={S.main}>
 
           {/* ── WhatsApp Tab ────────────────────────────────────────────── */}
@@ -488,8 +589,7 @@ export default function AdminPage() {
                   />
                 </Field>
                 <p style={{ color: "#9ca3af", fontSize: "12px", marginBottom: "18px" }}>
-                  Nomor ini digunakan untuk semua tombol &quot;Chat WhatsApp&quot; di navbar, hero, floating button, dan halaman kontak.
-                  Format: kode negara + nomor tanpa spasi (contoh: 62812xxxxxxxx).
+                  Digunakan untuk semua tombol &quot;Chat WhatsApp&quot; di seluruh halaman.
                 </p>
                 <button
                   style={{ ...S.saveBtn, ...(saving ? S.saveBtnDisabled : {}) }}
@@ -507,67 +607,22 @@ export default function AdminPage() {
             <div>
               <h2 style={{ fontSize: "18px", fontWeight: 800, marginBottom: "20px" }}>Hero Widgets</h2>
               <p style={{ color: "#6b7280", marginBottom: "20px", fontSize: "13px" }}>
-                Dua kartu mini yang tampil di sebelah kanan hero section sebagai contoh listing unggulan.
+                Dua kartu mini yang tampil di hero section sebagai contoh listing unggulan.
               </p>
-
-              {/* Widget 1 */}
-              <div style={S.card}>
-                <div style={S.cardTitle}>Widget 1 — Kartu Utama (depan)</div>
-                <div style={S.row}>
-                  <Field label="Label / Tipe (pill)">
-                    <input style={S.input} value={content.hero.widget1.pill}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget1: { ...content.hero.widget1, pill: e.target.value } } })} />
-                  </Field>
-                  <Field label="Nama Hunian">
-                    <input style={S.input} value={content.hero.widget1.name}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget1: { ...content.hero.widget1, name: e.target.value } } })} />
-                  </Field>
-                </div>
-                <div style={S.row}>
-                  <Field label="Lokasi">
-                    <input style={S.input} value={content.hero.widget1.loc}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget1: { ...content.hero.widget1, loc: e.target.value } } })} />
-                  </Field>
-                  <Field label="Harga">
-                    <input style={S.input} value={content.hero.widget1.price}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget1: { ...content.hero.widget1, price: e.target.value } } })} />
-                  </Field>
-                </div>
-                <Field label="Periode (contoh: bulan, hari)">
-                  <input style={{ ...S.input, maxWidth: "200px" }} value={content.hero.widget1.period}
-                    onChange={(e) => setC({ hero: { ...content.hero, widget1: { ...content.hero.widget1, period: e.target.value } } })} />
-                </Field>
-              </div>
-
-              {/* Widget 2 */}
-              <div style={S.card}>
-                <div style={S.cardTitle}>Widget 2 — Kartu Kecil (belakang)</div>
-                <div style={S.row}>
-                  <Field label="Label / Tipe (pill)">
-                    <input style={S.input} value={content.hero.widget2.pill}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget2: { ...content.hero.widget2, pill: e.target.value } } })} />
-                  </Field>
-                  <Field label="Nama Hunian">
-                    <input style={S.input} value={content.hero.widget2.name}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget2: { ...content.hero.widget2, name: e.target.value } } })} />
-                  </Field>
-                </div>
-                <div style={S.row}>
-                  <Field label="Lokasi">
-                    <input style={S.input} value={content.hero.widget2.loc}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget2: { ...content.hero.widget2, loc: e.target.value } } })} />
-                  </Field>
-                  <Field label="Harga">
-                    <input style={S.input} value={content.hero.widget2.price}
-                      onChange={(e) => setC({ hero: { ...content.hero, widget2: { ...content.hero.widget2, price: e.target.value } } })} />
-                  </Field>
-                </div>
-                <Field label="Periode">
-                  <input style={{ ...S.input, maxWidth: "200px" }} value={content.hero.widget2.period}
-                    onChange={(e) => setC({ hero: { ...content.hero, widget2: { ...content.hero.widget2, period: e.target.value } } })} />
-                </Field>
-              </div>
-
+              <WidgetEditor
+                label="Widget 1 — Kartu Utama (depan)"
+                widget={content.hero.widget1}
+                onChange={(w) => setC({ hero: { ...content.hero, widget1: w } })}
+                token={token}
+                saving={saving}
+              />
+              <WidgetEditor
+                label="Widget 2 — Kartu Kecil (belakang)"
+                widget={content.hero.widget2}
+                onChange={(w) => setC({ hero: { ...content.hero, widget2: w } })}
+                token={token}
+                saving={saving}
+              />
               <button
                 style={{ ...S.saveBtn, ...(saving ? S.saveBtnDisabled : {}) }}
                 disabled={saving}
@@ -584,16 +639,16 @@ export default function AdminPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                 <h2 style={{ fontSize: "18px", fontWeight: 800 }}>Listing Hunian ({content.listings.length})</h2>
                 {listingEdit === null && (
-                  <button style={S.addBtn} onClick={() => { setListingForm(EMPTY_LISTING); setListingEdit("new"); }}>
+                  <button style={S.addBtn} onClick={() => setListingEdit("new")}>
                     + Tambah Listing
                   </button>
                 )}
               </div>
 
-              {/* New listing form */}
               {listingEdit === "new" && (
                 <ListingForm
-                  initial={listingForm}
+                  initial={EMPTY_LISTING}
+                  token={token}
                   onSave={(l) => {
                     const updated = { ...content, listings: [...content.listings, l] };
                     save(updated);
@@ -603,7 +658,6 @@ export default function AdminPage() {
                 />
               )}
 
-              {/* Listing list */}
               <div style={S.card}>
                 {content.listings.length === 0 && (
                   <p style={{ color: "#9ca3af", textAlign: "center", padding: "20px 0" }}>Belum ada listing.</p>
@@ -613,6 +667,7 @@ export default function AdminPage() {
                     {listingEdit === i ? (
                       <ListingForm
                         initial={l}
+                        token={token}
                         onSave={(updated) => {
                           const listings = content.listings.map((x, j) => (j === i ? updated : x));
                           save({ ...content, listings });
@@ -623,17 +678,19 @@ export default function AdminPage() {
                     ) : (
                       <div style={S.listItem}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ marginBottom: "4px" }}>
+                          <div style={{ marginBottom: "4px", display: "flex", alignItems: "center", gap: "6px" }}>
                             <span style={S.badge(l.cat)}>{l.cat}</span>
                             <span style={{ fontWeight: 700, fontSize: "14px" }}>{l.title}</span>
-                            <span style={{ color: "#9ca3af", fontSize: "12px", marginLeft: "8px" }}>{l.id}</span>
+                            <span style={{ color: "#9ca3af", fontSize: "12px" }}>{l.id}</span>
                           </div>
-                          <div style={{ color: "#6b7280", fontSize: "12px" }}>
-                            📍 {l.loc} · {l.price}/{l.period} · Foto: {l.photos.join(", ")}
+                          <div style={{ color: "#6b7280", fontSize: "12px", display: "flex", alignItems: "center", gap: "12px" }}>
+                            <span>📍 {l.loc}</span>
+                            <span>{l.price}/{l.period}</span>
+                            <span>{l.photos.length} foto</span>
                           </div>
                         </div>
                         <div style={{ flexShrink: 0 }}>
-                          <button style={S.editBtn} onClick={() => { setListingForm(l); setListingEdit(i); }}>Edit</button>
+                          <button style={S.editBtn} onClick={() => setListingEdit(i)}>Edit</button>
                           <button
                             style={S.dangerBtn}
                             onClick={() => {
@@ -659,7 +716,7 @@ export default function AdminPage() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
                 <h2 style={{ fontSize: "18px", fontWeight: 800 }}>FAQ ({content.faqs.length})</h2>
                 {faqEdit === null && (
-                  <button style={S.addBtn} onClick={() => { setFaqForm(EMPTY_FAQ); setFaqEdit("new"); }}>
+                  <button style={S.addBtn} onClick={() => setFaqEdit("new")}>
                     + Tambah FAQ
                   </button>
                 )}
@@ -667,7 +724,7 @@ export default function AdminPage() {
 
               {faqEdit === "new" && (
                 <FaqForm
-                  initial={faqForm}
+                  initial={EMPTY_FAQ}
                   onSave={(f) => {
                     const updated = { ...content, faqs: [...content.faqs, f] };
                     save(updated);
@@ -700,7 +757,7 @@ export default function AdminPage() {
                           <div style={{ color: "#6b7280", fontSize: "12px" }}>{f.a.slice(0, 100)}{f.a.length > 100 ? "…" : ""}</div>
                         </div>
                         <div style={{ flexShrink: 0 }}>
-                          <button style={S.editBtn} onClick={() => { setFaqForm(f); setFaqEdit(i); }}>Edit</button>
+                          <button style={S.editBtn} onClick={() => setFaqEdit(i)}>Edit</button>
                           <button
                             style={S.dangerBtn}
                             onClick={() => {
@@ -765,7 +822,6 @@ export default function AdminPage() {
         </main>
       </div>
 
-      {/* Toast */}
       {toast && <div style={S.toast(toast.type)}>{toast.text}</div>}
 
       <style>{`

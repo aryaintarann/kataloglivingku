@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type HeroWidget = { pill: string; name: string; loc: string; price: string; period: string };
+type HeroWidget = { pill: string; name: string; loc: string; price: string; period: string; photo?: string };
 type Listing = {
   id: string; cat: string; title: string; loc: string; type: string;
   price: string; period: string; facilities: string[]; desc: string;
@@ -23,8 +23,8 @@ type Content = {
 const DEFAULT: Content = {
   whatsapp: "6281234567890",
   hero: {
-    widget1: { pill: "Kost Eksklusif", name: "Kost Menteng Premium", loc: "Jakarta Pusat · 5 menit ke MRT", price: "Rp 2.500.000", period: "bulan" },
-    widget2: { pill: "Apartemen", name: "Studio Dago View", loc: "Bandung", price: "Rp 3,2 jt", period: "bulan" },
+    widget1: { pill: "Kost Eksklusif", name: "Kost Menteng Premium", loc: "Jakarta Pusat · 5 menit ke MRT", price: "Rp 2.500.000", period: "bulan", photo: "" },
+    widget2: { pill: "Apartemen", name: "Studio Dago View", loc: "Bandung", price: "Rp 3,2 jt", period: "bulan", photo: "" },
   },
   listings: [],
   faqs: [],
@@ -83,7 +83,16 @@ function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
       data-wa={l.wa || waText}
     >
       <div className="photo">
-        <div className={`ph ${l.photos[0] ?? "ph-1"}`} />
+        {(() => {
+          const p = l.photos[0] ?? "ph-1";
+          const isUrl = p.startsWith("https://");
+          return (
+            <div
+              className={isUrl ? "ph" : `ph ${p}`}
+              style={isUrl ? { backgroundImage: `url(${p})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+            />
+          );
+        })()}
         <span className="badge-type">{l.type}</span>
         <span className="badge-verified">✓ Verified</span>
       </div>
@@ -188,7 +197,10 @@ export default async function Home() {
 
             <div className="hero-visual reveal" aria-hidden="true">
               <article className="hero-card main">
-                <div className="ph">
+                <div
+                  className="ph"
+                  style={c.hero.widget1.photo ? { background: `url(${c.hero.widget1.photo}) center/cover no-repeat` } : undefined}
+                >
                   <span className="pill">{c.hero.widget1.pill}</span>
                   <span className="heart">♥</span>
                 </div>
@@ -199,7 +211,10 @@ export default async function Home() {
                 </div>
               </article>
               <article className="hero-card alt">
-                <div className="ph">
+                <div
+                  className="ph"
+                  style={c.hero.widget2.photo ? { background: `url(${c.hero.widget2.photo}) center/cover no-repeat` } : undefined}
+                >
                   <span className="pill">{c.hero.widget2.pill}</span>
                 </div>
                 <div className="meta">

@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { timingSafeEqual } from "crypto";
 import { createServerClient } from "@/lib/supabase";
 
-const MAX_BODY_BYTES = 512 * 1024; // 512 KB
+const MAX_BODY_BYTES = 1024 * 1024; // 1 MB (naik karena foto URL lebih panjang)
 const ALLOWED_CATS = new Set(["kost", "apartemen", "harian"]);
 const ALLOWED_PERIODS = new Set(["bln", "hari", "thn"]);
-const ALLOWED_PHOTOS = new Set(["ph-1", "ph-2", "ph-3", "ph-4", "ph-5", "ph-6"]);
+const ALLOWED_PHOTO_CLASSES = new Set(["ph-1", "ph-2", "ph-3", "ph-4", "ph-5", "ph-6"]);
 
 function safeEqual(a: string, b: string): boolean {
   const len = Math.max(a.length, b.length, 1);
@@ -41,6 +41,30 @@ function noJsUrl(s: string): string {
   return /^\s*javascript:/i.test(s) ? "" : s;
 }
 
+// Validasi foto: CSS class (ph-1..ph-6) ATAU URL Supabase Storage milik project ini
+function isValidPhoto(p: string): boolean {
+  if (ALLOWED_PHOTO_CLASSES.has(p)) return true;
+  try {
+    const url = new URL(p);
+    const supaHost = process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).hostname : "";
+    return url.protocol === "https:" && url.hostname === supaHost && url.pathname.includes("/storage/v1/object/public/photos/");
+  } catch {
+    return false;
+  }
+}
+
+// Validasi foto URL untuk hero widget (lebih longgar: semua URL Supabase project)
+function isValidWidgetPhoto(p: string): boolean {
+  if (!p) return true;
+  try {
+    const url = new URL(p);
+    const supaHost = process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).hostname : "";
+    return url.protocol === "https:" && url.hostname === supaHost;
+  } catch {
+    return false;
+  }
+}
+
 function validateListing(l: unknown): Record<string, unknown> | null {
   if (typeof l !== "object" || !l) return null;
   const o = l as Record<string, unknown>;
@@ -48,7 +72,8 @@ function validateListing(l: unknown): Record<string, unknown> | null {
   if (!id) return null;
   const cat = str(o.cat, 20);
   const period = str(o.period, 10);
-  const photos = strArr(o.photos, 6, 10).filter((p) => ALLOWED_PHOTOS.has(p));
+  // maxLen 500 untuk menampung URL Supabase Storage
+  const photos = strArr(o.photos, 6, 500).filter(isValidPhoto);
   return {
     id,
     cat: ALLOWED_CATS.has(cat) ? cat : "kost",
@@ -124,7 +149,6 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Batasi ukuran body
   const contentLength = Number(req.headers.get("content-length") ?? 0);
   if (contentLength > MAX_BODY_BYTES) {
     return NextResponse.json({ error: "Payload terlalu besar" }, { status: 413 });
@@ -137,27 +161,25 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "JSON tidak valid" }, { status: 400 });
   }
 
-  // Validasi listings
   const rawListings = Array.isArray(body.listings) ? body.listings : [];
   const listings = rawListings.map(validateListing).filter(Boolean) as Record<string, unknown>[];
 
-  // Validasi FAQs
   const rawFaqs = Array.isArray(body.faqs) ? body.faqs : [];
   const faqs = rawFaqs.map(validateFaq).filter(Boolean) as { question: string; answer: string }[];
 
-  // Validasi hero widgets
   const hw1 = typeof body.hero === "object" && body.hero ? (body.hero as Record<string, unknown>).widget1 : {};
   const hw2 = typeof body.hero === "object" && body.hero ? (body.hero as Record<string, unknown>).widget2 : {};
   const safeWidget = (w: unknown) => {
     if (typeof w !== "object" || !w) return {};
     const o = w as Record<string, unknown>;
+    const photo = str(o.photo, 500);
     return {
       pill: str(o.pill), name: str(o.name), loc: str(o.loc),
       price: str(o.price), period: str(o.period),
+      photo: isValidWidgetPhoto(photo) ? photo : "",
     };
   };
 
-  // Validasi contact
   const contact = typeof body.contact === "object" && body.contact
     ? {
         phone: str((body.contact as Record<string, unknown>).phone, 50),
@@ -166,7 +188,7 @@ export async function PUT(req: NextRequest) {
       }
     : {};
 
-  const waNumber = str(body.whatsapp, 20).replace(/\D/g, ""); // hanya angka
+  const waNumber = str(body.whatsapp, 20).replace(/\D/g, "");
 
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ error: "Supabase belum dikonfigurasi di .env.local" }, { status: 503 });

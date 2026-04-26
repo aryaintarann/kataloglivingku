@@ -227,7 +227,7 @@ export default function ClientInteractions() {
       const photos = (article.dataset.photos ?? "ph-1")
         .split(",")
         .map((p) => p.trim())
-        .filter((p) => ALLOWED_PHOTOS.has(p));
+        .filter((p) => ALLOWED_PHOTOS.has(p) || (p.startsWith("https://") && p.includes("/storage/v1/object/public/photos/")));
 
       // u2500 Slider slides (foto diwhitelist, aman untuk class) u2500
       totalSlides = photos.length;
@@ -238,7 +238,14 @@ export default function ClientInteractions() {
           const slide = document.createElement("div");
           slide.className = "slide";
           const ph = document.createElement("div");
-          ph.className = `ph ${p}`; // aman: nilai sudah divalidasi dari whitelist
+          if (p.startsWith("https://")) {
+            ph.className = "ph";
+            ph.style.backgroundImage = `url(${p})`;
+            ph.style.backgroundSize = "cover";
+            ph.style.backgroundPosition = "center";
+          } else {
+            ph.className = `ph ${p}`; // CSS class (ph-1..ph-6), sudah divalidasi whitelist
+          }
           slide.appendChild(ph);
           sliderTrack.appendChild(slide);
         });
