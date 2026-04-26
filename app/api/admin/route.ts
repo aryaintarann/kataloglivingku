@@ -78,12 +78,30 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const db = createServerClient();
-  const [{ data: settings }, { data: listings }, { data: faqs }] = await Promise.all([
-    db.from("settings").select("*").eq("id", 1).single(),
-    db.from("listings").select("*").order("sort_order"),
-    db.from("faqs").select("*").order("sort_order"),
-  ]);
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: "Supabase belum dikonfigurasi di .env.local" }, { status: 503 });
+  }
+
+  let settings: Record<string, unknown> | null = null;
+  let listings: Record<string, unknown>[] | null = null;
+  let faqs: Record<string, unknown>[] | null = null;
+  try {
+    const db = createServerClient();
+    const results = await Promise.all([
+      db.from("settings").select("*").eq("id", 1).single(),
+      db.from("listings").select("*").order("sort_order"),
+      db.from("faqs").select("*").order("sort_order"),
+    ]);
+    if (results[0].error) throw results[0].error;
+    if (results[1].error) throw results[1].error;
+    if (results[2].error) throw results[2].error;
+    settings = results[0].data as Record<string, unknown>;
+    listings = results[1].data as Record<string, unknown>[];
+    faqs = results[2].data as Record<string, unknown>[];
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ error: `Database error: ${msg}` }, { status: 500 });
+  }
 
   return NextResponse.json({
     whatsapp: settings?.whatsapp ?? "",
@@ -149,6 +167,10 @@ export async function PUT(req: NextRequest) {
     : {};
 
   const waNumber = str(body.whatsapp, 20).replace(/\D/g, ""); // hanya angka
+
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: "Supabase belum dikonfigurasi di .env.local" }, { status: 503 });
+  }
 
   const db = createServerClient();
 
