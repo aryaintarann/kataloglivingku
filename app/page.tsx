@@ -138,8 +138,8 @@ export default async function Home() {
             <ul className="nav-links">
               <li><a href="#top" className="active">Home</a></li>
               <li><a href="#about">About Us</a></li>
-              <li><a href="#units">Our Units</a></li>
-              <li><a href="#services">Our Services</a></li>
+              <li><a href="#services">Services</a></li>
+              <li><a href="#units">Units</a></li>
               <li><a href="#testimoni">Testimoni</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
@@ -161,8 +161,8 @@ export default async function Home() {
       <aside className="drawer" id="drawer" aria-label="Menu navigasi mobile">
         <a href="#top">Home</a>
         <a href="#about">About Us</a>
-        <a href="#units">Our Units</a>
-        <a href="#services">Our Services</a>
+        <a href="#services">Services</a>
+        <a href="#units">Units</a>
         <a href="#testimoni">Testimoni</a>
         <a href="#contact">Contact</a>
         <a href={WA_BASE} className="btn btn-wa" target="_blank" rel="noopener noreferrer">
