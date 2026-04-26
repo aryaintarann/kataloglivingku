@@ -65,8 +65,13 @@ INSERT INTO faqs (question, answer, sort_order) VALUES
   ('Apakah semua listing sudah diverifikasi?', 'Ya. Setiap listing yang tampil di Partner Livingku telah melalui proses verifikasi: pengecekan dokumen properti, kunjungan tim lapangan untuk dokumentasi foto, dan validasi identitas owner.', 2);
 
 -- ============================================================
--- Row Level Security (nonaktifkan untuk akses via service role)
+-- Row Level Security
+-- Aktifkan RLS + deny all untuk anon/authenticated.
+-- Service role key selalu bypass RLS u2014 aman dipakai server-side.
 -- ============================================================
-ALTER TABLE settings DISABLE ROW LEVEL SECURITY;
-ALTER TABLE listings DISABLE ROW LEVEL SECURITY;
-ALTER TABLE faqs     DISABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE listings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE faqs     ENABLE ROW LEVEL SECURITY;
+
+-- Tidak ada policy = tidak ada akses untuk anon/authenticated key.
+-- Akses hanya melalui service role key (server-side).

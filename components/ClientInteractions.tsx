@@ -2,6 +2,21 @@
 
 import { useEffect, useRef } from "react";
 
+const ALLOWED_PHOTOS = new Set(["ph-1", "ph-2", "ph-3", "ph-4", "ph-5", "ph-6"]);
+
+const WA_SVG = `<svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16 0C7.164 0 0 7.163 0 16c0 2.833.742 5.487 2.034 7.79L0 32l8.42-2.006A15.93 15.93 0 0 0 16 32c8.836 0 16-7.163 16-16S24.836 0 16 0Zm0 29.333a13.27 13.27 0 0 1-6.747-1.836l-.483-.287-5 1.191 1.22-4.863-.315-.5A13.248 13.248 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333Zm7.273-9.927c-.397-.199-2.35-1.159-2.715-1.29-.364-.133-.63-.199-.895.199-.266.397-1.03 1.29-1.262 1.555-.233.265-.465.298-.862.1-.397-.2-1.676-.618-3.192-1.97-1.18-1.052-1.977-2.35-2.21-2.748-.232-.397-.025-.612.175-.81.18-.178.397-.464.596-.696.199-.232.265-.397.397-.662.133-.265.067-.497-.033-.696-.1-.199-.895-2.157-1.227-2.953-.323-.775-.65-.67-.895-.682l-.762-.013c-.265 0-.696.1-1.06.497-.364.397-1.39 1.358-1.39 3.312 0 1.953 1.423 3.84 1.622 4.105.199.265 2.8 4.275 6.784 5.996.948.41 1.688.654 2.265.837.952.302 1.819.26 2.504.158.764-.114 2.35-.96 2.682-1.887.332-.928.332-1.723.232-1.887-.099-.166-.364-.265-.762-.464Z"/></svg>`;
+
+function setText(id: string, text: string) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function clearEl(id: string): HTMLElement | null {
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = "";
+  return el ?? null;
+}
+
 export default function ClientInteractions() {
   const initialized = useRef(false);
 
@@ -81,7 +96,7 @@ export default function ClientInteractions() {
       revealObs.observe(el)
     );
 
-    // Counter animation — targets .counter spans inside .num
+    // Counter animation
     const formatNum = (n: number) => n.toLocaleString("id-ID");
     const countObs = new IntersectionObserver(
       (entries) => {
@@ -158,7 +173,11 @@ export default function ClientInteractions() {
       });
     });
 
-    // ── Listing Modal + Photo Slider ─────────────────────────
+    // u2500u2500 Listing Modal + Photo Slider u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500u2500
+
+    // Baca nomor WA dari data attribute yang di-render server (bukan hardcode)
+    const WA_BASE = (document.getElementById("top") as HTMLElement)?.dataset?.wabase ?? "";
+
     const modal = document.getElementById("listingModal");
     const modalClose = document.getElementById("modalClose");
     const sliderTrack = document.getElementById("sliderTrack");
@@ -183,7 +202,7 @@ export default function ClientInteractions() {
     sliderPrev?.addEventListener("click", () => goToSlide(currentSlide - 1));
     sliderNext?.addEventListener("click", () => goToSlide(currentSlide + 1));
 
-    // Touch/swipe support
+    // Touch/swipe
     let touchStartX = 0;
     const sliderEl = document.getElementById("modalSlider");
     sliderEl?.addEventListener("touchstart", (e) => {
@@ -194,61 +213,111 @@ export default function ClientInteractions() {
       if (Math.abs(dx) > 40) goToSlide(currentSlide + (dx < 0 ? 1 : -1));
     }, { passive: true });
 
-    const WA_BASE = "https://wa.me/6281234567890";
-    const WA_ICON = `<svg viewBox="0 0 32 32" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M16 0C7.164 0 0 7.163 0 16c0 2.833.742 5.487 2.034 7.79L0 32l8.42-2.006A15.93 15.93 0 0 0 16 32c8.836 0 16-7.163 16-16S24.836 0 16 0Zm0 29.333a13.27 13.27 0 0 1-6.747-1.836l-.483-.287-5 1.191 1.22-4.863-.315-.5A13.248 13.248 0 0 1 2.667 16C2.667 8.636 8.636 2.667 16 2.667S29.333 8.636 29.333 16 23.364 29.333 16 29.333Zm7.273-9.927c-.397-.199-2.35-1.159-2.715-1.29-.364-.133-.63-.199-.895.199-.266.397-1.03 1.29-1.262 1.555-.233.265-.465.298-.862.1-.397-.2-1.676-.618-3.192-1.97-1.18-1.052-1.977-2.35-2.21-2.748-.232-.397-.025-.612.175-.81.18-.178.397-.464.596-.696.199-.232.265-.397.397-.662.133-.265.067-.497-.033-.696-.1-.199-.895-2.157-1.227-2.953-.323-.775-.65-.67-.895-.682l-.762-.013c-.265 0-.696.1-1.06.497-.364.397-1.39 1.358-1.39 3.312 0 1.953 1.423 3.84 1.622 4.105.199.265 2.8 4.275 6.784 5.996.948.41 1.688.654 2.265.837.952.302 1.819.26 2.504.158.764-.114 2.35-.96 2.682-1.887.332-.928.332-1.723.232-1.887-.099-.166-.364-.265-.762-.464Z"/></svg>`;
-
     const openModal = (article: HTMLElement) => {
-      const title = article.dataset.title ?? "";
-      const loc = article.dataset.loc ?? "";
-      const type = article.dataset.type ?? "";
-      const price = article.dataset.price ?? "";
-      const period = article.dataset.period ?? "bln";
+      const title    = article.dataset.title ?? "";
+      const loc      = article.dataset.loc ?? "";
+      const type     = article.dataset.type ?? "";
+      const price    = article.dataset.price ?? "";
+      const period   = article.dataset.period ?? "bln";
+      const desc     = article.dataset.desc ?? "";
+      const wa       = article.dataset.wa ?? "";
       const facilities = (article.dataset.facilities ?? "").split(",").filter(Boolean);
-      const desc = article.dataset.desc ?? "";
-      const photos = (article.dataset.photos ?? "ph-1").split(",").filter(Boolean);
-      const wa = article.dataset.wa ?? "";
 
-      // Build slider slides
+      // Whitelist foto u2014 hanya ph-1 s/d ph-6 diizinkan
+      const photos = (article.dataset.photos ?? "ph-1")
+        .split(",")
+        .map((p) => p.trim())
+        .filter((p) => ALLOWED_PHOTOS.has(p));
+
+      // u2500 Slider slides (foto diwhitelist, aman untuk class) u2500
       totalSlides = photos.length;
       currentSlide = 0;
       if (sliderTrack) {
-        sliderTrack.innerHTML = photos
-          .map((p) => `<div class="slide"><div class="ph ${p.trim()}"></div></div>`)
-          .join("");
+        sliderTrack.innerHTML = "";
+        photos.forEach((p) => {
+          const slide = document.createElement("div");
+          slide.className = "slide";
+          const ph = document.createElement("div");
+          ph.className = `ph ${p}`; // aman: nilai sudah divalidasi dari whitelist
+          slide.appendChild(ph);
+          sliderTrack.appendChild(slide);
+        });
         sliderTrack.style.transform = "translateX(0)";
       }
 
-      // Dots
+      // u2500 Dots u2500
       if (sliderDots) {
-        sliderDots.innerHTML = totalSlides > 1
-          ? photos.map((_, i) =>
-            `<button class="slider-dot${i === 0 ? " active" : ""}" aria-label="Foto ${i + 1}"></button>`
-          ).join("")
-          : "";
-        sliderDots.querySelectorAll<HTMLElement>(".slider-dot").forEach((d, i) => {
-          d.addEventListener("click", () => goToSlide(i));
-        });
+        sliderDots.innerHTML = "";
+        if (totalSlides > 1) {
+          photos.forEach((_, i) => {
+            const btn = document.createElement("button");
+            btn.className = "slider-dot" + (i === 0 ? " active" : "");
+            btn.setAttribute("aria-label", `Foto ${i + 1}`);
+            btn.addEventListener("click", () => goToSlide(i));
+            sliderDots.appendChild(btn);
+          });
+        }
       }
 
-      // Counter + nav buttons
       if (sliderCounter) sliderCounter.textContent = totalSlides > 1 ? `1 / ${totalSlides}` : "";
       if (sliderPrev) sliderPrev.style.display = totalSlides > 1 ? "" : "none";
       if (sliderNext) sliderNext.style.display = totalSlides > 1 ? "" : "none";
 
-      // Populate text content
-      const set = (id: string, html: string) => {
-        const el = document.getElementById(id);
-        if (el) el.innerHTML = html;
-      };
-      set("modalBadges", `<span class="badge-type">${type}</span><span class="badge-verified">✓ Verified</span>`);
-      set("modalTitle", title);
-      set("modalLoc", `📍 ${loc}`);
-      set("modalPrice", `${price}<small>/${period}</small>`);
-      set("modalFacilities", facilities.map((f) => `<span>${f.trim()}</span>`).join(""));
-      set("modalDesc", desc);
-      set("modalActions",
-        `<a href="${WA_BASE}?text=${wa}" target="_blank" rel="noopener noreferrer" class="btn btn-wa btn-lg">${WA_ICON} Chat WhatsApp</a>`
-      );
+      // u2500 Badges (textContent u2014 tidak ada innerHTML dari data pengguna) u2500
+      const badgesEl = clearEl("modalBadges");
+      if (badgesEl) {
+        const badgeType = document.createElement("span");
+        badgeType.className = "badge-type";
+        badgeType.textContent = type;
+        const badgeVerified = document.createElement("span");
+        badgeVerified.className = "badge-verified";
+        badgeVerified.textContent = "✓ Verified";
+        badgesEl.appendChild(badgeType);
+        badgesEl.appendChild(badgeVerified);
+      }
+
+      // u2500 Text fields u2500
+      setText("modalTitle", title);
+      setText("modalLoc", `📍 ${loc}`);
+
+      // u2500 Price (perlu <small>) u2500
+      const priceEl = clearEl("modalPrice");
+      if (priceEl) {
+        priceEl.appendChild(document.createTextNode(price));
+        const small = document.createElement("small");
+        small.textContent = `/${period}`;
+        priceEl.appendChild(small);
+      }
+
+      // u2500 Facilities u2500
+      const facEl = clearEl("modalFacilities");
+      if (facEl) {
+        facilities.forEach((f) => {
+          const span = document.createElement("span");
+          span.textContent = f.trim();
+          facEl.appendChild(span);
+        });
+      }
+
+      // u2500 Description u2500
+      setText("modalDesc", desc);
+
+      // u2500 WhatsApp button u2014 validasi URL sebelum digunakan sebagai href u2500
+      const actionsEl = clearEl("modalActions");
+      if (actionsEl && WA_BASE.startsWith("https://wa.me/")) {
+        const waUrl = `${WA_BASE}?text=${wa}`;
+        // Pastikan URL final juga valid (tidak ada protocol injection)
+        if (waUrl.startsWith("https://wa.me/")) {
+          const a = document.createElement("a");
+          a.href = waUrl;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.className = "btn btn-wa btn-lg";
+          // WA_SVG adalah SVG hardcode, aman
+          a.innerHTML = WA_SVG + " Chat WhatsApp";
+          actionsEl.appendChild(a);
+        }
+      }
 
       modal?.classList.add("open");
       document.body.style.overflow = "hidden";

@@ -160,7 +160,7 @@ export default async function Home() {
         </a>
       </aside>
 
-      <main id="top">
+      <main id="top" data-wabase={WA_BASE}>
 
         {/* ========== HERO ========== */}
         <section className="hero">
