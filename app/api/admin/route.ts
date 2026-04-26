@@ -186,7 +186,10 @@ export async function PUT(req: NextRequest) {
   await db.from("listings").delete().neq("id", "");
   if (listings.length > 0) {
     const { error: listErr } = await db.from("listings").insert(
-      listings.map((l, i) => ({ ...l, description: l.desc, desc: undefined, sort_order: i }))
+      listings.map((l, i) => {
+        const { desc, ...rest } = l;
+        return { ...rest, description: desc, sort_order: i };
+      })
     );
     if (listErr) return NextResponse.json({ error: listErr.message }, { status: 500 });
   }
