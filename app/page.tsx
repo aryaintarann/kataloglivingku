@@ -1,5 +1,4 @@
-import { readFileSync } from "fs";
-import { join } from "path";
+import { createServerClient } from "@/lib/supabase";
 import ClientInteractions from "@/components/ClientInteractions";
 
 export const dynamic = "force-dynamic";
@@ -32,10 +31,26 @@ const DEFAULT: Content = {
   contact: { phone: "+62 812-3456-7890", email: "halo@partnerlivingku.id", coverage: "20+ Kota di Indonesia" },
 };
 
-function getContent(): Content {
+async function getContent(): Promise<Content> {
   try {
-    const raw = readFileSync(join(process.cwd(), "data/content.json"), "utf-8");
-    return JSON.parse(raw);
+    const db = createServerClient();
+    const [{ data: settings }, { data: listings }, { data: faqs }] = await Promise.all([
+      db.from("settings").select("*").eq("id", 1).single(),
+      db.from("listings").select("*").order("sort_order"),
+      db.from("faqs").select("*").order("sort_order"),
+    ]);
+    if (!settings) return DEFAULT;
+    return {
+      whatsapp: settings.whatsapp,
+      hero: { widget1: settings.hero_widget1, widget2: settings.hero_widget2 },
+      listings: (listings ?? []).map((l) => ({
+        id: l.id, cat: l.cat, title: l.title, loc: l.loc, type: l.type,
+        price: l.price, period: l.period, facilities: l.facilities,
+        desc: l.desc, photos: l.photos, wa: l.wa,
+      })),
+      faqs: (faqs ?? []).map((f) => ({ q: f.question, a: f.answer })),
+      contact: settings.contact,
+    };
   } catch {
     return DEFAULT;
   }
@@ -93,8 +108,8 @@ function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
 
 // ── Page ───────────────────────────────────────────────────────────────────────
 
-export default function Home() {
-  const c = getContent();
+export default async function Home() {
+  const c = await getContent();
   const WA_BASE = `https://wa.me/${c.whatsapp}`;
   const WA_DEFAULT = `${WA_BASE}?text=Halo%20Partner%20Livingku%2C%20saya%20ingin%20mencari%20hunian`;
 
