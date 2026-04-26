@@ -38,7 +38,7 @@ export default function ClientInteractions() {
     onScroll();
 
     // Active nav link on scroll
-    const sections = ["top", "about", "units", "services", "testimoni", "contact"];
+    const sections = ["top", "about", "services", "units", "testimoni", "contact"];
     const linkMap: Record<string, Element> = {};
     document.querySelectorAll(".nav-links a").forEach((a) => {
       const id = a.getAttribute("href")?.replace("#", "") ?? "";
