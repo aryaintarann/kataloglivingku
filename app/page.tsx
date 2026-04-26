@@ -121,6 +121,8 @@ export default async function Home() {
   const c = await getContent();
   const WA_BASE = `https://wa.me/${c.whatsapp}`;
   const WA_DEFAULT = `${WA_BASE}?text=Halo%20Partner%20Livingku%2C%20saya%20ingin%20mencari%20hunian`;
+  const extractCity = (loc: string) => loc.split("·")[0].split(",")[0].trim();
+  const cityCount = new Set(c.listings.map((l) => extractCity(l.loc)).filter(Boolean)).size;
 
   return (
     <>
@@ -191,7 +193,7 @@ export default async function Home() {
                 </a>
               </div>
               <div className="trust-bar">
-                <span><b>20+</b> Kota</span>
+                <span><b>{cityCount}</b> Kota</span>
                 <span className="dot" />
                 <span>✓ Terverifikasi</span>
               </div>
@@ -291,7 +293,7 @@ export default async function Home() {
                 <div className="stat-grid stat-grid-2">
                   <div className="stat">
                     <div className="num">
-                      <span className="counter" data-count="20">0</span>
+                      <span className="counter" data-count={String(cityCount)}>0</span>
                       <small>+</small>
                     </div>
                     <div className="lbl">Kota Tersedia</div>
