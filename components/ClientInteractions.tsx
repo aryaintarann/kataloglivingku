@@ -195,35 +195,52 @@ export default function ClientInteractions() {
       });
     });
 
-    // Build city buttons from listing data
+    // Build city dropdown from listing data
     const cities = [...new Set(
       allCards.map((c) => extractCity(c.dataset.loc ?? "")).filter(Boolean)
     )].sort();
-    const fpCities = document.getElementById("fpCities");
-    if (fpCities && cities.length > 0) {
-      const allCityBtn = document.createElement("button");
-      allCityBtn.className = "fp-city-btn active";
-      allCityBtn.textContent = "Semua Kota";
-      allCityBtn.addEventListener("click", () => {
-        fpCities.querySelectorAll(".fp-city-btn").forEach((b) => b.classList.remove("active"));
-        allCityBtn.classList.add("active");
-        activeCity = "all";
-        applyFilters();
+    const citySelect    = document.getElementById("citySelect");
+    const cityTrigger   = document.getElementById("citySelectTrigger");
+    const cityLabel     = document.getElementById("citySelectLabel");
+    const cityList      = document.getElementById("citySelectList");
+
+    const toggleCityDropdown = (force?: boolean) => {
+      const open = force ?? !citySelect?.classList.contains("open");
+      citySelect?.classList.toggle("open", open);
+      cityTrigger?.setAttribute("aria-expanded", open ? "true" : "false");
+    };
+
+    const selectCity = (city: string, label: string) => {
+      activeCity = city;
+      if (cityLabel) cityLabel.textContent = label;
+      cityList?.querySelectorAll(".city-select-item").forEach((item) => {
+        const sel = (item as HTMLElement).dataset.value === city;
+        item.classList.toggle("active", sel);
+        item.setAttribute("aria-selected", sel ? "true" : "false");
       });
-      fpCities.appendChild(allCityBtn);
-      cities.forEach((city) => {
-        const btn = document.createElement("button");
-        btn.className = "fp-city-btn";
-        btn.textContent = city;
-        btn.addEventListener("click", () => {
-          fpCities.querySelectorAll(".fp-city-btn").forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          activeCity = city;
-          applyFilters();
-        });
-        fpCities.appendChild(btn);
-      });
+      toggleCityDropdown(false);
+      applyFilters();
+    };
+
+    if (cityList) {
+      const makeItem = (value: string, label: string) => {
+        const li = document.createElement("li");
+        li.className = "city-select-item" + (value === "all" ? " active" : "");
+        li.setAttribute("role", "option");
+        li.setAttribute("aria-selected", value === "all" ? "true" : "false");
+        li.dataset.value = value;
+        li.textContent = label;
+        li.addEventListener("click", (e) => { e.stopPropagation(); selectCity(value, label); });
+        return li;
+      };
+      cityList.appendChild(makeItem("all", "Semua Kota"));
+      cities.forEach((city) => cityList.appendChild(makeItem(city, city)));
     }
+
+    cityTrigger?.addEventListener("click", (e) => { e.stopPropagation(); toggleCityDropdown(); });
+    document.addEventListener("click", (e) => {
+      if (!citySelect?.contains(e.target as Node)) toggleCityDropdown(false);
+    });
 
     // Price sort
     const priceOpts = document.querySelectorAll<HTMLElement>("#fpPriceOpts .fp-opt");
@@ -255,7 +272,7 @@ export default function ClientInteractions() {
       activeCity = "all";
       priceSort = "default";
       tabs.forEach((t, i) => { t.classList.toggle("active", i === 0); t.setAttribute("aria-selected", i === 0 ? "true" : "false"); });
-      fpCities?.querySelectorAll(".fp-city-btn").forEach((b, i) => b.classList.toggle("active", i === 0));
+      selectCity("all", "Semua Kota");
       priceOpts.forEach((b, i) => b.classList.toggle("active", i === 0));
       applyFilters();
       togglePanel(false);

@@ -419,7 +419,15 @@ export default async function Home() {
             <div className="filter-panel" id="filterPanel">
               <div className="fp-section">
                 <div className="fp-label">Kota</div>
-                <div className="fp-cities" id="fpCities" />
+                <div className="city-select" id="citySelect">
+                  <button className="city-select-trigger" id="citySelectTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+                    <span id="citySelectLabel">Semua Kota</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" aria-hidden="true">
+                      <polyline points="6 9 12 15 18 9" />
+                    </svg>
+                  </button>
+                  <ul className="city-select-list" id="citySelectList" role="listbox" aria-label="Pilih kota" />
+                </div>
               </div>
               <div className="fp-section">
                 <div className="fp-label">Urutkan Harga</div>
