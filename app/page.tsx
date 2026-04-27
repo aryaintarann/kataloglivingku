@@ -34,13 +34,13 @@ type Content = {
 const DEFAULT: Content = {
   whatsapp: "6281234567890",
   hero: {
-    widget1: { pill: "Kost Eksklusif", name: "Kost Menteng Premium", loc: "Jakarta Pusat · 5 menit ke MRT", price: "Rp 2.500.000", period: "bulan", photo: "" },
-    widget2: { pill: "Apartemen", name: "Studio Dago View", loc: "Bandung", price: "Rp 3,2 jt", period: "bulan", photo: "" },
+    widget1: { pill: "Exclusive Co-living", name: "Premium Menteng Co-living", loc: "Central Jakarta · 5 mins to MRT", price: "Rp 2.500.000", period: "month", photo: "" },
+    widget2: { pill: "Apartment", name: "Studio Dago View", loc: "Bandung", price: "Rp 3,2 jt", period: "month", photo: "" },
   },
   listings: [],
   faqs: [],
   testimonials: [],
-  contact: { phone: "+62 812-3456-7890", email: "halo@partnerlivingku.id", coverage: "20+ Kota di Indonesia" },
+  contact: { phone: "+62 812-3456-7890", email: "halo@partnerlivingku.id", coverage: "20+ Cities in Indonesia" },
 };
 
 async function getContent(): Promise<Content> {
@@ -84,7 +84,7 @@ function WhatsAppIcon({ size = 16 }: { size?: number }) {
 }
 
 function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
-  const waText = `Halo,%20saya%20tertarik%20${encodeURIComponent(l.title)}`;
+  const waText = `Hello,%20I'm%20interested%20in%20${encodeURIComponent(l.title)}`;
   return (
     <article
       className="listing reveal"
@@ -137,7 +137,7 @@ function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
 export default async function Home() {
   const c = await getContent();
   const WA_BASE = `https://wa.me/${c.whatsapp}`;
-  const WA_DEFAULT = `${WA_BASE}?text=Halo%20Partner%20Livingku%2C%20saya%20ingin%20mencari%20hunian`;
+  const WA_DEFAULT = `${WA_BASE}?text=Hello%20Partner%20Livingku%2C%20I%20am%20looking%20for%20a%20place`;
   const extractCity = (loc: string) => loc.split("·")[0].split(",")[0].trim();
   const cityCount = new Set(c.listings.map((l) => extractCity(l.loc)).filter(Boolean)).size;
 
@@ -153,13 +153,13 @@ export default async function Home() {
             <span><b>Partner</b> <i>Livingku</i></span>
           </a>
 
-          <nav aria-label="Navigasi utama">
+          <nav aria-label="Main navigation">
             <ul className="nav-links">
               <li><a href="#top" className="active">Home</a></li>
               <li><a href="#about">About Us</a></li>
               <li><a href="#services">Services</a></li>
               <li><a href="#units">Units</a></li>
-              <li><a href="#testimoni">Testimoni</a></li>
+              <li><a href="#testimoni">Testimonials</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </nav>
@@ -182,7 +182,7 @@ export default async function Home() {
         <a href="#about">About Us</a>
         <a href="#services">Services</a>
         <a href="#units">Units</a>
-        <a href="#testimoni">Testimoni</a>
+        <a href="#testimoni">Testimonials</a>
         <a href="#contact">Contact</a>
         <a href={WA_BASE} className="btn btn-wa" target="_blank" rel="noopener noreferrer">
           <WhatsAppIcon size={16} />
@@ -199,20 +199,20 @@ export default async function Home() {
           <span className="hero-blob-2" aria-hidden="true" />
           <div className="container">
             <div className="hero-copy reveal">
-              <span className="eyebrow">Direktori Hunian Indonesia</span>
-              <h1>Temukan Kost &amp; Apartemen <em>Terbaik</em> di Indonesia</h1>
-              <p className="hero-sub">Dari Sabang sampai Merauke — pilihan hunian terverifikasi, harga transparan, dan langsung hubungi owner tanpa perantara.</p>
+              <span className="eyebrow">Indonesian Property Directory</span>
+              <h1>Find the <em>Best</em> Co-living &amp; Apartments in Indonesia</h1>
+              <p className="hero-sub">From Sabang to Merauke — verified housing choices, transparent pricing, and direct contact with owners.</p>
               <div className="hero-actions">
-                <a href="#units" className="btn btn-primary btn-lg">Lihat Katalog →</a>
+                <a href="#units" className="btn btn-primary btn-lg">View Catalog →</a>
                 <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-lg">
                   <WhatsAppIcon size={16} />
                   Chat WhatsApp
                 </a>
               </div>
               <div className="trust-bar">
-                <span><b>{cityCount}</b> Kota</span>
+                <span><b>{cityCount}</b> Cities</span>
                 <span className="dot" />
-                <span>✓ Terverifikasi</span>
+                <span>✓ Verified</span>
               </div>
             </div>
 
@@ -254,9 +254,9 @@ export default async function Home() {
           <div className="batik-bg" aria-hidden="true" />
           <div className="container">
             <div className="about-copy reveal">
-              <span className="eyebrow">Tentang Kami</span>
-              <h2>Mengapa Memilih Partner Livingku?</h2>
-              <p className="lede">Kami percaya mencari hunian seharusnya tidak rumit. Partner Livingku menghadirkan direktori kost dan apartemen yang setiap listing-nya kami verifikasi langsung — foto sesuai aslinya, harga transparan, dan owner siap dihubungi via WhatsApp.</p>
+              <span className="eyebrow">About Us</span>
+              <h2>Why Choose Partner Livingku?</h2>
+              <p className="lede">We believe finding a home shouldn't be complicated. Partner Livingku brings a directory where every listing is verified — real photos, transparent pricing, and owners ready via WhatsApp.</p>
 
               <div className="features">
                 <div className="feature">
@@ -266,8 +266,8 @@ export default async function Home() {
                       <path d="M21 12c0 5-4 8.5-9 9-5-.5-9-4-9-9V6l9-3 9 3v6z" />
                     </svg>
                   </div>
-                  <h4>Listing Terverifikasi</h4>
-                  <p>Setiap properti dicek tim kami — alamat, fasilitas, dan keaslian owner.</p>
+                  <h4>Verified Listings</h4>
+                  <p>Every property is checked by our team — address, facilities, and owner authenticity.</p>
                 </div>
                 <div className="feature">
                   <div className="ic">
@@ -276,8 +276,8 @@ export default async function Home() {
                       <path d="M12 7v10M9 9h4.5a2 2 0 010 4h-3a2 2 0 000 4H15" />
                     </svg>
                   </div>
-                  <h4>Harga Transparan</h4>
-                  <p>Tidak ada biaya tersembunyi. Harga yang tertera adalah harga yang dibayar.</p>
+                  <h4>Transparent Pricing</h4>
+                  <p>No hidden fees. The displayed price is what you pay.</p>
                 </div>
                 <div className="feature">
                   <div className="ic">
@@ -287,8 +287,8 @@ export default async function Home() {
                       <path d="M8 6l1.5-2h5L16 6" />
                     </svg>
                   </div>
-                  <h4>Foto Real &amp; Akurat</h4>
-                  <p>Foto diambil langsung di lokasi — tidak ada gambar generik dari internet.</p>
+                  <h4>Real &amp; Accurate Photos</h4>
+                  <p>Photos taken on-site — no generic images from the internet.</p>
                 </div>
                 <div className="feature">
                   <div className="ic">
@@ -296,30 +296,30 @@ export default async function Home() {
                       <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
                     </svg>
                   </div>
-                  <h4>Respon Cepat via WA</h4>
-                  <p>Tim kami online Senin–Minggu, 08.00–21.00 WIB. Balas dalam hitungan menit.</p>
+                  <h4>Fast Response via WA</h4>
+                  <p>Our team is online Monday–Sunday, 08:00–21:00 WIB. We reply in minutes.</p>
                 </div>
               </div>
             </div>
 
             <div className="about-visual reveal">
               <div className="stats-card">
-                <span className="eyebrow stats-eyebrow">Angka Kami</span>
-                <h3>Dipercaya ribuan pencari hunian</h3>
-                <p className="sub">Sejak 2022, kami terus tumbuh bersama komunitas kost dan apartemen di Indonesia.</p>
+                <span className="eyebrow stats-eyebrow">Our Numbers</span>
+                <h3>Trusted by thousands of home seekers</h3>
+                <p className="sub">Since 2022, we continue to grow with the co-living and apartment community in Indonesia.</p>
                 <div className="stat-grid stat-grid-2">
                   <div className="stat">
                     <div className="num">
                       <span className="counter" data-count={String(cityCount)}>0</span>
                       <small>+</small>
                     </div>
-                    <div className="lbl">Kota Tersedia</div>
+                    <div className="lbl">Available Cities</div>
                   </div>
                   <div className="stat">
                     <div className="num">
                       <span className="counter" data-count={String(c.testimonials.filter(t => t.rating >= 3).length)}>0</span>
                     </div>
-                    <div className="lbl">Penghuni Puas</div>
+                    <div className="lbl">Satisfied Residents</div>
                   </div>
                 </div>
               </div>
@@ -332,9 +332,9 @@ export default async function Home() {
           <div className="batik-bg" aria-hidden="true" />
           <div className="container">
             <div className="section-head reveal">
-              <span className="eyebrow">Layanan Kami</span>
+              <span className="eyebrow">Our Services</span>
               <h2>Our Services</h2>
-              <p>Solusi manajemen properti komprehensif — dari operasional harian hingga pemasaran digital dan manajemen tenant.</p>
+              <p>Comprehensive property management solutions — from daily operations to digital marketing and tenant management.</p>
             </div>
 
             <div className="svc-grid">
@@ -348,7 +348,7 @@ export default async function Home() {
                 <h3 className="svc-cat">Operational Management</h3>
                 <ul className="svc-list">
                   <li>Housekeeping &amp; Cleaning Management</li>
-                  <li>Maintenance &amp; Perbaikan</li>
+                  <li>Maintenance &amp; Repairs</li>
                   <li>Vendor &amp; Staff Coordination</li>
                 </ul>
               </div>
@@ -411,21 +411,21 @@ export default async function Home() {
         <section className="section units" id="units">
           <div className="container">
             <div className="section-head reveal">
-              <span className="eyebrow">Listing Pilihan</span>
-              <h2>Temukan Hunian yang Tepat Untukmu</h2>
-              <p>Pilih kategori sesuai kebutuhan — semua sudah terverifikasi dan siap dihubungi langsung ke owner.</p>
+              <span className="eyebrow">Featured Listings</span>
+              <h2>Find the Right Home For You</h2>
+              <p>Choose a category that fits your needs — all verified and ready for direct contact.</p>
             </div>
 
             {c.listings.length > 0 ? (
               <>
                 <div className="filter-row reveal">
                   <div className="filter-tabs" role="tablist" aria-label="Filter tipe hunian">
-                    <button className="active" data-filter="all" role="tab" aria-selected="true">Semua</button>
-                    <button data-filter="kost" role="tab" aria-selected="false">Kost</button>
-                    <button data-filter="apartemen" role="tab" aria-selected="false">Apartemen</button>
-                    <button data-filter="harian" role="tab" aria-selected="false">Harian</button>
+                    <button className="active" data-filter="all" role="tab" aria-selected="true">All</button>
+                    <button data-filter="kost" role="tab" aria-selected="false">Co-living</button>
+                    <button data-filter="apartemen" role="tab" aria-selected="false">Apartment</button>
+                    <button data-filter="harian" role="tab" aria-selected="false">Daily</button>
                   </div>
-                  <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label="Filter lanjutan">
+                  <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label="Advanced filter">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
                       <line x1="4" y1="6" x2="20" y2="6" />
                       <line x1="8" y1="12" x2="16" y2="12" />
@@ -438,10 +438,10 @@ export default async function Home() {
 
                 <div className="filter-panel" id="filterPanel">
                   <div className="fp-section">
-                    <div className="fp-label">Kota</div>
+                    <div className="fp-label">City</div>
                     <div className="city-select" id="citySelect">
                       <button className="city-select-trigger" id="citySelectTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-                        <span id="citySelectLabel">Semua Kota</span>
+                        <span id="citySelectLabel">All Cities</span>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" aria-hidden="true">
                           <polyline points="6 9 12 15 18 9" />
                         </svg>
@@ -452,24 +452,24 @@ export default async function Home() {
                             <circle cx="11" cy="11" r="8" />
                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                           </svg>
-                          <input type="text" id="citySearchInput" placeholder="Cari kota..." autoComplete="off" />
+                          <input type="text" id="citySearchInput" placeholder="Search city..." autoComplete="off" />
                         </div>
-                        <ul id="citySelectList" role="listbox" aria-label="Pilih kota" />
-                        <p className="city-no-results" id="cityNoResults">Kota tidak ditemukan</p>
+                        <ul id="citySelectList" role="listbox" aria-label="Select city" />
+                        <p className="city-no-results" id="cityNoResults">City not found</p>
                       </div>
                     </div>
                   </div>
                   <div className="fp-section">
-                    <div className="fp-label">Urutkan Harga</div>
+                    <div className="fp-label">Sort by Price</div>
                     <div className="fp-price-opts" id="fpPriceOpts">
                       <button className="fp-opt active" data-sort="default">Default</button>
                       <button className="fp-opt" data-sort="asc">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="18 15 12 9 6 15" /></svg>
-                        Terendah
+                        Lowest
                       </button>
                       <button className="fp-opt" data-sort="desc">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
-                        Tertinggi
+                        Highest
                       </button>
                     </div>
                   </div>
@@ -502,8 +502,8 @@ export default async function Home() {
           <div className="batik-bg" aria-hidden="true" />
           <div className="container">
             <div className="section-head reveal">
-              <span className="eyebrow">Testimoni</span>
-              <h2>Apa Kata Mereka?</h2>
+              <span className="eyebrow">Testimonials</span>
+              <h2>What They Say</h2>
               <div className="gold-band" style={{ marginTop: "18px" }}>
                 <span className="stars">
                   {"★".repeat(c.testimonials.length > 0 ? Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length) : 0)}
@@ -516,7 +516,7 @@ export default async function Home() {
                       : "0.0"}
                     /5
                   </b>{" "}
-                  rating dari {c.testimonials.length} penghuni
+                  rating from {c.testimonials.length} residents
                 </span>
               </div>
             </div>
@@ -542,8 +542,8 @@ export default async function Home() {
               </div>
             ) : (
               <div className="units-empty">
-                <p className="units-empty-title">Belum ada testimoni</p>
-                <p className="units-empty-sub">Jadilah yang pertama memberikan testimoni!</p>
+                <p className="units-empty-title">No testimonials yet</p>
+                <p className="units-empty-sub">Be the first to provide a testimonial!</p>
               </div>
             )}
 
@@ -556,12 +556,12 @@ export default async function Home() {
           <div className="container">
             <div className="reveal">
               <span className="eyebrow">FAQ</span>
-              <h2 style={{ marginTop: "14px" }}>Pertanyaan yang Sering Ditanyakan</h2>
+              <h2 style={{ marginTop: "14px" }}>Frequently Asked Questions</h2>
               <p style={{ color: "var(--muted)", marginTop: "16px", maxWidth: "36ch" }}>
-                Belum ketemu jawabannya? Langsung chat tim kami via WhatsApp — biasanya kami balas dalam 5 menit.
+                Can't find the answer? Chat directly with our team via WhatsApp — we usually reply within 5 minutes.
               </p>
               <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ marginTop: "24px" }}>
-                Tanya Tim Kami →
+                Ask Our Team →
               </a>
             </div>
 
@@ -584,12 +584,12 @@ export default async function Home() {
         {/* ========== CTA / CONTACT ========== */}
         <section className="section cta" id="contact">
           <div className="container reveal">
-            <span className="eyebrow">Mulai Sekarang</span>
-            <h2>Siap Menemukan Hunian Impianmu?</h2>
-            <p className="lede">Tim kami siap membantu Senin–Minggu, 08.00–21.00 WIB. Cukup chat WhatsApp — kami balas dalam hitungan menit.</p>
+            <span className="eyebrow">Start Now</span>
+            <h2>Ready to Find Your Dream Home?</h2>
+            <p className="lede">Our team is ready to help Monday–Sunday, 08:00–21:00 WIB. Just chat via WhatsApp — we reply in minutes.</p>
             <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="wa-big">
               <WhatsAppIcon size={26} />
-              Chat Sekarang di WhatsApp
+              Chat Now on WhatsApp
             </a>
             <div className="contact-info">
               <span>
@@ -617,14 +617,14 @@ export default async function Home() {
         </section>
 
         {/* ========== LISTING MODAL ========== */}
-        <div className="modal-overlay" id="listingModal" aria-modal="true" role="dialog" aria-label="Detail Hunian">
+        <div className="modal-overlay" id="listingModal" aria-modal="true" role="dialog" aria-label="Property Details">
           <div className="modal-box">
-            <button className="modal-close" id="modalClose" aria-label="Tutup">✕</button>
+            <button className="modal-close" id="modalClose" aria-label="Close">✕</button>
 
             <div className="modal-slider" id="modalSlider">
               <div className="slider-track" id="sliderTrack" />
-              <button className="slider-btn slider-prev" id="sliderPrev" aria-label="Foto sebelumnya">‹</button>
-              <button className="slider-btn slider-next" id="sliderNext" aria-label="Foto berikutnya">›</button>
+              <button className="slider-btn slider-prev" id="sliderPrev" aria-label="Previous photo">‹</button>
+              <button className="slider-btn slider-next" id="sliderNext" aria-label="Next photo">›</button>
               <div className="slider-dots" id="sliderDots" />
               <div className="slider-counter" id="sliderCounter" />
             </div>
@@ -634,7 +634,7 @@ export default async function Home() {
               <h2 className="modal-title" id="modalTitle" />
               <div className="modal-loc" id="modalLoc" />
               <div className="modal-price" id="modalPrice" />
-              <p className="modal-section-label">Fasilitas</p>
+              <p className="modal-section-label">Facilities</p>
               <div className="modal-facilities" id="modalFacilities" />
               <hr className="modal-divider" />
               <p className="modal-desc" id="modalDesc" />
@@ -652,21 +652,21 @@ export default async function Home() {
             <div className="logo">
               <span><b>Partner</b> <i>Livingku</i></span>
             </div>
-            <p>Direktori kost &amp; apartemen terpercaya di Indonesia. Temukan hunian idealmu, mudah dan terpercaya.</p>
+            <p>Trusted co-living &amp; apartment directory in Indonesia. Find your ideal home, easily and safely.</p>
           </div>
           <div>
-            <h5>Halaman</h5>
+            <h5>Pages</h5>
             <ul>
               <li><a href="#top">Home</a></li>
               <li><a href="#about">About Us</a></li>
               <li><a href="#units">Our Units</a></li>
               <li><a href="#services">Our Services</a></li>
-              <li><a href="#testimoni">Testimoni</a></li>
+              <li><a href="#testimoni">Testimonials</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
           </div>
           <div>
-            <h5>Kota Populer</h5>
+            <h5>Popular Cities</h5>
             <ul>
               <li><a href="#units">Jakarta</a></li>
               <li><a href="#units">Bandung</a></li>
@@ -676,20 +676,20 @@ export default async function Home() {
             </ul>
           </div>
           <div>
-            <h5>Tipe Hunian</h5>
+            <h5>Housing Types</h5>
             <ul>
-              <li><a href="#units">Kost Putra</a></li>
-              <li><a href="#units">Kost Putri</a></li>
-              <li><a href="#units">Kost Campur</a></li>
-              <li><a href="#units">Apartemen Studio</a></li>
-              <li><a href="#units">Sewa Harian</a></li>
+              <li><a href="#units">Men's Co-living</a></li>
+              <li><a href="#units">Women's Co-living</a></li>
+              <li><a href="#units">Mixed Co-living</a></li>
+              <li><a href="#units">Studio Apartment</a></li>
+              <li><a href="#units">Daily Rent</a></li>
             </ul>
           </div>
           <div className="legal">
             <span>© 2026 Partner Livingku.</span>
             <div className="links">
               <a href="/privacy-policy">Privacy Policy</a>
-              <a href="/terms-of-service">Syarat &amp; Ketentuan</a>
+              <a href="/terms-of-service">Terms &amp; Conditions</a>
             </div>
           </div>
         </div>
@@ -697,7 +697,7 @@ export default async function Home() {
 
       {/* ========== FLOATING WHATSAPP ========== */}
       <div className="wa-float">
-        <span className="tip">Chat dengan kami</span>
+        <span className="tip">Chat with us</span>
         <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp">
           <button className="wa-btn">
             <WhatsAppIcon size={30} />

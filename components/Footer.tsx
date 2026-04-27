@@ -8,20 +8,20 @@ export default function Footer() {
           <div className="logo">
             <span><b>Partner</b> <i>Livingku</i></span>
           </div>
-          <p>Direktori kost &amp; apartemen terpercaya di Indonesia. Temukan hunian idealmu, mudah dan terpercaya.</p>
+          <p>Trusted co-living &amp; apartment directory in Indonesia. Find your ideal home, easily and safely.</p>
         </div>
         <div>
-          <h5>Halaman</h5>
+          <h5>Pages</h5>
           <ul>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/#about">About Us</Link></li>
             <li><Link href="/#services">Our Services</Link></li>
-            <li><Link href="/#testimoni">Testimoni</Link></li>
+            <li><Link href="/#testimoni">Testimonials</Link></li>
             <li><Link href="/#contact">Contact</Link></li>
           </ul>
         </div>
         <div>
-          <h5>Kota Populer</h5>
+          <h5>Popular Cities</h5>
           <ul>
             <li><Link href="/#cities">Jakarta</Link></li>
             <li><Link href="/#cities">Bandung</Link></li>
@@ -31,20 +31,20 @@ export default function Footer() {
           </ul>
         </div>
         <div>
-          <h5>Tipe Hunian</h5>
+          <h5>Housing Types</h5>
           <ul>
-            <li><Link href="/#services">Kost Putra</Link></li>
-            <li><Link href="/#services">Kost Putri</Link></li>
-            <li><Link href="/#services">Kost Campur</Link></li>
-            <li><Link href="/#services">Apartemen Studio</Link></li>
-            <li><Link href="/#services">Sewa Harian</Link></li>
+            <li><Link href="/#services">Men's Co-living</Link></li>
+            <li><Link href="/#services">Women's Co-living</Link></li>
+            <li><Link href="/#services">Mixed Co-living</Link></li>
+            <li><Link href="/#services">Studio Apartment</Link></li>
+            <li><Link href="/#services">Daily Rent</Link></li>
           </ul>
         </div>
         <div className="legal">
-          <span>© 2026 Partner Livingku. Dibuat dengan ♥ di Indonesia.</span>
+          <span>© 2026 Partner Livingku. Made with ♥ in Indonesia.</span>
           <div className="links">
             <Link href="/privacy-policy">Privacy Policy</Link>
-            <Link href="/terms-of-service">Syarat &amp; Ketentuan</Link>
+            <Link href="/terms-of-service">Terms &amp; Conditions</Link>
           </div>
         </div>
       </div>

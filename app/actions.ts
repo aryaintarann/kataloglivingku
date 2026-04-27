@@ -12,11 +12,11 @@ export async function submitTestimonial(formData: FormData) {
     const content = formData.get("content") as string;
 
     if (!name || !city || !housing_type || !rating || !content) {
-      return { success: false, error: "Semua kolom wajib diisi" };
+      return { success: false, error: "All fields are required" };
     }
 
     if (rating < 1 || rating > 5) {
-      return { success: false, error: "Rating harus antara 1 dan 5" };
+      return { success: false, error: "Rating must be between 1 and 5" };
     }
 
     const db = createServerClient();
@@ -32,7 +32,7 @@ export async function submitTestimonial(formData: FormData) {
 
     if (error) {
       console.error("Supabase insert error:", error);
-      return { success: false, error: "Gagal menyimpan testimoni" };
+      return { success: false, error: "Failed to save testimonial" };
     }
 
     revalidatePath("/");
@@ -40,6 +40,6 @@ export async function submitTestimonial(formData: FormData) {
     return { success: true };
   } catch (error) {
     console.error("submitTestimonial error:", error);
-    return { success: false, error: "Terjadi kesalahan server" };
+    return { success: false, error: "Server error occurred" };
   }
 }

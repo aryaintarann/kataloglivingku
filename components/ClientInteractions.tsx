@@ -247,7 +247,7 @@ export default function ClientInteractions() {
         li.addEventListener("click", (e) => { e.stopPropagation(); selectCity(value, label); });
         return li;
       };
-      cityList.appendChild(makeItem("all", "Semua Kota"));
+      cityList.appendChild(makeItem("all", "All Cities"));
       cities.forEach((city) => cityList.appendChild(makeItem(city, city)));
     }
 
@@ -298,7 +298,7 @@ export default function ClientInteractions() {
       activeCity = "all";
       priceSort = "default";
       tabs.forEach((t, i) => { t.classList.toggle("active", i === 0); t.setAttribute("aria-selected", i === 0 ? "true" : "false"); });
-      selectCity("all", "Semua Kota");
+      selectCity("all", "All Cities");
       priceOpts.forEach((b, i) => b.classList.toggle("active", i === 0));
       applyFilters();
       togglePanel(false);
@@ -410,7 +410,7 @@ export default function ClientInteractions() {
           photos.forEach((_, i) => {
             const btn = document.createElement("button");
             btn.className = "slider-dot" + (i === 0 ? " active" : "");
-            btn.setAttribute("aria-label", `Foto ${i + 1}`);
+            btn.setAttribute("aria-label", `Photo ${i + 1}`);
             btn.addEventListener("click", () => goToSlide(i));
             sliderDots.appendChild(btn);
           });

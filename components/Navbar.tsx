@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const WA_NUMBER = "6281234567890";
-const WA_DEFAULT = `https://wa.me/${WA_NUMBER}?text=Halo%20Partner%20Livingku%2C%20saya%20ingin%20mencari%20hunian`;
+const WA_DEFAULT = `https://wa.me/${WA_NUMBER}?text=Hello%20Partner%20Livingku%2C%20I%20am%20looking%20for%20a%20place`;
 
 function WhatsAppIcon() {
   return (
@@ -16,16 +16,16 @@ export default function Navbar() {
     <>
       <header className="nav nav-static" id="nav">
         <div className="container">
-          <Link href="/" className="logo" aria-label="Partner Livingku — Beranda">
+          <Link href="/" className="logo" aria-label="Partner Livingku — Home">
             <span><b>Partner</b> <i>Livingku</i></span>
           </Link>
 
-          <nav aria-label="Navigasi utama">
+          <nav aria-label="Main navigation">
             <ul className="nav-links">
               <li><Link href="/">Home</Link></li>
               <li><Link href="/#about">About Us</Link></li>
               <li><Link href="/#services">Our Services</Link></li>
-              <li><Link href="/#testimoni">Testimoni</Link></li>
+              <li><Link href="/#testimoni">Testimonials</Link></li>
               <li><Link href="/#contact">Contact</Link></li>
             </ul>
           </nav>

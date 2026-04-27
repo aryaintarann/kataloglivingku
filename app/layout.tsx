@@ -25,33 +25,33 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Temukan Kost & Apartemen Terbaik di Indonesia | Partner Livingku",
+  title: "Find the Best Co-living & Apartments in Indonesia | Partner Livingku",
   description:
-    "Partner Livingku — direktori kost dan apartemen terpercaya di Indonesia. Temukan hunian impianmu di Jakarta, Bandung, Surabaya, Bali, dan kota lainnya. Harga transparan, listing terverifikasi.",
+    "Partner Livingku — the trusted co-living and apartment directory in Indonesia. Find your dream home in Jakarta, Bandung, Surabaya, Bali, and other cities. Transparent pricing, verified listings.",
   keywords: [
-    "kost Jakarta",
-    "apartemen Bandung",
-    "sewa kost Indonesia",
-    "direktori kost",
-    "kost terverifikasi",
-    "cari kost murah",
-    "apartemen sewa Indonesia",
+    "co-living Jakarta",
+    "apartment Bandung",
+    "rent room Indonesia",
+    "co-living directory",
+    "verified listings",
+    "find cheap apartment",
+    "rent apartment Indonesia",
     "Partner Livingku",
   ],
   openGraph: {
-    title: "Temukan Kost & Apartemen Terbaik di Indonesia | Partner Livingku",
+    title: "Find the Best Co-living & Apartments in Indonesia | Partner Livingku",
     description:
-      "Direktori kost dan apartemen terpercaya di seluruh Indonesia. Listing terverifikasi, harga transparan.",
+      "The trusted co-living and apartment directory across Indonesia. Verified listings, transparent pricing.",
     url: "https://partnerlivingku.id",
     siteName: "Partner Livingku",
-    locale: "id_ID",
+    locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Temukan Kost & Apartemen Terbaik di Indonesia | Partner Livingku",
+    title: "Find the Best Co-living & Apartments in Indonesia | Partner Livingku",
     description:
-      "Direktori kost dan apartemen terpercaya di seluruh Indonesia.",
+      "The trusted co-living and apartment directory across Indonesia.",
   },
   robots: {
     index: true,
@@ -71,11 +71,11 @@ const jsonLd = {
       name: "Partner Livingku",
       url: "https://partnerlivingku.id",
       description:
-        "Direktori kost-kostan dan apartemen terpercaya di Indonesia.",
+        "Trusted co-living and apartment directory in Indonesia.",
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer service",
-        availableLanguage: "Indonesian",
+        availableLanguage: "English",
       },
     },
     {
@@ -84,25 +84,25 @@ const jsonLd = {
       url: "https://partnerlivingku.id",
       name: "Partner Livingku",
       publisher: { "@id": "https://partnerlivingku.id/#organization" },
-      inLanguage: "id",
+      inLanguage: "en",
     },
     {
       "@type": "FAQPage",
       mainEntity: [
         {
           "@type": "Question",
-          name: "Apakah layanan Partner Livingku gratis untuk pencari kost?",
+          name: "Is Partner Livingku's service free for seekers?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Ya, layanan pencarian hunian di Partner Livingku 100% gratis untuk pencari kost dan apartemen.",
+            text: "Yes, finding a home on Partner Livingku is 100% free for seekers.",
           },
         },
         {
           "@type": "Question",
-          name: "Apakah semua listing sudah diverifikasi?",
+          name: "Are all listings verified?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Ya, setiap listing yang tampil telah melalui proses verifikasi oleh tim kami.",
+            text: "Yes, every listing shown has gone through a verification process by our team.",
           },
         },
       ],
@@ -117,7 +117,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="id"
+      lang="en"
       className={`${playfair.variable} ${plusJakarta.variable} ${spaceMono.variable}`}
     >
       <head>

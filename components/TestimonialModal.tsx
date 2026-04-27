@@ -35,15 +35,15 @@ export default function TestimonialModal() {
     try {
       const result = await submitTestimonial(formData);
       if (result.success) {
-        setSuccessMsg("Terima kasih! Testimoni Anda berhasil dikirim.");
+        setSuccessMsg("Thank you! Your testimonial has been submitted.");
         setTimeout(() => {
           handleClose();
         }, 2000);
       } else {
-        setErrorMsg(result.error || "Terjadi kesalahan.");
+        setErrorMsg(result.error || "An error occurred.");
       }
     } catch (err) {
-      setErrorMsg("Terjadi kesalahan sistem.");
+      setErrorMsg("A system error occurred.");
     } finally {
       setIsSubmitting(false);
     }
@@ -53,20 +53,20 @@ export default function TestimonialModal() {
     <>
       <div className="testi-cta-wrap reveal">
         <button onClick={handleOpen} className="btn btn-primary btn-lg">
-          Beri Testimoni
+          Add Testimonial
         </button>
       </div>
 
       {isOpen && (
         <div className="modal-overlay open" onClick={handleClose} style={{ zIndex: 1000 }}>
           <div className="modal-box testi-modal-box" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={handleClose} aria-label="Tutup">
+            <button className="modal-close" onClick={handleClose} aria-label="Close">
               ✕
             </button>
             <div className="modal-content">
-              <h2 className="modal-title">Berikan Testimoni Anda</h2>
+              <h2 className="modal-title">Share Your Experience</h2>
               <p className="modal-section-label" style={{ marginBottom: "20px" }}>
-                Pengalaman Anda sangat berarti bagi kami.
+                Your feedback means a lot to us.
               </p>
 
               {successMsg ? (
@@ -74,18 +74,18 @@ export default function TestimonialModal() {
               ) : (
                 <form onSubmit={handleSubmit} className="testi-form">
                   <div className="form-group">
-                    <label htmlFor="name">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" required placeholder="Contoh: Budi Santoso" />
+                    <label htmlFor="name">Full Name</label>
+                    <input type="text" id="name" name="name" required placeholder="Example: John Doe" />
                   </div>
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label htmlFor="city">Kota</label>
-                      <input type="text" id="city" name="city" required placeholder="Contoh: Jakarta" />
+                      <label htmlFor="city">City</label>
+                      <input type="text" id="city" name="city" required placeholder="Example: Jakarta" />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="housing_type">Tipe Hunian</label>
-                      <input type="text" id="housing_type" name="housing_type" required placeholder="Contoh: Kost Eksklusif" />
+                      <label htmlFor="housing_type">Housing Type</label>
+                      <input type="text" id="housing_type" name="housing_type" required placeholder="Example: Exclusive Co-living" />
                     </div>
                   </div>
 
@@ -106,20 +106,20 @@ export default function TestimonialModal() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="content">Ulasan Anda</label>
+                    <label htmlFor="content">Your Review</label>
                     <textarea
                       id="content"
                       name="content"
                       required
                       rows={4}
-                      placeholder="Ceritakan pengalaman Anda mencari hunian bersama kami..."
+                      placeholder="Tell us about your experience finding a home with us..."
                     ></textarea>
                   </div>
 
                   {errorMsg && <div className="alert-error">{errorMsg}</div>}
 
                   <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={isSubmitting}>
-                    {isSubmitting ? "Mengirim..." : "Kirim Testimoni"}
+                    {isSubmitting ? "Submitting..." : "Submit Testimonial"}
                   </button>
                 </form>
               )}
