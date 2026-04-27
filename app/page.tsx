@@ -317,8 +317,7 @@ export default async function Home() {
                   </div>
                   <div className="stat">
                     <div className="num">
-                      <span className="counter" data-count="1000">0</span>
-                      <small>+</small>
+                      <span className="counter" data-count={String(c.testimonials.filter(t => t.rating >= 3).length)}>0</span>
                     </div>
                     <div className="lbl">Penghuni Puas</div>
                   </div>
