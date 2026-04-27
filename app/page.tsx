@@ -507,19 +507,17 @@ export default async function Home() {
               <h2>Apa Kata Mereka?</h2>
               <div className="gold-band" style={{ marginTop: "18px" }}>
                 <span className="stars">
-                  {c.testimonials.length > 0
-                    ? "★".repeat(Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length)) +
-                      "☆".repeat(5 - Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length))
-                    : "★★★★★"}
+                  {"★".repeat(c.testimonials.length > 0 ? Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length) : 0)}
+                  {"☆".repeat(5 - (c.testimonials.length > 0 ? Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length) : 0))}
                 </span>
                 <span>
                   <b>
                     {c.testimonials.length > 0
                       ? (c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length).toFixed(1)
-                      : "4.9"}
+                      : "0.0"}
                     /5
                   </b>{" "}
-                  rating dari {c.testimonials.length > 0 ? c.testimonials.length : "200+"} penghuni
+                  rating dari {c.testimonials.length} penghuni
                 </span>
               </div>
             </div>
