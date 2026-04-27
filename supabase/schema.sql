@@ -36,6 +36,19 @@ CREATE TABLE IF NOT EXISTS faqs (
   sort_order  INTEGER NOT NULL DEFAULT 0
 );
 
+-- 4. Testimonials
+CREATE TABLE IF NOT EXISTS testimonials (
+  id           UUID        PRIMARY KEY DEFAULT gen_random_uuid(),
+  name         TEXT        NOT NULL,
+  city         TEXT        NOT NULL,
+  housing_type TEXT        NOT NULL,
+  rating       INTEGER     NOT NULL CHECK (rating >= 1 AND rating <= 5),
+  content      TEXT        NOT NULL,
+  avatar_url   TEXT,
+  is_approved  BOOLEAN     DEFAULT false,
+  created_at   TIMESTAMPTZ DEFAULT now()
+);
+
 -- ============================================================
 -- Seed Data (data awal dari content.json)
 -- ============================================================
@@ -72,6 +85,7 @@ INSERT INTO faqs (question, answer, sort_order) VALUES
 ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE listings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faqs     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
 
 -- Tidak ada policy = tidak ada akses untuk anon/authenticated key.
 -- Akses hanya melalui service role key (server-side).
