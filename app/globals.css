@@ -1760,3 +1760,102 @@ footer .legal .links { display: flex; gap: 24px; }
   .legal-hero { padding: 48px 0 40px; }
   .legal-body { padding: 48px 0 64px; }
 }
+
+/* =========================================================
+   TESTIMONIAL MODAL
+   ========================================================= */
+.testi-cta-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.testi-modal-box {
+  max-width: 500px;
+  width: 100%;
+}
+
+.testi-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.testi-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.testi-form .form-row {
+  display: flex;
+  gap: 16px;
+}
+.testi-form .form-row .form-group {
+  flex: 1;
+}
+
+.testi-form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.testi-form input,
+.testi-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  background: var(--bg);
+  transition: border-color 0.2s;
+}
+
+.testi-form input:focus,
+.testi-form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.rating-selector {
+  display: flex;
+  gap: 8px;
+}
+
+.star-btn {
+  font-size: 1.8rem;
+  color: var(--line-strong);
+  transition: color 0.2s, transform 0.2s;
+}
+
+.star-btn.active {
+  color: var(--secondary);
+}
+
+.star-btn:hover {
+  transform: scale(1.1);
+}
+
+.btn-block {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.alert-success {
+  padding: 16px;
+  background: rgba(37, 211, 102, 0.1);
+  color: var(--wa-dark);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-weight: 600;
+}
+
+.alert-error {
+  padding: 12px;
+  background: rgba(231, 76, 60, 0.1);
+  color: #e74c3c;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}

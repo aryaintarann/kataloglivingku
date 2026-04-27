@@ -1,5 +1,6 @@
 import { createServerClient } from "@/lib/supabase";
 import ClientInteractions from "@/components/ClientInteractions";
+import TestimonialModal from "@/components/TestimonialModal";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +13,21 @@ type Listing = {
   photos: string[]; wa: string;
 };
 type Faq = { q: string; a: string };
+type Testimonial = {
+  id: string;
+  name: string;
+  city: string;
+  housing_type: string;
+  rating: number;
+  content: string;
+  avatar_url?: string;
+};
 type Content = {
   whatsapp: string;
   hero: { widget1: HeroWidget; widget2: HeroWidget };
   listings: Listing[];
   faqs: Faq[];
+  testimonials: Testimonial[];
   contact: { phone: string; email: string; coverage: string };
 };
 
@@ -28,16 +39,18 @@ const DEFAULT: Content = {
   },
   listings: [],
   faqs: [],
+  testimonials: [],
   contact: { phone: "+62 812-3456-7890", email: "halo@partnerlivingku.id", coverage: "20+ Kota di Indonesia" },
 };
 
 async function getContent(): Promise<Content> {
   try {
     const db = createServerClient();
-    const [{ data: settings }, { data: listings }, { data: faqs }] = await Promise.all([
+    const [{ data: settings }, { data: listings }, { data: faqs }, { data: testimonials }] = await Promise.all([
       db.from("settings").select("*").eq("id", 1).single(),
       db.from("listings").select("*").order("sort_order"),
       db.from("faqs").select("*").order("sort_order"),
+      db.from("testimonials").select("*").eq("is_approved", true).order("created_at", { ascending: false }),
     ]);
     if (!settings) return DEFAULT;
     return {
@@ -49,6 +62,10 @@ async function getContent(): Promise<Content> {
         desc: l.description, photos: l.photos, wa: l.wa,
       })),
       faqs: (faqs ?? []).map((f) => ({ q: f.question, a: f.answer })),
+      testimonials: (testimonials ?? []).map((t) => ({
+        id: t.id, name: t.name, city: t.city, housing_type: t.housing_type,
+        rating: t.rating, content: t.content, avatar_url: t.avatar_url
+      })),
       contact: settings.contact,
     };
   } catch {
@@ -489,51 +506,51 @@ export default async function Home() {
               <span className="eyebrow">Testimoni</span>
               <h2>Apa Kata Mereka?</h2>
               <div className="gold-band" style={{ marginTop: "18px" }}>
-                <span className="stars">★★★★★</span>
-                <span><b>4.9/5</b> rating dari 200+ penghuni</span>
+                <span className="stars">
+                  {c.testimonials.length > 0
+                    ? "★".repeat(Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length)) +
+                      "☆".repeat(5 - Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length))
+                    : "★★★★★"}
+                </span>
+                <span>
+                  <b>
+                    {c.testimonials.length > 0
+                      ? (c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length).toFixed(1)
+                      : "4.9"}
+                    /5
+                  </b>{" "}
+                  rating dari {c.testimonials.length > 0 ? c.testimonials.length : "200+"} penghuni
+                </span>
               </div>
             </div>
 
-            <div className="testi-grid reveal-stagger">
-              <article className="testi-card">
-                <span className="quote-mark">&ldquo;</span>
-                <div className="stars">★★★★★</div>
-                <blockquote>Proses nyarinya gampang banget, langsung direspon tim-nya. Kost yang saya temukan sesuai banget sama foto!</blockquote>
-                <div className="person">
-                  <div className="avatar av-1">RP</div>
-                  <div>
-                    <div className="who">Rizky Pratama</div>
-                    <div className="meta">Jakarta · Kost Eksklusif</div>
-                  </div>
-                </div>
-              </article>
+            {c.testimonials.length > 0 ? (
+              <div className="testi-grid reveal-stagger">
+                {c.testimonials.map((t) => (
+                  <article key={t.id} className="testi-card">
+                    <span className="quote-mark">&ldquo;</span>
+                    <div className="stars">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</div>
+                    <blockquote>{t.content}</blockquote>
+                    <div className="person">
+                      <div className={`avatar av-${(t.name.length % 3) + 1}`}>
+                        {t.name.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <div className="who">{t.name}</div>
+                        <div className="meta">{t.city} · {t.housing_type}</div>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="units-empty">
+                <p className="units-empty-title">Belum ada testimoni</p>
+                <p className="units-empty-sub">Jadilah yang pertama memberikan testimoni!</p>
+              </div>
+            )}
 
-              <article className="testi-card">
-                <span className="quote-mark">&ldquo;</span>
-                <div className="stars">★★★★★</div>
-                <blockquote>Partner Livingku beneran bantu saya pas pindah kerja ke Bandung. Dalam 2 hari langsung dapat hunian yang cocok.</blockquote>
-                <div className="person">
-                  <div className="avatar av-2">SD</div>
-                  <div>
-                    <div className="who">Sari Dewi</div>
-                    <div className="meta">Bandung · Apartemen Studio</div>
-                  </div>
-                </div>
-              </article>
-
-              <article className="testi-card">
-                <span className="quote-mark">&ldquo;</span>
-                <div className="stars">★★★★★</div>
-                <blockquote>Rekomendasiin ke temen-temen, listing-nya banyak dan harganya transparan. Gak ada biaya tersembunyi!</blockquote>
-                <div className="person">
-                  <div className="avatar av-3">AF</div>
-                  <div>
-                    <div className="who">Ahmad Fauzi</div>
-                    <div className="meta">Surabaya · Kost Putri</div>
-                  </div>
-                </div>
-              </article>
-            </div>
+            <TestimonialModal />
           </div>
         </section>
 
