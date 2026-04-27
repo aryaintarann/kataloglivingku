@@ -306,7 +306,7 @@ export default async function Home() {
               <div className="stats-card">
                 <span className="eyebrow stats-eyebrow">Our Numbers</span>
                 <h3>Trusted by thousands of home seekers</h3>
-                <p className="sub">Since 2022, we continue to grow with the co-living and apartment community in Indonesia.</p>
+                <p className="sub">Since 2026, we continue to grow with the co-living and apartment community in Indonesia.</p>
                 <div className="stat-grid stat-grid-2">
                   <div className="stat">
                     <div className="num">
