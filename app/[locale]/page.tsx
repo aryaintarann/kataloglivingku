@@ -720,7 +720,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </ul>
           </div>
           <div className="legal">
-            <span>{locale === "id" ? "© 2026 Partner Livingku. Dibuat dengan ♥ di Indonesia." : "© 2026 Partner Livingku. Made with ♥ in Indonesia."}</span>
+            <span>{locale === "id" ? "© 2026 Partner Livingku." : "© 2026 Partner Livingku."}</span>
             <div className="links">
               <a href="/privacy-policy">{locale === "id" ? "Kebijakan Privasi" : "Privacy Policy"}</a>
               <a href="/terms-of-service">{locale === "id" ? "Syarat & Ketentuan" : "Terms & Conditions"}</a>
