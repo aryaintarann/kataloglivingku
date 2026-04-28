@@ -78,6 +78,7 @@ export async function generateMetadata({
         { url: "/favicon.svg", type: "image/svg+xml" },
         { url: "/favicon.ico", sizes: "any" },
       ],
+      apple: [{ url: "/apple-icon.svg", type: "image/svg+xml" }],
     },
     alternates: {
       canonical: isId ? "https://partnerlivingku.id" : "https://partnerlivingku.id/en",

@@ -132,6 +132,8 @@ function ListingCard({ l, waBase, tUnits }: { l: Listing; waBase: string; tUnits
           const isUrl = p.startsWith("https://");
           return (
             <div
+              role="img"
+              aria-label={`${l.title} — ${l.loc}`}
               className={isUrl ? "ph" : `ph ${p}`}
               style={isUrl ? { backgroundImage: `url(${p})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
             />
@@ -203,7 +205,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
     ? {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        name: locale === "id" ? "Daftar Ko-living & Apartemen — Partner Livingku" : "Co-living & Apartment Listings — Partner Livingku",
+        name: locale === "id" ? "Daftar Kost & Apartemen — Partner Livingku" : "Co-living & Apartment Listings — Partner Livingku",
         itemListElement: c.listings.map((l, i) => ({
           "@type": "ListItem",
           position: i + 1,
@@ -218,6 +220,46 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       }
     : null;
 
+  const avgRating = c.testimonials.length > 0
+    ? (c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length)
+    : null;
+
+  const ratingJsonLd = avgRating !== null
+    ? {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "@id": `https://partnerlivingku.id${locale === "en" ? "/en" : ""}/#business`,
+        name: "Partner Livingku",
+        url: locale === "en" ? "https://partnerlivingku.id/en" : "https://partnerlivingku.id",
+        aggregateRating: {
+          "@type": "AggregateRating",
+          ratingValue: avgRating.toFixed(1),
+          reviewCount: c.testimonials.length,
+          bestRating: "5",
+          worstRating: "1",
+        },
+        review: c.testimonials.map((t) => ({
+          "@type": "Review",
+          author: { "@type": "Person", name: t.name },
+          reviewRating: { "@type": "Rating", ratingValue: t.rating, bestRating: "5", worstRating: "1" },
+          reviewBody: t.content,
+        })),
+      }
+    : null;
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "id" ? "Beranda" : "Home",
+        item: locale === "id" ? "https://partnerlivingku.id" : "https://partnerlivingku.id/en",
+      },
+    ],
+  };
+
   return (
     <>
       <ClientInteractions />
@@ -227,6 +269,10 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       {listingsJsonLd && (
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }} />
       )}
+      {ratingJsonLd && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ratingJsonLd) }} />
+      )}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
       <div className="scroll-progress" id="scrollProgress" aria-hidden="true" />
 
       {/* NAVBAR */}
