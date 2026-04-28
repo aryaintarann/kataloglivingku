@@ -163,6 +163,26 @@ p { margin: 0; }
 
 .nav-cta { display: flex; align-items: center; gap: 12px; }
 
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink-2);
+  font-size: .88rem;
+  font-weight: 600;
+  font-family: var(--mono);
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+  flex-shrink: 0;
+}
+.lang-btn:hover { background: var(--surface); color: var(--primary); border-color: var(--primary); }
+.lang-btn:disabled { opacity: .5; cursor: wait; }
+
 /* =========================================================
    BUTTONS
    ========================================================= */

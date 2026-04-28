@@ -23,24 +23,7 @@ export default function LanguageSwitcher() {
       onClick={toggle}
       disabled={isPending}
       title={t("switchTo")}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "6px",
-        padding: "6px 12px",
-        border: "1.5px solid var(--color-gold)",
-        borderRadius: "6px",
-        background: "transparent",
-        color: "var(--color-gold)",
-        fontSize: "12px",
-        fontWeight: 700,
-        letterSpacing: "0.08em",
-        cursor: isPending ? "wait" : "pointer",
-        opacity: isPending ? 0.6 : 1,
-        transition: "all 0.2s",
-        fontFamily: "var(--font-space-mono), monospace",
-        flexShrink: 0,
-      }}
+      className="lang-btn"
     >
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
