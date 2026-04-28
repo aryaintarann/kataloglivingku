@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="7" fill="#1B3A4B"/>
+  <!-- House body + roof as one filled shape -->
+  <path d="M16 6L5 15.5h3V26h7v-6h2v6h7V15.5h3L16 6z" fill="#C9A84C"/>
+  <!-- Window left -->
+  <rect x="9" y="18" width="4" height="3.5" rx="0.8" fill="#1B3A4B" opacity="0.6"/>
+  <!-- Window right -->
+  <rect x="19" y="18" width="4" height="3.5" rx="0.8" fill="#1B3A4B" opacity="0.6"/>
+</svg>

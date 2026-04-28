@@ -49,6 +49,9 @@ const S = {
   sidebar: {
     width: "200px", background: "#fff", borderRight: "1px solid #e5e7eb",
     padding: "20px 12px", flexShrink: 0,
+    position: "sticky" as const, top: "56px",
+    height: "calc(100vh - 56px)", overflowY: "auto" as const,
+    alignSelf: "flex-start" as const,
   } as React.CSSProperties,
   sideLabel: { fontSize: "11px", fontWeight: 600, color: "#9ca3af", textTransform: "uppercase" as const, letterSpacing: "0.08em", padding: "0 8px", marginBottom: "6px" },
   navBtn: (active: boolean): React.CSSProperties => ({
@@ -286,7 +289,7 @@ function ListingForm({
   return (
     <div style={{ ...S.card, border: "2px solid #c9a84c" }}>
       <div style={S.cardTitle}>{initial.id ? `Edit: ${initial.title}` : "Tambah Listing Baru"}</div>
-      <div style={S.row}>
+      <div style={S.row} className="adm-row">
         <Field label="ID Listing (contoh: JKT-001)">
           <input style={S.input} value={f.id} onChange={(e) => set("id", e.target.value)} placeholder="JKT-001" />
         </Field>
@@ -298,7 +301,7 @@ function ListingForm({
           </select>
         </Field>
       </div>
-      <div style={S.row}>
+      <div style={S.row} className="adm-row">
         <Field label="Judul">
           <input style={S.input} value={f.title} onChange={(e) => set("title", e.target.value)} placeholder="Kost Eksklusif Menteng" />
         </Field>
@@ -306,7 +309,7 @@ function ListingForm({
           <input style={S.input} value={f.type} onChange={(e) => set("type", e.target.value)} placeholder="Kost Eksklusif" />
         </Field>
       </div>
-      <div style={S.row}>
+      <div style={S.row} className="adm-row">
         <Field label="Lokasi">
           <input style={S.input} value={f.loc} onChange={(e) => set("loc", e.target.value)} placeholder="Jakarta Pusat" />
         </Field>
@@ -314,7 +317,7 @@ function ListingForm({
           <input style={S.input} value={f.price} onChange={(e) => set("price", e.target.value)} placeholder="Rp 2.500.000" />
         </Field>
       </div>
-      <div style={S.row}>
+      <div style={S.row} className="adm-row">
         <Field label="Periode">
           <select style={S.select} value={f.period} onChange={(e) => set("period", e.target.value)}>
             <option value="bln">Bulanan (bln)</option>
@@ -409,7 +412,7 @@ function WidgetEditor({
   return (
     <div style={S.card}>
       <div style={S.cardTitle}>{label}</div>
-      <div style={S.row}>
+      <div style={S.row} className="adm-row">
         <Field label="Label / Tipe (pill)">
           <input style={S.input} value={widget.pill} onChange={(e) => set("pill", e.target.value)} />
         </Field>
@@ -417,7 +420,7 @@ function WidgetEditor({
           <input style={S.input} value={widget.name} onChange={(e) => set("name", e.target.value)} />
         </Field>
       </div>
-      <div style={S.row}>
+      <div style={S.row} className="adm-row">
         <Field label="Lokasi">
           <input style={S.input} value={widget.loc} onChange={(e) => set("loc", e.target.value)} />
         </Field>
@@ -559,8 +562,24 @@ export default function AdminPage() {
         <button style={S.logoutBtn} onClick={handleLogout}>Logout</button>
       </header>
 
-      <div style={S.layout}>
-        <aside style={S.sidebar}>
+      {/* Mobile tab bar */}
+      <div className="adm-mobiletabs">
+        {TAB_LABELS.map(({ key, label }) => (
+          <button
+            key={key}
+            onClick={() => setTab(key)}
+            className={`adm-tabpill${tab === key ? " adm-tabpill-active" : ""}`}
+          >
+            {label}
+          </button>
+        ))}
+        <a href="/" target="_blank" rel="noopener noreferrer" className="adm-tabpill adm-tablink">
+          ↗ Website
+        </a>
+      </div>
+
+      <div style={S.layout} className="adm-layout">
+        <aside style={S.sidebar} className="adm-sidebar">
           <div style={S.sideLabel}>Menu</div>
           {TAB_LABELS.map(({ key, label }) => (
             <button key={key} style={S.navBtn(tab === key)} onClick={() => setTab(key)}>
@@ -578,7 +597,7 @@ export default function AdminPage() {
           </a>
         </aside>
 
-        <main style={S.main}>
+        <main style={S.main} className="adm-main">
 
           {/* â”€â”€ WhatsApp Tab â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
           {tab === "whatsapp" && (
@@ -834,6 +853,41 @@ export default function AdminPage() {
         @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
         input:focus, textarea:focus, select:focus { border-color: #c9a84c !important; background: #fff !important; }
         * { box-sizing: border-box; }
+
+        .adm-layout { display: flex; min-height: calc(100vh - 56px); }
+        .adm-main { min-width: 0; }
+        .adm-mobiletabs { display: none; }
+
+        .adm-tabpill {
+          flex-shrink: 0; white-space: nowrap; border: none; cursor: pointer;
+          padding: 7px 16px; border-radius: 20px; font-size: 13px; font-weight: 600;
+          background: none; color: #374151; font-family: inherit;
+          transition: background .15s, color .15s;
+        }
+        .adm-tabpill:hover { background: #f3f4f6; }
+        .adm-tabpill-active { background: #fdf6e3 !important; color: #c9a84c !important; }
+        .adm-tablink { text-decoration: none; color: #9ca3af !important; }
+        .adm-tablink:hover { background: #f3f4f6 !important; color: #374151 !important; }
+
+        @media (max-width: 767px) {
+          .adm-layout { flex-direction: column; }
+          .adm-sidebar { display: none !important; }
+          .adm-mobiletabs {
+            display: flex; overflow-x: auto; gap: 4px;
+            padding: 8px 12px; background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky; top: 56px; z-index: 50;
+            scrollbar-width: none; -webkit-overflow-scrolling: touch;
+          }
+          .adm-mobiletabs::-webkit-scrollbar { display: none; }
+          .adm-main { padding: 16px !important; max-width: 100% !important; }
+          .adm-row { grid-template-columns: 1fr !important; }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+          .adm-sidebar { width: 170px !important; padding: 16px 10px !important; }
+          .adm-main { padding: 20px 24px !important; }
+        }
       `}</style>
     </div>
   );

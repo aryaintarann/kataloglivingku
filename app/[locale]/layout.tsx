@@ -73,6 +73,12 @@ export async function generateMetadata({
       follow: true,
       googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
     },
+    icons: {
+      icon: [
+        { url: "/favicon.svg", type: "image/svg+xml" },
+        { url: "/favicon.ico", sizes: "any" },
+      ],
+    },
     alternates: {
       canonical: isId ? "https://partnerlivingku.id" : "https://partnerlivingku.id/en",
       languages: {
