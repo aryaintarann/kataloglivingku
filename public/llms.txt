@@ -1,48 +1,67 @@
 # Partner Livingku
 
-> Trusted co-living and apartment directory in Indonesia.
+> Direktori kost & apartemen terpercaya di Bali, Indonesia.
+> Trusted co-living and apartment directory in Bali, Indonesia.
 
 ## About
 
-Partner Livingku is a property search platform for co-living spaces and apartments
-across Indonesia. We provide verified listings with transparent pricing, real on-site
-photos, and direct contact with property owners via WhatsApp — no hidden fees,
-no fake listings.
+Partner Livingku is a verified property directory specializing in co-living spaces,
+apartments, and daily rentals across Bali, Indonesia. We connect property seekers
+directly with verified owners — transparent pricing, real on-site photos, no hidden
+fees, no fake listings, and instant contact via WhatsApp.
 
-## Services
+We also offer end-to-end property management services for owners across Bali.
 
-- Exclusive co-living, women-only co-living, men-only co-living, mixed co-living
-- Studio, 1BR, and 2BR apartments
-- Daily, weekly, and monthly rental options
-- Available in: Jakarta, Bandung, Surabaya, Bali, Yogyakarta, Medan, and other cities
+## Coverage Areas (Bali)
 
-## Property Management Services
+Denpasar, Seminyak, Canggu, Ubud, Kuta, Sanur, Jimbaran, Nusa Dua, Legian,
+Kerobokan, Gianyar, Tabanan, Singaraja, Uluwatu, Berawa, Pererenan
 
-Partner Livingku also provides end-to-end property management for owners:
-- Operational management (housekeeping, maintenance, vendor coordination)
-- Financial management (rent collection, monthly reports, cost tracking)
-- Listing & marketing (branding, digital marketing on Instagram & TikTok, photography)
-- Tenant management (lease agreements, check-in/check-out, customer service)
+## Listing Categories
+
+- **Kost Eksklusif** — Premium co-living rooms, monthly rental
+- **Kost Putri** — Women-only co-living
+- **Kost Pria** — Men-only co-living
+- **Kost Campur** — Mixed co-living
+- **Apartemen Studio** — Studio apartments
+- **Apartemen 1BR / 2BR** — 1–2 bedroom apartments
+- **Sewa Harian** — Daily/short-term rental (villas, rooms)
+
+## Property Management Services for Owners
+
+- Operational management: housekeeping, maintenance, vendor coordination
+- Financial management: rent collection, monthly reports, expense tracking
+- Listing & marketing: professional photography, branding, Instagram & TikTok ads
+- Tenant management: lease agreements, check-in/check-out handling, customer service
 
 ## How It Works
 
-1. Browse listings on the homepage and filter by city or housing type
-2. Click Detail on any listing to view full information and photos
-3. Contact the team directly via WhatsApp for availability and booking
+1. Browse and filter listings on the homepage by area or housing type
+2. Click "Detail" on any listing to view full description, photos, facilities, and price
+3. Click "Chat WA" to contact the owner directly via WhatsApp — no middleman fees
 
-## Target Users
+## Key Features
 
-- Individuals and families looking for co-living spaces or apartments in Indonesia
-- Property owners seeking professional management services
-- Relocating professionals and students needing verified, affordable housing
+- All listings are verified by the Partner Livingku team
+- Transparent pricing — price shown is price paid, no hidden fees
+- Real on-site photos — not stock images
+- Direct WhatsApp contact with property owners
+- Bilingual platform: Bahasa Indonesia and English
+- Available Monday–Sunday, 08:00–21:00 WIB (UTC+7)
 
-## Contact
+## Target Audience
+
+- Individuals, couples, and families relocating to Bali
+- Digital nomads and remote workers seeking monthly or daily rentals in Bali
+- Students and young professionals looking for affordable co-living in Bali
+- Expats looking for verified furnished apartments in Bali
+- Property owners in Bali seeking professional management services
+
+## Contact & Links
 
 - Website: https://partnerlivingku.id
-- Operational hours: Monday–Sunday, 08:00–21:00 WIB (UTC+7)
-
-## Pages
-
-- Homepage / Listings: https://partnerlivingku.id
+- Website (English): https://partnerlivingku.id/en
 - Privacy Policy: https://partnerlivingku.id/privacy-policy
 - Terms of Service: https://partnerlivingku.id/terms-of-service
+- Sitemap: https://partnerlivingku.id/sitemap.xml
+- Hours: Monday–Sunday, 08:00–21:00 WIB

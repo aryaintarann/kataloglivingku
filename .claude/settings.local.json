@@ -8,7 +8,9 @@
       "Bash(git push *)",
       "mcp__context7__resolve-library-id",
       "mcp__context7__query-docs",
-      "Bash(pnpm add *)"
+      "Bash(pnpm add *)",
+      "Bash(git commit *)",
+      "Bash(git rm *)"
     ]
   }
 }
