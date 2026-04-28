@@ -686,7 +686,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <div className="container">
           <div className="brand">
             <div className="logo"><span><b>Partner</b> <i>Livingku</i></span></div>
-            <p>{locale === "id" ? "Direktori ko-living & apartemen terpercaya di Indonesia. Temukan hunian ideal Anda, mudah dan aman." : "Trusted co-living & apartment directory in Indonesia. Find your ideal home, easily and safely."}</p>
+            <p>{locale === "id" ? "Direktori kost & apartemen terpercaya di Indonesia. Temukan hunian ideal Anda, mudah dan aman." : "Trusted co-living & apartment directory in Indonesia. Find your ideal home, easily and safely."}</p>
           </div>
           <div>
             <h5>{locale === "id" ? "Halaman" : "Pages"}</h5>
@@ -712,9 +712,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <div>
             <h5>{locale === "id" ? "Tipe Hunian" : "Housing Types"}</h5>
             <ul>
-              <li><a href="#units">{locale === "id" ? "Ko-living Pria" : "Men's Co-living"}</a></li>
-              <li><a href="#units">{locale === "id" ? "Ko-living Wanita" : "Women's Co-living"}</a></li>
-              <li><a href="#units">{locale === "id" ? "Ko-living Campuran" : "Mixed Co-living"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Kost Pria" : "Men's Co-living"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Kost Wanita" : "Women's Co-living"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Kost Campuran" : "Mixed Co-living"}</a></li>
               <li><a href="#units">{locale === "id" ? "Apartemen Studio" : "Studio Apartment"}</a></li>
               <li><a href="#units">{locale === "id" ? "Sewa Harian" : "Daily Rent"}</a></li>
             </ul>
