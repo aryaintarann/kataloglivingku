@@ -212,7 +212,7 @@ function PhotoGrid({
       {photos.length < maxPhotos && (
         <label style={{ width: "110px", height: "80px", borderRadius: "8px", border: "2px dashed #d1d5db", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", cursor: isBusy ? "default" : "pointer", color: "#9ca3af", fontSize: "12px", gap: "4px", flexShrink: 0 }}>
           <span style={{ fontSize: "20px", lineHeight: 1 }}>{isBusy ? "â³" : "+"}</span>
-          <span>{isBusy ? "Uploadingâ€¦" : "Tambah Foto"}</span>
+          <span>{isBusy ? "Uploading…" : "Tambah Foto"}</span>
           <input type="file" accept="image/*" multiple={maxPhotos > 1} style={{ display: "none" }} onChange={handleFiles} disabled={isBusy} />
         </label>
       )}
@@ -252,7 +252,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
         <div style={S.loginTitle}>
           <span style={S.gold}>Partner</span> Livingku
         </div>
-        <div style={S.loginSub}>Admin Panel â€” masuk untuk mengelola konten</div>
+        <div style={S.loginSub}>Admin Panel – masuk untuk mengelola konten</div>
         <form onSubmit={submit}>
           <Field label="Password Admin">
             <input
@@ -266,7 +266,7 @@ function LoginScreen({ onLogin }: { onLogin: (token: string) => void }) {
           </Field>
           {err && <div style={S.loginError}>{err}</div>}
           <button style={S.loginBtn} type="submit" disabled={loading}>
-            {loading ? "Memverifikasiâ€¦" : "Masuk â†’"}
+            {loading ? "Memverifikasi…" : "Masuk →"}
           </button>
         </form>
       </div>
@@ -334,7 +334,7 @@ function ListingForm({
       <Field label="Deskripsi">
         <textarea style={S.textarea} value={f.desc} onChange={(e) => set("desc", e.target.value)} rows={3} />
       </Field>
-      <Field label="Foto (maks 6 foto, maks 5 MB/foto â€” JPG, PNG, WebP)">
+      <Field label="Foto (maks 6 foto, maks 5 MB/foto — JPG, PNG, WebP)">
         <PhotoGrid
           photos={f.photos}
           onRemove={(i) => set("photos", f.photos.filter((_, j) => j !== i))}
@@ -346,8 +346,8 @@ function ListingForm({
         />
         <p style={{ color: "#9ca3af", fontSize: "11px", marginTop: "8px", lineHeight: 1.5 }}>
           📐 <b style={{ color: "#6b7280" }}>Ukuran ideal: 16:9 landscape — min. 800×450px, disarankan 1200×675px.</b><br />
-          Foto tampil di kartu listing (366Ã—220px) dan modal detail (680Ã—300px), keduanya crop tengah.
-          Foto portrait atau square akan terpotong signifikan di sisi kiriâ€“kanan.
+          Foto tampil di kartu listing (366×220px) dan modal detail (680×300px), keduanya crop tengah.
+          Foto portrait atau square akan terpotong signifikan di sisi kiri–kanan.
         </p>
       </Field>
       <Field label="Pesan WhatsApp (URL-encoded, tanpa tanda tanya awal)">
@@ -524,7 +524,7 @@ export default function AdminPage() {
   if (loading) {
     return (
       <div style={S.loginWrap}>
-        <div style={{ color: "#9ca3af", fontSize: "15px" }}>Memuatâ€¦</div>
+        <div style={{ color: "#9ca3af", fontSize: "15px" }}>Memuat…</div>
       </div>
     );
   }
@@ -554,7 +554,7 @@ export default function AdminPage() {
     <div style={S.page}>
       <header style={S.header}>
         <div style={S.brand}>
-          <span style={S.gold}>Partner</span> Livingku â€” Admin
+          <span style={S.gold}>Partner</span> Livingku — Admin
         </div>
         <button style={S.logoutBtn} onClick={handleLogout}>Logout</button>
       </header>
@@ -574,7 +574,7 @@ export default function AdminPage() {
             rel="noopener noreferrer"
             style={{ ...S.navBtn(false), display: "block", textDecoration: "none", color: "#6b7280" }}
           >
-            â†— Lihat Website
+            ↗ Lihat Website
           </a>
         </aside>
 
@@ -602,7 +602,7 @@ export default function AdminPage() {
                   disabled={saving}
                   onClick={() => save(content)}
                 >
-                  {saving ? "Menyimpanâ€¦" : "Simpan"}
+                  {saving ? "Menyimpan…" : "Simpan"}
                 </button>
               </div>
             </div>
@@ -616,14 +616,14 @@ export default function AdminPage() {
                 Dua kartu mini yang tampil di hero section sebagai contoh listing unggulan.
               </p>
               <WidgetEditor
-                label="Widget 1 â€” Kartu Utama (depan)"
+                label="Widget 1 — Kartu Utama (depan)"
                 widget={content.hero.widget1}
                 onChange={(w) => setC({ hero: { ...content.hero, widget1: w } })}
                 token={token}
                 saving={saving}
               />
               <WidgetEditor
-                label="Widget 2 â€” Kartu Kecil (belakang)"
+                label="Widget 2 — Kartu Kecil (belakang)"
                 widget={content.hero.widget2}
                 onChange={(w) => setC({ hero: { ...content.hero, widget2: w } })}
                 token={token}
@@ -634,7 +634,7 @@ export default function AdminPage() {
                 disabled={saving}
                 onClick={() => save(content)}
               >
-                {saving ? "Menyimpanâ€¦" : "Simpan Perubahan Hero"}
+                {saving ? "Menyimpan…" : "Simpan Perubahan Hero"}
               </button>
             </div>
           )}
@@ -760,7 +760,7 @@ export default function AdminPage() {
                       <div style={S.listItem}>
                         <div style={{ flex: 1, paddingRight: "16px" }}>
                           <div style={{ fontWeight: 600, marginBottom: "4px" }}>{f.q}</div>
-                          <div style={{ color: "#6b7280", fontSize: "12px" }}>{f.a.slice(0, 100)}{f.a.length > 100 ? "â€¦" : ""}</div>
+                          <div style={{ color: "#6b7280", fontSize: "12px" }}>{f.a.slice(0, 100)}{f.a.length > 100 ? "…" : ""}</div>
                         </div>
                         <div style={{ flexShrink: 0 }}>
                           <button style={S.editBtn} onClick={() => setFaqEdit(i)}>Edit</button>
@@ -819,7 +819,7 @@ export default function AdminPage() {
                   disabled={saving}
                   onClick={() => save(content)}
                 >
-                  {saving ? "Menyimpanâ€¦" : "Simpan"}
+                  {saving ? "Menyimpan…" : "Simpan"}
                 </button>
               </div>
             </div>
