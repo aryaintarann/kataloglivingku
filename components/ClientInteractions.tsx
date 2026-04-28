@@ -304,6 +304,80 @@ export default function ClientInteractions() {
       togglePanel(false);
     });
 
+    // ── Testimonial Slider ────────────────────────────────────────────────────
+    const testiTrack = document.getElementById("testiTrack");
+    const testiOuter = document.getElementById("testiOuter");
+    const testiPrev = document.getElementById("testiPrev") as HTMLButtonElement | null;
+    const testiNext = document.getElementById("testiNext") as HTMLButtonElement | null;
+    const testiProgressFill = document.getElementById("testiProgressFill");
+    const testiCards = Array.from(document.querySelectorAll<HTMLElement>("#testiTrack .testi-card"));
+
+    if (testiTrack && testiCards.length > 1) {
+      let testiIndex = 0;
+      let autoTimer: ReturnType<typeof setInterval> | null = null;
+      const GAP = 24;
+
+      const getVisible = () => {
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 768) return 2;
+        return 1;
+      };
+
+      const maxIdx = () => Math.max(0, testiCards.length - getVisible());
+
+      const getStep = () => {
+        const card = testiCards[0];
+        return card ? card.offsetWidth + GAP : 0;
+      };
+
+      const updateProgress = () => {
+        const max = maxIdx();
+        if (testiProgressFill) testiProgressFill.style.width = (max === 0 ? 100 : (testiIndex / max) * 100) + "%";
+      };
+
+      const goTo = (idx: number, wrap = false) => {
+        const max = maxIdx();
+        if (wrap) {
+          testiIndex = idx < 0 ? max : idx > max ? 0 : idx;
+        } else {
+          testiIndex = Math.max(0, Math.min(idx, max));
+        }
+        testiTrack.style.transform = `translateX(-${testiIndex * getStep()}px)`;
+        if (testiPrev) testiPrev.disabled = testiIndex === 0;
+        if (testiNext) testiNext.disabled = testiIndex >= max;
+        updateProgress();
+      };
+
+      const startAuto = () => {
+        autoTimer = setInterval(() => goTo(testiIndex >= maxIdx() ? 0 : testiIndex + 1), 4500);
+      };
+      const resetAuto = () => {
+        if (autoTimer) clearInterval(autoTimer);
+        startAuto();
+      };
+
+      testiPrev?.addEventListener("click", () => { goTo(testiIndex - 1); resetAuto(); });
+      testiNext?.addEventListener("click", () => { goTo(testiIndex + 1); resetAuto(); });
+
+      // Pause autoplay on hover
+      testiOuter?.addEventListener("mouseenter", () => { if (autoTimer) clearInterval(autoTimer); });
+      testiOuter?.addEventListener("mouseleave", () => startAuto());
+
+      // Touch swipe
+      let tsX = 0;
+      testiTrack.addEventListener("touchstart", (e) => { tsX = (e as TouchEvent).touches[0].clientX; }, { passive: true });
+      testiTrack.addEventListener("touchend", (e) => {
+        const dx = (e as TouchEvent).changedTouches[0].clientX - tsX;
+        if (Math.abs(dx) > 40) { goTo(testiIndex + (dx < 0 ? 1 : -1), true); resetAuto(); }
+      }, { passive: true });
+
+      // Recalculate on resize
+      window.addEventListener("resize", () => goTo(testiIndex), { passive: true });
+
+      goTo(0);
+      startAuto();
+    }
+
     // FAQ accordion
     document.querySelectorAll(".faq-item").forEach((item) => {
       const q = item.querySelector(".faq-q");

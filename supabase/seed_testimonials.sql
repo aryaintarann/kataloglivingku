@@ -1,7 +1,7 @@
 -- ============================================================
 -- Partner Livingku — Seed Data: Testimonials
 -- Jalankan di: Supabase Dashboard > SQL Editor
--- Berisi: 8 testimoni penghuni + 4 testimoni owner
+-- Berisi: 17 testimoni penghuni + 8 testimoni owner = 25 total
 -- Semua is_approved = true agar langsung tampil di website
 -- ============================================================
 
@@ -97,6 +97,105 @@ INSERT INTO testimonials (name, city, housing_type, rating, content, avatar_url,
   now() - interval '9 months'
 ),
 
+(
+  'Tania Kusumawati',
+  'Semarang',
+  'Kost Putri',
+  5,
+  'Pindah ke Semarang untuk magang 6 bulan, cari kost putri yang murah tapi nyaman. Lewat Partner Livingku dapat kost di dekat Simpang Lima, harga 650 ribu per bulan sudah termasuk listrik. Proses dari cari sampai check-in cuma 3 hari. Sangat membantu untuk perantau seperti saya!',
+  NULL,
+  true,
+  now() - interval '1 month'
+),
+
+(
+  'Rendra Saputra',
+  'Makassar',
+  'Kost Pria',
+  4,
+  'Kuliah di Unhas, cari kost putra yang dekat kampus dan ada fasilitas dapur. Ketemu di Partner Livingku — listing fotonya real, pas datang kondisinya beneran sama persis. Owner ramah dan fast respon via WhatsApp. Recommended banget buat mahasiswa baru di Makassar.',
+  NULL,
+  true,
+  now() - interval '4 months'
+),
+
+(
+  'Laras Ningrum',
+  'Malang',
+  'Kost Putri',
+  5,
+  'Mahasiswi UB yang baru masuk, dibantu kakak cari kost lewat Partner Livingku. Dalam sehari langsung dapat pilihan yang cocok di area Dinoyo. Kost bersih, penjaga ramah, dan harganya sesuai budget mahasiswa. Terima kasih Partner Livingku!',
+  NULL,
+  true,
+  now() - interval '2 months'
+),
+
+(
+  'Farhan Maulana',
+  'Jakarta',
+  'Apartemen Studio',
+  5,
+  'Fresh graduate yang baru mulai kerja di Jakarta. Budget terbatas tapi tetap mau tinggal di tempat yang layak. Partner Livingku bantu saya filter berdasarkan harga dan lokasi — akhirnya dapat studio di Tangerang Selatan yang super terjangkau dan dekat stasiun. Sangat membantu!',
+  NULL,
+  true,
+  now() - interval '3 months'
+),
+
+(
+  'Mega Silvia',
+  'Yogyakarta',
+  'Kost Campur',
+  4,
+  'Cari kost campur yang boleh ada tamu dan tidak terlalu strict. Lewat Partner Livingku bisa filter berbagai tipe kost dengan mudah. Dapat kost bagus di Condongcatur, dekat kampus UGM, harga bersaing. Pelayanan Partner Livingku juga responsif saat ada pertanyaan.',
+  NULL,
+  true,
+  now() - interval '5 months'
+),
+
+(
+  'Irfan Hakim',
+  'Palembang',
+  'Kost Pria',
+  5,
+  'Dipindahtugaskan ke Palembang mendadak, butuh hunian dalam waktu singkat. Partner Livingku jadi penyelamat — dalam 1 hari sudah dapat 5 pilihan kost pria yang sesuai kriteria. Langsung contact owner via WhatsApp, besoknya sudah bisa check-in. Service-nya beneran cepat!',
+  NULL,
+  true,
+  now() - interval '6 months'
+),
+
+(
+  'Nadya Fitriani',
+  'Surabaya',
+  'Apartemen 1BR',
+  5,
+  'Pindah dari Malang ke Surabaya untuk kerja. Cari apartemen 1BR yang dekat pusat kota tapi harganya tidak mencekik. Partner Livingku bantu banget — semua listing sudah verified jadi tidak perlu khawatir kena tipu. Sekarang tinggal di Gubeng, nyaman dan strategis!',
+  NULL,
+  true,
+  now() - interval '8 months'
+),
+
+(
+  'Bagas Prasetyo',
+  'Bali',
+  'Apartemen Studio',
+  4,
+  'WFH dari Bali selama 3 bulan, butuh apartemen studio yang ada kolam renang dan WiFi kencang. Lewat Partner Livingku langsung ketemu opsi yang sesuai di Kuta. Harga 2,5 juta per bulan all-inclusive, sangat worth it untuk standar Bali. Pasti balik lagi!',
+  NULL,
+  true,
+  now() - interval '10 months'
+),
+
+(
+  'Ayu Wulandari',
+  'Bandung',
+  'Kost Putri',
+  5,
+  'Anak baru lulus SMA mau kuliah di Bandung, orang tua khawatir soal keamanan kost. Partner Livingku jadi pilihan karena ada fitur verified listing — orang tua jadi yakin karena semua informasi properti bisa dicek. Sudah setahun di Bandung, aman dan nyaman!',
+  NULL,
+  true,
+  now() - interval '13 months'
+),
+
 -- ── SISI OWNER ──────────────────────────────────────────────
 
 (
@@ -141,6 +240,50 @@ INSERT INTO testimonials (name, city, housing_type, rating, content, avatar_url,
   NULL,
   true,
   now() - interval '14 months'
+),
+
+(
+  'Agus Hermawan',
+  'Semarang',
+  'Owner · Kost Pria 15 Kamar',
+  5,
+  'Kost saya di pusat Semarang sebelumnya hanya 50% terisi meski harganya sudah kompetitif. Masalahnya di marketing — foto seadanya dan tidak ada deskripsi yang menarik. Partner Livingku ubah semuanya: foto profesional, deskripsi detail, dan listing terverifikasi. Dalam 2 bulan, kost penuh!',
+  NULL,
+  true,
+  now() - interval '6 months'
+),
+
+(
+  'Dewi Anggraini',
+  'Makassar',
+  'Owner · Apartemen 2 Unit',
+  4,
+  'Punya 2 unit apartemen di Makassar yang susah dapat penyewa karena persaingan ketat. Setelah listing di Partner Livingku, dalam 3 minggu sudah ada 2 penyewa baru yang serius. Proses seleksi mereka juga membantu saring calon penyewa yang tidak serius. Sistem kerjanya sangat profesional.',
+  NULL,
+  true,
+  now() - interval '4 months'
+),
+
+(
+  'Wahyu Nugroho',
+  'Malang',
+  'Owner · Kost Campur 20 Kamar',
+  5,
+  'Sebagai investor properti dengan beberapa kost di Malang, Partner Livingku sangat membantu skalabilitas bisnis saya. Tidak perlu hire staf marketing sendiri — mereka yang handle semua. Laporan bulanan detail dan transparan. Return on investment-nya konsisten dan memuaskan.',
+  NULL,
+  true,
+  now() - interval '9 months'
+),
+
+(
+  'Sri Hartati',
+  'Bali',
+  'Owner · Villa Harian 3 Unit',
+  5,
+  'Punya villa harian di Canggu yang sempat sepi di luar musim turis. Partner Livingku bantu listing dengan strategi yang tepat dan target market yang berbeda — termasuk remote worker dan digital nomad. Sekarang occupancy rate naik signifikan bahkan di low season. Sangat merekomendasikan!',
+  NULL,
+  true,
+  now() - interval '7 months'
 );
 
 -- Verifikasi data berhasil masuk

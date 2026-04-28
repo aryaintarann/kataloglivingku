@@ -565,23 +565,36 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </div>
 
             {c.testimonials.length > 0 ? (
-              <div className="testi-grid reveal-stagger">
-                {c.testimonials.map((t) => (
-                  <article key={t.id} className="testi-card">
-                    <span className="quote-mark">&ldquo;</span>
-                    <div className="stars">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</div>
-                    <blockquote>{t.content}</blockquote>
-                    <div className="person">
-                      <div className={`avatar av-${(t.name.length % 3) + 1}`}>
-                        {t.name.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase()}
-                      </div>
-                      <div>
-                        <div className="who">{t.name}</div>
-                        <div className="meta">{t.city} · {t.housing_type}</div>
-                      </div>
-                    </div>
-                  </article>
-                ))}
+              <div className="testi-slider-wrap reveal">
+                <div className="testi-slider-outer" id="testiOuter">
+                  <div className="testi-track" id="testiTrack">
+                    {c.testimonials.map((t) => (
+                      <article key={t.id} className="testi-card">
+                        <span className="quote-mark">&ldquo;</span>
+                        <div className="stars">{"★".repeat(t.rating)}{"☆".repeat(5 - t.rating)}</div>
+                        <blockquote>{t.content}</blockquote>
+                        <div className="person">
+                          <div className={`avatar av-${(t.name.length % 3) + 1}`}>
+                            {t.name.split(" ").map((n) => n[0]).join("").substring(0, 2).toUpperCase()}
+                          </div>
+                          <div>
+                            <div className="who">{t.name}</div>
+                            <div className="meta">{t.city} · {t.housing_type}</div>
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+                <div className="testi-slider-ui">
+                  <button className="testi-nav" id="testiPrev" aria-label={locale === "id" ? "Testimoni sebelumnya" : "Previous testimonial"}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
+                  </button>
+                  <div className="testi-progress"><div className="testi-progress-fill" id="testiProgressFill" /></div>
+                  <button className="testi-nav" id="testiNext" aria-label={locale === "id" ? "Testimoni selanjutnya" : "Next testimonial"}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="18" height="18" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="units-empty">
