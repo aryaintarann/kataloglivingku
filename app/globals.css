@@ -283,13 +283,6 @@ p { margin: 0; }
 }
 .drawer a:hover { background: var(--surface); }
 .drawer .btn-wa { margin-top: 18px; justify-content: center; }
-.drawer-lang {
-  display: flex; align-items: center; gap: 8px;
-  padding: 14px 20px; font-size: .93rem; font-weight: 600;
-  color: var(--muted); border-top: 1px solid var(--line);
-  margin-top: 8px;
-}
-.drawer-lang:hover { background: var(--surface); color: var(--primary); }
 .scrim {
   position: fixed;
   inset: 0;
@@ -324,6 +317,7 @@ p { margin: 0; }
 .hero .container { display: grid; grid-template-columns: 1.1fr .9fr; gap: 64px; align-items: center; position: relative; z-index: 2; }
 .hero-copy h1 { margin: 18px 0 22px; }
 .hero-copy h1 em { font-style: italic; color: var(--primary); font-weight: 500; position: relative; white-space: nowrap; }
+@media (max-width: 600px) { .hero-copy h1 em { white-space: normal; } }
 .hero-copy h1 em::after {
   content: "";
   position: absolute;

@@ -322,13 +322,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           <WhatsAppIcon size={16} />
           Chat WhatsApp
         </a>
-        <a
-          href={locale === "id" ? "/en" : "/"}
-          className="drawer-lang"
-          aria-label={locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
-        >
-          🌐 {locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
-        </a>
       </aside>
 
       {/* FLOATING WHATSAPP */}
