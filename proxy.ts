@@ -1,9 +1,13 @@
+import createNextIntlMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function proxy(req: NextRequest) {
-  const res = NextResponse.next();
+const intlMiddleware = createNextIntlMiddleware(routing);
 
+const SKIP_INTL = /^(\/api|\/admin|\/opengraph-image|\/sitemap\.xml|\/robots\.txt|\/llms\.txt|\/favicon\.ico|\/.*\..+)/;
+
+function addSecurityHeaders(res: NextResponse): NextResponse {
   res.headers.set("X-Frame-Options", "DENY");
   res.headers.set("X-Content-Type-Options", "nosniff");
   res.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
@@ -20,8 +24,18 @@ export function proxy(req: NextRequest) {
       "frame-ancestors 'none'",
     ].join("; ")
   );
-
   return res;
+}
+
+export function proxy(req: NextRequest) {
+  const { pathname } = req.nextUrl;
+
+  if (!SKIP_INTL.test(pathname)) {
+    const intlRes = intlMiddleware(req);
+    if (intlRes) return addSecurityHeaders(intlRes);
+  }
+
+  return addSecurityHeaders(NextResponse.next());
 }
 
 export const config = {

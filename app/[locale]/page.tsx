@@ -1,6 +1,10 @@
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { createServerClient } from "@/lib/supabase";
+import { translateToEn, translateArrayToEn } from "@/lib/translate";
 import ClientInteractions from "@/components/ClientInteractions";
 import TestimonialModal from "@/components/TestimonialModal";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +18,8 @@ type Listing = {
 };
 type Faq = { q: string; a: string };
 type Testimonial = {
-  id: string;
-  name: string;
-  city: string;
-  housing_type: string;
-  rating: number;
-  content: string;
-  avatar_url?: string;
+  id: string; name: string; city: string; housing_type: string;
+  rating: number; content: string; avatar_url?: string;
 };
 type Content = {
   whatsapp: string;
@@ -64,7 +63,7 @@ async function getContent(): Promise<Content> {
       faqs: (faqs ?? []).map((f) => ({ q: f.question, a: f.answer })),
       testimonials: (testimonials ?? []).map((t) => ({
         id: t.id, name: t.name, city: t.city, housing_type: t.housing_type,
-        rating: t.rating, content: t.content, avatar_url: t.avatar_url
+        rating: t.rating, content: t.content, avatar_url: t.avatar_url,
       })),
       contact: settings.contact,
     };
@@ -73,7 +72,34 @@ async function getContent(): Promise<Content> {
   }
 }
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
+async function getTranslatedContent(c: Content, locale: string): Promise<Content> {
+  if (locale === "id") return c;
+  const [listings, faqs, testimonials] = await Promise.all([
+    Promise.all(
+      c.listings.map(async (l) => ({
+        ...l,
+        type: await translateToEn(l.type),
+        desc: await translateToEn(l.desc),
+        facilities: await translateArrayToEn(l.facilities),
+      }))
+    ),
+    Promise.all(
+      c.faqs.map(async (f) => ({
+        q: await translateToEn(f.q),
+        a: await translateToEn(f.a),
+      }))
+    ),
+    Promise.all(
+      c.testimonials.map(async (t) => ({
+        ...t,
+        content: await translateToEn(t.content),
+      }))
+    ),
+  ]);
+  return { ...c, listings, faqs, testimonials };
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
 function WhatsAppIcon({ size = 16 }: { size?: number }) {
   return (
@@ -83,7 +109,7 @@ function WhatsAppIcon({ size = 16 }: { size?: number }) {
   );
 }
 
-function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
+function ListingCard({ l, waBase, tUnits }: { l: Listing; waBase: string; tUnits: (k: string) => string }) {
   const waText = `Hello,%20I'm%20interested%20in%20${encodeURIComponent(l.title)}`;
   return (
     <article
@@ -111,7 +137,7 @@ function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
           );
         })()}
         <span className="badge-type">{l.type}</span>
-        <span className="badge-verified">✓ Verified</span>
+        <span className="badge-verified">{tUnits("verified")}</span>
       </div>
       <div className="body">
         <h3>{l.title}</h3>
@@ -124,18 +150,37 @@ function ListingCard({ l, waBase }: { l: Listing; waBase: string }) {
           <span className="listing-code">{l.id}</span>
         </div>
         <div className="actions">
-          <button className="btn btn-outline btn-detail">Detail</button>
-          <a href={`${waBase}?text=${l.wa || waText}`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">Chat WA</a>
+          <button className="btn btn-outline btn-detail">{tUnits("detail")}</button>
+          <a href={`${waBase}?text=${l.wa || waText}`} target="_blank" rel="noopener noreferrer" className="btn btn-wa">{tUnits("chatWA")}</a>
         </div>
       </div>
     </article>
   );
 }
 
-// ── Page ───────────────────────────────────────────────────────────────────────
+// ── Page ──────────────────────────────────────────────────────────────────────
 
-export default async function Home() {
-  const c = await getContent();
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const [rawContent, t, tUnits] = await Promise.all([
+    getContent(),
+    getTranslations("hero"),
+    getTranslations("units"),
+  ]);
+
+  const [tAbout, tSvc, tTesti, tFaq, tContact, tModal] = await Promise.all([
+    getTranslations("about"),
+    getTranslations("services"),
+    getTranslations("testimonials"),
+    getTranslations("faq"),
+    getTranslations("contact"),
+    getTranslations("modal"),
+  ]);
+
+  const c = await getTranslatedContent(rawContent, locale);
+
   const WA_BASE = `https://wa.me/${c.whatsapp}`;
   const WA_DEFAULT = `${WA_BASE}?text=Hello%20Partner%20Livingku%2C%20I%20am%20looking%20for%20a%20place`;
   const extractCity = (loc: string) => loc.split("·")[0].split(",")[0].trim();
@@ -157,7 +202,7 @@ export default async function Home() {
     ? {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        name: "Co-living & Apartment Listings — Partner Livingku",
+        name: locale === "id" ? "Daftar Ko-living & Apartemen — Partner Livingku" : "Co-living & Apartment Listings — Partner Livingku",
         itemListElement: c.listings.map((l, i) => ({
           "@type": "ListItem",
           position: i + 1,
@@ -166,12 +211,7 @@ export default async function Home() {
             name: l.title,
             description: l.desc,
             address: { "@type": "PostalAddress", addressLocality: l.loc, addressCountry: "ID" },
-            offers: {
-              "@type": "Offer",
-              name: `${l.price} / ${l.period}`,
-              priceCurrency: "IDR",
-              availability: "https://schema.org/InStock",
-            },
+            offers: { "@type": "Offer", name: `${l.price} / ${l.period}`, priceCurrency: "IDR", availability: "https://schema.org/InStock" },
           },
         })),
       }
@@ -181,43 +221,35 @@ export default async function Home() {
     <>
       <ClientInteractions />
       {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       )}
       {listingsJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }} />
       )}
       <div className="scroll-progress" id="scrollProgress" aria-hidden="true" />
 
-      {/* ========== NAVBAR ========== */}
+      {/* NAVBAR */}
       <header className="nav" id="nav">
         <div className="container">
-          <a href="#top" className="logo" aria-label="Partner Livingku — Beranda">
+          <a href="#top" className="logo" aria-label={t("eyebrow")}>
             <span><b>Partner</b> <i>Livingku</i></span>
           </a>
-
           <nav aria-label="Main navigation">
             <ul className="nav-links">
-              <li><a href="#top" className="active">Home</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#units">Units</a></li>
-              <li><a href="#testimoni">Testimonials</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a href="#top" className="active">{locale === "id" ? "Beranda" : "Home"}</a></li>
+              <li><a href="#about">{locale === "id" ? "Tentang Kami" : "About Us"}</a></li>
+              <li><a href="#services">{locale === "id" ? "Layanan" : "Services"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Unit" : "Units"}</a></li>
+              <li><a href="#testimoni">{locale === "id" ? "Testimoni" : "Testimonials"}</a></li>
+              <li><a href="#contact">{locale === "id" ? "Kontak" : "Contact"}</a></li>
             </ul>
           </nav>
-
           <div className="nav-cta">
             <a href={WA_DEFAULT} className="btn btn-wa" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp">
               <WhatsAppIcon size={16} />
               Chat WhatsApp
             </a>
-            <button className="hamburger" id="hamburger" aria-label="Buka menu" aria-controls="drawer" aria-expanded="false">
+            <button className="hamburger" id="hamburger" aria-label={locale === "id" ? "Buka menu" : "Open menu"} aria-controls="drawer" aria-expanded="false">
               <span />
             </button>
           </div>
@@ -225,51 +257,65 @@ export default async function Home() {
       </header>
 
       <div className="scrim" id="scrim" />
-      <aside className="drawer" id="drawer" aria-label="Menu navigasi mobile">
-        <a href="#top">Home</a>
-        <a href="#about">About Us</a>
-        <a href="#services">Services</a>
-        <a href="#units">Units</a>
-        <a href="#testimoni">Testimonials</a>
-        <a href="#contact">Contact</a>
+      <aside className="drawer" id="drawer" aria-label={locale === "id" ? "Menu navigasi mobile" : "Mobile navigation menu"}>
+        <a href="#top">{locale === "id" ? "Beranda" : "Home"}</a>
+        <a href="#about">{locale === "id" ? "Tentang Kami" : "About Us"}</a>
+        <a href="#services">{locale === "id" ? "Layanan" : "Services"}</a>
+        <a href="#units">{locale === "id" ? "Unit" : "Units"}</a>
+        <a href="#testimoni">{locale === "id" ? "Testimoni" : "Testimonials"}</a>
+        <a href="#contact">{locale === "id" ? "Kontak" : "Contact"}</a>
         <a href={WA_BASE} className="btn btn-wa" target="_blank" rel="noopener noreferrer">
           <WhatsAppIcon size={16} />
           Chat WhatsApp
         </a>
       </aside>
 
+      {/* LANGUAGE SWITCHER FLOATING (mobile) */}
+      <div style={{ position: "fixed", top: "16px", right: "70px", zIndex: 200 }}>
+        <a
+          href={locale === "id" ? "/en" : "/"}
+          style={{
+            display: "flex", alignItems: "center", gap: "6px",
+            padding: "6px 12px", border: "1.5px solid var(--color-gold)",
+            borderRadius: "6px", background: "var(--bg)", color: "var(--color-gold)",
+            fontSize: "12px", fontWeight: 700, letterSpacing: "0.08em",
+            textDecoration: "none", fontFamily: "var(--font-space-mono), monospace",
+          }}
+          aria-label={locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
+        >
+          🌐 {locale === "id" ? "EN" : "ID"}
+        </a>
+      </div>
+
       <main id="top" data-wabase={WA_BASE}>
 
-        {/* ========== HERO ========== */}
+        {/* HERO */}
         <section className="hero">
           <div className="batik-bg" aria-hidden="true" />
           <span className="hero-blob" aria-hidden="true" />
           <span className="hero-blob-2" aria-hidden="true" />
           <div className="container">
             <div className="hero-copy reveal">
-              <span className="eyebrow">Indonesian Property Directory</span>
-              <h1>Find the <em>Best</em> Co-living &amp; Apartments in Indonesia</h1>
-              <p className="hero-sub">From Sabang to Merauke — verified housing choices, transparent pricing, and direct contact with owners.</p>
+              <span className="eyebrow">{t("eyebrow")}</span>
+              <h1>{t("h1Before")} <em>{t("h1Em")}</em> {t("h1After")}</h1>
+              <p className="hero-sub">{t("sub")}</p>
               <div className="hero-actions">
-                <a href="#units" className="btn btn-primary btn-lg">View Catalog →</a>
+                <a href="#units" className="btn btn-primary btn-lg">{t("cta1")}</a>
                 <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="btn btn-outline btn-lg">
                   <WhatsAppIcon size={16} />
                   Chat WhatsApp
                 </a>
               </div>
               <div className="trust-bar">
-                <span><b>{cityCount}</b> Cities</span>
+                <span><b>{cityCount}</b> {t("cities")}</span>
                 <span className="dot" />
-                <span>✓ Verified</span>
+                <span>✓ {t("verified")}</span>
               </div>
             </div>
 
             <div className="hero-visual reveal" aria-hidden="true">
               <article className="hero-card main">
-                <div
-                  className="ph"
-                  style={c.hero.widget1.photo ? { background: `url(${c.hero.widget1.photo}) center/cover no-repeat` } : undefined}
-                >
+                <div className="ph" style={c.hero.widget1.photo ? { background: `url(${c.hero.widget1.photo}) center/cover no-repeat` } : undefined}>
                   <span className="pill">{c.hero.widget1.pill}</span>
                   <span className="heart">♥</span>
                 </div>
@@ -280,10 +326,7 @@ export default async function Home() {
                 </div>
               </article>
               <article className="hero-card alt">
-                <div
-                  className="ph"
-                  style={c.hero.widget2.photo ? { background: `url(${c.hero.widget2.photo}) center/cover no-repeat` } : undefined}
-                >
+                <div className="ph" style={c.hero.widget2.photo ? { background: `url(${c.hero.widget2.photo}) center/cover no-repeat` } : undefined}>
                   <span className="pill">{c.hero.widget2.pill}</span>
                 </div>
                 <div className="meta">
@@ -296,78 +339,45 @@ export default async function Home() {
           </div>
         </section>
 
-
-        {/* ========== ABOUT ========== */}
+        {/* ABOUT */}
         <section className="section about" id="about">
           <div className="batik-bg" aria-hidden="true" />
           <div className="container">
             <div className="about-copy reveal">
-              <span className="eyebrow">About Us</span>
-              <h2>Why Choose Partner Livingku?</h2>
-              <p className="lede">We believe finding a home shouldn't be complicated. Partner Livingku brings a directory where every listing is verified — real photos, transparent pricing, and owners ready via WhatsApp.</p>
-
+              <span className="eyebrow">{tAbout("eyebrow")}</span>
+              <h2>{tAbout("h2")}</h2>
+              <p className="lede">{tAbout("desc")}</p>
               <div className="features">
-                <div className="feature">
-                  <div className="ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M9 12l2 2 4-4" />
-                      <path d="M21 12c0 5-4 8.5-9 9-5-.5-9-4-9-9V6l9-3 9 3v6z" />
-                    </svg>
+                {[
+                  { title: tAbout("f1Title"), desc: tAbout("f1Desc"), icon: <><path d="M9 12l2 2 4-4" /><path d="M21 12c0 5-4 8.5-9 9-5-.5-9-4-9-9V6l9-3 9 3v6z" /></> },
+                  { title: tAbout("f2Title"), desc: tAbout("f2Desc"), icon: <><circle cx="12" cy="12" r="9" /><path d="M12 7v10M9 9h4.5a2 2 0 010 4h-3a2 2 0 000 4H15" /></> },
+                  { title: tAbout("f3Title"), desc: tAbout("f3Desc"), icon: <><rect x="3" y="6" width="18" height="14" rx="2" /><circle cx="12" cy="13" r="3.5" /><path d="M8 6l1.5-2h5L16 6" /></> },
+                  { title: tAbout("f4Title"), desc: tAbout("f4Desc"), icon: <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" /> },
+                ].map(({ title, desc, icon }) => (
+                  <div className="feature" key={title}>
+                    <div className="ic">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">{icon}</svg>
+                    </div>
+                    <h4>{title}</h4>
+                    <p>{desc}</p>
                   </div>
-                  <h4>Verified Listings</h4>
-                  <p>Every property is checked by our team — address, facilities, and owner authenticity.</p>
-                </div>
-                <div className="feature">
-                  <div className="ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 7v10M9 9h4.5a2 2 0 010 4h-3a2 2 0 000 4H15" />
-                    </svg>
-                  </div>
-                  <h4>Transparent Pricing</h4>
-                  <p>No hidden fees. The displayed price is what you pay.</p>
-                </div>
-                <div className="feature">
-                  <div className="ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="6" width="18" height="14" rx="2" />
-                      <circle cx="12" cy="13" r="3.5" />
-                      <path d="M8 6l1.5-2h5L16 6" />
-                    </svg>
-                  </div>
-                  <h4>Real &amp; Accurate Photos</h4>
-                  <p>Photos taken on-site — no generic images from the internet.</p>
-                </div>
-                <div className="feature">
-                  <div className="ic">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />
-                    </svg>
-                  </div>
-                  <h4>Fast Response via WA</h4>
-                  <p>Our team is online Monday–Sunday, 08:00–21:00 WIB. We reply in minutes.</p>
-                </div>
+                ))}
               </div>
             </div>
 
             <div className="about-visual reveal">
               <div className="stats-card">
-                <span className="eyebrow stats-eyebrow">Our Numbers</span>
-                <h3>Trusted by thousands of home seekers</h3>
-                <p className="sub">Since 2026, we continue to grow with the co-living and apartment community in Indonesia.</p>
+                <span className="eyebrow stats-eyebrow">{tAbout("statsEyebrow")}</span>
+                <h3>{tAbout("statsH3")}</h3>
+                <p className="sub">{tAbout("statsSub")}</p>
                 <div className="stat-grid stat-grid-2">
                   <div className="stat">
-                    <div className="num">
-                      <span className="counter" data-count={String(cityCount)}>0</span>
-                      <small>+</small>
-                    </div>
-                    <div className="lbl">Available Cities</div>
+                    <div className="num"><span className="counter" data-count={String(cityCount)}>0</span><small>+</small></div>
+                    <div className="lbl">{tAbout("statsCities")}</div>
                   </div>
                   <div className="stat">
-                    <div className="num">
-                      <span className="counter" data-count={String(c.testimonials.filter(t => t.rating >= 3).length)}>0</span>
-                    </div>
-                    <div className="lbl">Satisfied Residents</div>
+                    <div className="num"><span className="counter" data-count={String(c.testimonials.filter(t => t.rating >= 3).length)}>0</span></div>
+                    <div className="lbl">{tAbout("statsResidents")}</div>
                   </div>
                 </div>
               </div>
@@ -375,109 +385,58 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ========== OUR SERVICES ========== */}
+        {/* SERVICES */}
         <section className="section svc-section" id="services">
           <div className="batik-bg" aria-hidden="true" />
           <div className="container">
             <div className="section-head reveal">
-              <span className="eyebrow">Our Services</span>
-              <h2>Our Services</h2>
-              <p>Comprehensive property management solutions — from daily operations to digital marketing and tenant management.</p>
+              <span className="eyebrow">{tSvc("eyebrow")}</span>
+              <h2>{tSvc("h2")}</h2>
+              <p>{tSvc("desc")}</p>
             </div>
-
             <div className="svc-grid">
-              <div className="svc-card reveal">
-                <div className="svc-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-                  </svg>
+              {[
+                { num: "01", title: tSvc("s1"), items: [tSvc("s1l1"), tSvc("s1l2"), tSvc("s1l3")], icon: <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /> },
+                { num: "02", title: tSvc("s2"), items: [tSvc("s2l1"), tSvc("s2l2"), tSvc("s2l3"), tSvc("s2l4"), tSvc("s2l5")], icon: <><line x1="12" y1="1" x2="12" y2="23" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" /></> },
+                { num: "03", title: tSvc("s3"), items: [tSvc("s3l1"), tSvc("s3l2"), tSvc("s3l3")], icon: <path d="M22 12h-4l-3 9L9 3l-3 9H2" /> },
+                { num: "04", title: tSvc("s4"), items: [tSvc("s4l1"), tSvc("s4l2"), tSvc("s4l3")], icon: <><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></> },
+              ].map(({ num, title, items, icon }) => (
+                <div className="svc-card reveal" key={num}>
+                  <div className="svc-icon-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icon}</svg>
+                  </div>
+                  <div className="svc-num-bg" aria-hidden="true">{num}</div>
+                  <h3 className="svc-cat">{title}</h3>
+                  <ul className="svc-list">
+                    {items.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
                 </div>
-                <div className="svc-num-bg" aria-hidden="true">01</div>
-                <h3 className="svc-cat">Operational Management</h3>
-                <ul className="svc-list">
-                  <li>Housekeeping &amp; Cleaning Management</li>
-                  <li>Maintenance &amp; Repairs</li>
-                  <li>Vendor &amp; Staff Coordination</li>
-                </ul>
-              </div>
-
-              <div className="svc-card reveal">
-                <div className="svc-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <line x1="12" y1="1" x2="12" y2="23" />
-                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                  </svg>
-                </div>
-                <div className="svc-num-bg" aria-hidden="true">02</div>
-                <h3 className="svc-cat">Financial Management</h3>
-                <ul className="svc-list">
-                  <li>Rent Collection &amp; Monitoring</li>
-                  <li>Monthly Financial Report</li>
-                  <li>Expenses Tracking &amp; Cost Efficiency</li>
-                  <li>Transparent Profit Tracking</li>
-                  <li>Optimize Occupancy Rate</li>
-                </ul>
-              </div>
-
-              <div className="svc-card reveal">
-                <div className="svc-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                  </svg>
-                </div>
-                <div className="svc-num-bg" aria-hidden="true">03</div>
-                <h3 className="svc-cat">Listing &amp; Market Management</h3>
-                <ul className="svc-list">
-                  <li>Property Branding</li>
-                  <li>Digital Marketing (Instagram &amp; TikTok)</li>
-                  <li>Professional Photo &amp; Video</li>
-                </ul>
-              </div>
-
-              <div className="svc-card reveal">
-                <div className="svc-icon-wrap">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                    <circle cx="9" cy="7" r="4" />
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                  </svg>
-                </div>
-                <div className="svc-num-bg" aria-hidden="true">04</div>
-                <h3 className="svc-cat">Tenant Management</h3>
-                <ul className="svc-list">
-                  <li>Rent Agreement &amp; Legal Administration</li>
-                  <li>Handling Check In &amp; Check Out</li>
-                  <li>Customer Service &amp; Complaint Handling</li>
-                </ul>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* ========== OUR UNITS / LISTINGS ========== */}
+        {/* UNITS */}
         <section className="section units" id="units">
           <div className="container">
             <div className="section-head reveal">
-              <span className="eyebrow">Featured Listings</span>
-              <h2>Find the Right Home For You</h2>
-              <p>Choose a category that fits your needs — all verified and ready for direct contact.</p>
+              <span className="eyebrow">{tUnits("eyebrow")}</span>
+              <h2>{tUnits("h2")}</h2>
+              <p>{tUnits("desc")}</p>
             </div>
 
             {c.listings.length > 0 ? (
               <>
                 <div className="filter-row reveal">
-                  <div className="filter-tabs" role="tablist" aria-label="Filter tipe hunian">
-                    <button className="active" data-filter="all" role="tab" aria-selected="true">All</button>
-                    <button data-filter="kost" role="tab" aria-selected="false">Co-living</button>
-                    <button data-filter="apartemen" role="tab" aria-selected="false">Apartment</button>
-                    <button data-filter="harian" role="tab" aria-selected="false">Daily</button>
+                  <div className="filter-tabs" role="tablist" aria-label={tUnits("filterLabel")}>
+                    <button className="active" data-filter="all" role="tab" aria-selected="true">{tUnits("filterAll")}</button>
+                    <button data-filter="kost" role="tab" aria-selected="false">{tUnits("filterKost")}</button>
+                    <button data-filter="apartemen" role="tab" aria-selected="false">{tUnits("filterApartemen")}</button>
+                    <button data-filter="harian" role="tab" aria-selected="false">{tUnits("filterHarian")}</button>
                   </div>
-                  <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label="Advanced filter">
+                  <button className="filter-btn" id="filterBtn" aria-expanded="false" aria-controls="filterPanel" aria-label={tUnits("advancedFilter")}>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
-                      <line x1="4" y1="6" x2="20" y2="6" />
-                      <line x1="8" y1="12" x2="16" y2="12" />
-                      <line x1="11" y1="18" x2="13" y2="18" />
+                      <line x1="4" y1="6" x2="20" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="11" y1="18" x2="13" y2="18" />
                     </svg>
                     Filter
                     <span className="filter-badge" id="filterBadge" />
@@ -486,47 +445,42 @@ export default async function Home() {
 
                 <div className="filter-panel" id="filterPanel">
                   <div className="fp-section">
-                    <div className="fp-label">City</div>
+                    <div className="fp-label">{tUnits("filterCity")}</div>
                     <div className="city-select" id="citySelect">
                       <button className="city-select-trigger" id="citySelectTrigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-                        <span id="citySelectLabel">All Cities</span>
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" aria-hidden="true">
-                          <polyline points="6 9 12 15 18 9" />
-                        </svg>
+                        <span id="citySelectLabel">{tUnits("allCities")}</span>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="14" height="14" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
                       </button>
                       <div className="city-dropdown" id="cityDropdown">
                         <div className="city-search-wrap">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true">
-                            <circle cx="11" cy="11" r="8" />
-                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                          </svg>
-                          <input type="text" id="citySearchInput" placeholder="Search city..." autoComplete="off" />
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15" aria-hidden="true"><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></svg>
+                          <input type="text" id="citySearchInput" placeholder={tUnits("searchCity")} autoComplete="off" />
                         </div>
-                        <ul id="citySelectList" role="listbox" aria-label="Select city" />
-                        <p className="city-no-results" id="cityNoResults">City not found</p>
+                        <ul id="citySelectList" role="listbox" aria-label={tUnits("filterCity")} />
+                        <p className="city-no-results" id="cityNoResults">{tUnits("cityNotFound")}</p>
                       </div>
                     </div>
                   </div>
                   <div className="fp-section">
-                    <div className="fp-label">Sort by Price</div>
+                    <div className="fp-label">{tUnits("filterSort")}</div>
                     <div className="fp-price-opts" id="fpPriceOpts">
-                      <button className="fp-opt active" data-sort="default">Default</button>
+                      <button className="fp-opt active" data-sort="default">{tUnits("sortDefault")}</button>
                       <button className="fp-opt" data-sort="asc">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="18 15 12 9 6 15" /></svg>
-                        Lowest
+                        {tUnits("sortAsc")}
                       </button>
                       <button className="fp-opt" data-sort="desc">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="13" height="13" aria-hidden="true"><polyline points="6 9 12 15 18 9" /></svg>
-                        Highest
+                        {tUnits("sortDesc")}
                       </button>
                     </div>
                   </div>
-                  <button className="fp-reset" id="fpReset">Reset Filter</button>
+                  <button className="fp-reset" id="fpReset">{tUnits("resetFilter")}</button>
                 </div>
 
                 <div className="listing-grid" id="listingGrid">
                   {c.listings.map((l) => (
-                    <ListingCard key={l.id} l={l} waBase={WA_BASE} />
+                    <ListingCard key={l.id} l={l} waBase={WA_BASE} tUnits={tUnits} />
                   ))}
                 </div>
               </>
@@ -534,37 +488,31 @@ export default async function Home() {
               <div className="units-empty">
                 <div className="units-empty-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" width="32" height="32" aria-hidden="true">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                    <polyline points="9 22 9 12 15 12 15 22" />
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" />
                   </svg>
                 </div>
-                <p className="units-empty-title">On Progress</p>
-                <p className="units-empty-sub">Coming Soon!</p>
+                <p className="units-empty-title">{tUnits("emptyTitle")}</p>
+                <p className="units-empty-sub">{tUnits("emptySub")}</p>
               </div>
             )}
           </div>
         </section>
 
-        {/* ========== TESTIMONI ========== */}
+        {/* TESTIMONIALS */}
         <section className="section testimoni" id="testimoni">
           <div className="batik-bg" aria-hidden="true" />
           <div className="container">
             <div className="section-head reveal">
-              <span className="eyebrow">Testimonials</span>
-              <h2>What They Say</h2>
+              <span className="eyebrow">{tTesti("eyebrow")}</span>
+              <h2>{tTesti("h2")}</h2>
               <div className="gold-band" style={{ marginTop: "18px" }}>
                 <span className="stars">
                   {"★".repeat(c.testimonials.length > 0 ? Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length) : 0)}
                   {"☆".repeat(5 - (c.testimonials.length > 0 ? Math.round(c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length) : 0))}
                 </span>
                 <span>
-                  <b>
-                    {c.testimonials.length > 0
-                      ? (c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length).toFixed(1)
-                      : "0.0"}
-                    /5
-                  </b>{" "}
-                  rating from {c.testimonials.length} residents
+                  <b>{c.testimonials.length > 0 ? (c.testimonials.reduce((acc, t) => acc + t.rating, 0) / c.testimonials.length).toFixed(1) : "0.0"}/5</b>{" "}
+                  {tTesti("ratingFrom")} {c.testimonials.length} {tTesti("residents")}
                 </span>
               </div>
             </div>
@@ -590,8 +538,8 @@ export default async function Home() {
               </div>
             ) : (
               <div className="units-empty">
-                <p className="units-empty-title">No testimonials yet</p>
-                <p className="units-empty-sub">Be the first to provide a testimonial!</p>
+                <p className="units-empty-title">{tTesti("emptyTitle")}</p>
+                <p className="units-empty-sub">{tTesti("emptySub")}</p>
               </div>
             )}
 
@@ -599,20 +547,17 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ========== FAQ ========== */}
+        {/* FAQ */}
         <section className="section faq" id="faq">
           <div className="container">
             <div className="reveal">
-              <span className="eyebrow">FAQ</span>
-              <h2 style={{ marginTop: "14px" }}>Frequently Asked Questions</h2>
-              <p style={{ color: "var(--muted)", marginTop: "16px", maxWidth: "36ch" }}>
-                Can't find the answer? Chat directly with our team via WhatsApp — we usually reply within 5 minutes.
-              </p>
+              <span className="eyebrow">{tFaq("eyebrow")}</span>
+              <h2 style={{ marginTop: "14px" }}>{tFaq("h2")}</h2>
+              <p style={{ color: "var(--muted)", marginTop: "16px", maxWidth: "36ch" }}>{tFaq("desc")}</p>
               <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="btn btn-primary" style={{ marginTop: "24px" }}>
-                Ask Our Team →
+                {tFaq("cta")}
               </a>
             </div>
-
             <div className="faq-list reveal-stagger" id="faqList">
               {c.faqs.map((f, i) => (
                 <div className="faq-item" key={i}>
@@ -629,15 +574,15 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ========== CTA / CONTACT ========== */}
+        {/* CONTACT */}
         <section className="section cta" id="contact">
           <div className="container reveal">
-            <span className="eyebrow">Start Now</span>
-            <h2>Ready to Find Your Dream Home?</h2>
-            <p className="lede">Our team is ready to help Monday–Sunday, 08:00–21:00 WIB. Just chat via WhatsApp — we reply in minutes.</p>
+            <span className="eyebrow">{tContact("eyebrow")}</span>
+            <h2>{tContact("h2")}</h2>
+            <p className="lede">{tContact("desc")}</p>
             <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" className="wa-big">
               <WhatsAppIcon size={26} />
-              Chat Now on WhatsApp
+              {tContact("cta")}
             </a>
             <div className="contact-info">
               <span>
@@ -648,15 +593,13 @@ export default async function Home() {
               </span>
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="2" y="4" width="20" height="16" rx="2" />
-                  <path d="m2 7 10 6 10-6" />
+                  <rect x="2" y="4" width="20" height="16" rx="2" /><path d="m2 7 10 6 10-6" />
                 </svg>
                 {c.contact.email}
               </span>
               <span>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                  <circle cx="12" cy="10" r="3" />
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" />
                 </svg>
                 {c.contact.coverage}
               </span>
@@ -664,25 +607,23 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* ========== LISTING MODAL ========== */}
-        <div className="modal-overlay" id="listingModal" aria-modal="true" role="dialog" aria-label="Property Details">
+        {/* MODAL */}
+        <div className="modal-overlay" id="listingModal" aria-modal="true" role="dialog" aria-label={tModal("propertyDetails")}>
           <div className="modal-box">
-            <button className="modal-close" id="modalClose" aria-label="Close">✕</button>
-
+            <button className="modal-close" id="modalClose" aria-label={tModal("close")}>✕</button>
             <div className="modal-slider" id="modalSlider">
               <div className="slider-track" id="sliderTrack" />
-              <button className="slider-btn slider-prev" id="sliderPrev" aria-label="Previous photo">‹</button>
-              <button className="slider-btn slider-next" id="sliderNext" aria-label="Next photo">›</button>
+              <button className="slider-btn slider-prev" id="sliderPrev" aria-label={tModal("prevPhoto")}>‹</button>
+              <button className="slider-btn slider-next" id="sliderNext" aria-label={tModal("nextPhoto")}>›</button>
               <div className="slider-dots" id="sliderDots" />
               <div className="slider-counter" id="sliderCounter" />
             </div>
-
             <div className="modal-content">
               <div className="modal-badges" id="modalBadges" />
               <h2 className="modal-title" id="modalTitle" />
               <div className="modal-loc" id="modalLoc" />
               <div className="modal-price" id="modalPrice" />
-              <p className="modal-section-label">Facilities</p>
+              <p className="modal-section-label">{tModal("facilities")}</p>
               <div className="modal-facilities" id="modalFacilities" />
               <hr className="modal-divider" />
               <p className="modal-desc" id="modalDesc" />
@@ -693,28 +634,26 @@ export default async function Home() {
 
       </main>
 
-      {/* ========== FOOTER ========== */}
+      {/* FOOTER */}
       <footer>
         <div className="container">
           <div className="brand">
-            <div className="logo">
-              <span><b>Partner</b> <i>Livingku</i></span>
-            </div>
-            <p>Trusted co-living &amp; apartment directory in Indonesia. Find your ideal home, easily and safely.</p>
+            <div className="logo"><span><b>Partner</b> <i>Livingku</i></span></div>
+            <p>{locale === "id" ? "Direktori ko-living & apartemen terpercaya di Indonesia. Temukan hunian ideal Anda, mudah dan aman." : "Trusted co-living & apartment directory in Indonesia. Find your ideal home, easily and safely."}</p>
           </div>
           <div>
-            <h5>Pages</h5>
+            <h5>{locale === "id" ? "Halaman" : "Pages"}</h5>
             <ul>
-              <li><a href="#top">Home</a></li>
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#units">Our Units</a></li>
-              <li><a href="#services">Our Services</a></li>
-              <li><a href="#testimoni">Testimonials</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a href="#top">{locale === "id" ? "Beranda" : "Home"}</a></li>
+              <li><a href="#about">{locale === "id" ? "Tentang Kami" : "About Us"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Unit Kami" : "Our Units"}</a></li>
+              <li><a href="#services">{locale === "id" ? "Layanan Kami" : "Our Services"}</a></li>
+              <li><a href="#testimoni">{locale === "id" ? "Testimoni" : "Testimonials"}</a></li>
+              <li><a href="#contact">{locale === "id" ? "Kontak" : "Contact"}</a></li>
             </ul>
           </div>
           <div>
-            <h5>Popular Cities</h5>
+            <h5>{locale === "id" ? "Kota Populer" : "Popular Cities"}</h5>
             <ul>
               <li><a href="#units">Jakarta</a></li>
               <li><a href="#units">Bandung</a></li>
@@ -724,34 +663,24 @@ export default async function Home() {
             </ul>
           </div>
           <div>
-            <h5>Housing Types</h5>
+            <h5>{locale === "id" ? "Tipe Hunian" : "Housing Types"}</h5>
             <ul>
-              <li><a href="#units">Men's Co-living</a></li>
-              <li><a href="#units">Women's Co-living</a></li>
-              <li><a href="#units">Mixed Co-living</a></li>
-              <li><a href="#units">Studio Apartment</a></li>
-              <li><a href="#units">Daily Rent</a></li>
+              <li><a href="#units">{locale === "id" ? "Ko-living Pria" : "Men's Co-living"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Ko-living Wanita" : "Women's Co-living"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Ko-living Campuran" : "Mixed Co-living"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Apartemen Studio" : "Studio Apartment"}</a></li>
+              <li><a href="#units">{locale === "id" ? "Sewa Harian" : "Daily Rent"}</a></li>
             </ul>
           </div>
           <div className="legal">
-            <span>© 2026 Partner Livingku.</span>
+            <span>{locale === "id" ? "© 2026 Partner Livingku. Dibuat dengan ♥ di Indonesia." : "© 2026 Partner Livingku. Made with ♥ in Indonesia."}</span>
             <div className="links">
-              <a href="/privacy-policy">Privacy Policy</a>
-              <a href="/terms-of-service">Terms &amp; Conditions</a>
+              <a href="/privacy-policy">{locale === "id" ? "Kebijakan Privasi" : "Privacy Policy"}</a>
+              <a href="/terms-of-service">{locale === "id" ? "Syarat & Ketentuan" : "Terms & Conditions"}</a>
             </div>
           </div>
         </div>
       </footer>
-
-      {/* ========== FLOATING WHATSAPP ========== */}
-      <div className="wa-float">
-        <span className="tip">Chat with us</span>
-        <a href={WA_DEFAULT} target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp">
-          <button className="wa-btn">
-            <WhatsAppIcon size={30} />
-          </button>
-        </a>
-      </div>
     </>
   );
 }

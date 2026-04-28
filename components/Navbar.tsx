@@ -1,7 +1,6 @@
-import Link from "next/link";
-
-const WA_NUMBER = "6281234567890";
-const WA_DEFAULT = `https://wa.me/${WA_NUMBER}?text=Hello%20Partner%20Livingku%2C%20I%20am%20looking%20for%20a%20place`;
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 function WhatsAppIcon() {
   return (
@@ -11,29 +10,32 @@ function WhatsAppIcon() {
   );
 }
 
-export default function Navbar() {
+export default function Navbar({ waDefault }: { waDefault: string }) {
+  const t = useTranslations("nav");
+
   return (
     <>
       <header className="nav nav-static" id="nav">
         <div className="container">
-          <Link href="/" className="logo" aria-label="Partner Livingku — Home">
+          <Link href="/" className="logo" aria-label={t("ariaHome")}>
             <span><b>Partner</b> <i>Livingku</i></span>
           </Link>
 
           <nav aria-label="Main navigation">
             <ul className="nav-links">
-              <li><Link href="/">Home</Link></li>
-              <li><Link href="/#about">About Us</Link></li>
-              <li><Link href="/#services">Our Services</Link></li>
-              <li><Link href="/#testimoni">Testimonials</Link></li>
-              <li><Link href="/#contact">Contact</Link></li>
+              <li><Link href="/">{t("home")}</Link></li>
+              <li><Link href="/#about">{t("about")}</Link></li>
+              <li><Link href="/#services">{t("services")}</Link></li>
+              <li><Link href="/#testimoni">{t("testimonials")}</Link></li>
+              <li><Link href="/#contact">{t("contact")}</Link></li>
             </ul>
           </nav>
 
           <div className="nav-cta">
-            <a href={WA_DEFAULT} className="btn btn-wa" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp">
+            <LanguageSwitcher />
+            <a href={waDefault} className="btn btn-wa" target="_blank" rel="noopener noreferrer" aria-label={t("chatWA")}>
               <WhatsAppIcon />
-              Chat WhatsApp
+              {t("chatWA")}
             </a>
           </div>
         </div>

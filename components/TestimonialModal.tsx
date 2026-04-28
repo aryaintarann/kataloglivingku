@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { submitTestimonial } from "@/app/actions";
 
 export default function TestimonialModal() {
+  const t = useTranslations("testimonialForm");
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(5);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,15 +37,13 @@ export default function TestimonialModal() {
     try {
       const result = await submitTestimonial(formData);
       if (result.success) {
-        setSuccessMsg("Thank you! Your testimonial has been submitted.");
-        setTimeout(() => {
-          handleClose();
-        }, 2000);
+        setSuccessMsg(t("success"));
+        setTimeout(handleClose, 2000);
       } else {
-        setErrorMsg(result.error || "An error occurred.");
+        setErrorMsg(result.error || t("errorGeneral"));
       }
-    } catch (err) {
-      setErrorMsg("A system error occurred.");
+    } catch {
+      setErrorMsg(t("errorSystem"));
     } finally {
       setIsSubmitting(false);
     }
@@ -53,20 +53,20 @@ export default function TestimonialModal() {
     <>
       <div className="testi-cta-wrap reveal">
         <button onClick={handleOpen} className="btn btn-primary btn-lg">
-          Add Testimonial
+          {t("addBtn")}
         </button>
       </div>
 
       {isOpen && (
         <div className="modal-overlay open" onClick={handleClose} style={{ zIndex: 1000 }}>
           <div className="modal-box testi-modal-box" onClick={(e) => e.stopPropagation()}>
-            <button className="modal-close" onClick={handleClose} aria-label="Close">
+            <button className="modal-close" onClick={handleClose} aria-label={t("closeLabel")}>
               ✕
             </button>
             <div className="modal-content">
-              <h2 className="modal-title">Share Your Experience</h2>
+              <h2 className="modal-title">{t("title")}</h2>
               <p className="modal-section-label" style={{ marginBottom: "20px" }}>
-                Your feedback means a lot to us.
+                {t("subtitle")}
               </p>
 
               {successMsg ? (
@@ -74,23 +74,23 @@ export default function TestimonialModal() {
               ) : (
                 <form onSubmit={handleSubmit} className="testi-form">
                   <div className="form-group">
-                    <label htmlFor="name">Full Name</label>
-                    <input type="text" id="name" name="name" required placeholder="Example: John Doe" />
+                    <label htmlFor="name">{t("nameLabel")}</label>
+                    <input type="text" id="name" name="name" required placeholder={t("namePlaceholder")} />
                   </div>
 
                   <div className="form-row">
                     <div className="form-group">
-                      <label htmlFor="city">City</label>
-                      <input type="text" id="city" name="city" required placeholder="Example: Jakarta" />
+                      <label htmlFor="city">{t("cityLabel")}</label>
+                      <input type="text" id="city" name="city" required placeholder={t("cityPlaceholder")} />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="housing_type">Housing Type</label>
-                      <input type="text" id="housing_type" name="housing_type" required placeholder="Example: Exclusive Co-living" />
+                      <label htmlFor="housing_type">{t("housingLabel")}</label>
+                      <input type="text" id="housing_type" name="housing_type" required placeholder={t("housingPlaceholder")} />
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label>Rating</label>
+                    <label>{t("ratingLabel")}</label>
                     <div className="rating-selector">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <button
@@ -106,20 +106,20 @@ export default function TestimonialModal() {
                   </div>
 
                   <div className="form-group">
-                    <label htmlFor="content">Your Review</label>
+                    <label htmlFor="content">{t("reviewLabel")}</label>
                     <textarea
                       id="content"
                       name="content"
                       required
                       rows={4}
-                      placeholder="Tell us about your experience finding a home with us..."
-                    ></textarea>
+                      placeholder={t("reviewPlaceholder")}
+                    />
                   </div>
 
                   {errorMsg && <div className="alert-error">{errorMsg}</div>}
 
                   <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={isSubmitting}>
-                    {isSubmitting ? "Submitting..." : "Submit Testimonial"}
+                    {isSubmitting ? t("submitting") : t("submitBtn")}
                   </button>
                 </form>
               )}

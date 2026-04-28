@@ -1,6 +1,9 @@
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export default function Footer() {
+  const t = useTranslations("footer");
+
   return (
     <footer>
       <div className="container">
@@ -8,43 +11,44 @@ export default function Footer() {
           <div className="logo">
             <span><b>Partner</b> <i>Livingku</i></span>
           </div>
-          <p>Trusted co-living &amp; apartment directory in Indonesia. Find your ideal home, easily and safely.</p>
+          <p>{t("desc")}</p>
         </div>
         <div>
-          <h5>Pages</h5>
+          <h5>{t("pages")}</h5>
           <ul>
-            <li><Link href="/">Home</Link></li>
-            <li><Link href="/#about">About Us</Link></li>
-            <li><Link href="/#services">Our Services</Link></li>
-            <li><Link href="/#testimoni">Testimonials</Link></li>
-            <li><Link href="/#contact">Contact</Link></li>
+            <li><Link href="/">{t("home")}</Link></li>
+            <li><Link href="/#about">{t("about")}</Link></li>
+            <li><Link href="/#units">{t("units")}</Link></li>
+            <li><Link href="/#services">{t("services")}</Link></li>
+            <li><Link href="/#testimoni">{t("testimonials")}</Link></li>
+            <li><Link href="/#contact">{t("contact")}</Link></li>
           </ul>
         </div>
         <div>
-          <h5>Popular Cities</h5>
+          <h5>{t("popularCities")}</h5>
           <ul>
-            <li><Link href="/#cities">Jakarta</Link></li>
-            <li><Link href="/#cities">Bandung</Link></li>
-            <li><Link href="/#cities">Surabaya</Link></li>
-            <li><Link href="/#cities">Bali</Link></li>
-            <li><Link href="/#cities">Yogyakarta</Link></li>
+            <li><Link href="/#units">Jakarta</Link></li>
+            <li><Link href="/#units">Bandung</Link></li>
+            <li><Link href="/#units">Surabaya</Link></li>
+            <li><Link href="/#units">Bali</Link></li>
+            <li><Link href="/#units">Yogyakarta</Link></li>
           </ul>
         </div>
         <div>
-          <h5>Housing Types</h5>
+          <h5>{t("housingTypes")}</h5>
           <ul>
-            <li><Link href="/#services">Men's Co-living</Link></li>
-            <li><Link href="/#services">Women's Co-living</Link></li>
-            <li><Link href="/#services">Mixed Co-living</Link></li>
-            <li><Link href="/#services">Studio Apartment</Link></li>
-            <li><Link href="/#services">Daily Rent</Link></li>
+            <li><Link href="/#units">{t("menKost")}</Link></li>
+            <li><Link href="/#units">{t("womenKost")}</Link></li>
+            <li><Link href="/#units">{t("mixedKost")}</Link></li>
+            <li><Link href="/#units">{t("studio")}</Link></li>
+            <li><Link href="/#units">{t("daily")}</Link></li>
           </ul>
         </div>
         <div className="legal">
-          <span>© 2026 Partner Livingku. Made with ♥ in Indonesia.</span>
+          <span>{t("copyright")}</span>
           <div className="links">
-            <Link href="/privacy-policy">Privacy Policy</Link>
-            <Link href="/terms-of-service">Terms &amp; Conditions</Link>
+            <Link href="/privacy-policy">{t("privacyPolicy")}</Link>
+            <Link href="/terms-of-service">{t("terms")}</Link>
           </div>
         </div>
       </div>
