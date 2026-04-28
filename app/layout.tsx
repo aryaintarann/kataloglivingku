@@ -25,18 +25,23 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://partnerlivingku.id"),
   title: "Find the Best Co-living & Apartments in Indonesia | Partner Livingku",
   description:
     "Partner Livingku — the trusted co-living and apartment directory in Indonesia. Find your dream home in Jakarta, Bandung, Surabaya, Bali, and other cities. Transparent pricing, verified listings.",
   keywords: [
     "co-living Jakarta",
+    "co-living Indonesia",
     "apartment Bandung",
     "rent room Indonesia",
+    "sewa kost Jakarta",
     "co-living directory",
-    "verified listings",
-    "find cheap apartment",
+    "verified listings Indonesia",
+    "affordable apartment Indonesia",
     "rent apartment Indonesia",
     "Partner Livingku",
+    "kost Jakarta",
+    "apartemen Bandung",
   ],
   openGraph: {
     title: "Find the Best Co-living & Apartments in Indonesia | Partner Livingku",
@@ -44,18 +49,33 @@ export const metadata: Metadata = {
       "The trusted co-living and apartment directory across Indonesia. Verified listings, transparent pricing.",
     url: "https://partnerlivingku.id",
     siteName: "Partner Livingku",
-    locale: "en_US",
+    locale: "id_ID",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Partner Livingku — Co-living & Apartment Directory in Indonesia",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Find the Best Co-living & Apartments in Indonesia | Partner Livingku",
     description:
       "The trusted co-living and apartment directory across Indonesia.",
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
   alternates: {
     canonical: "https://partnerlivingku.id",
@@ -70,12 +90,12 @@ const jsonLd = {
       "@id": "https://partnerlivingku.id/#organization",
       name: "Partner Livingku",
       url: "https://partnerlivingku.id",
-      description:
-        "Trusted co-living and apartment directory in Indonesia.",
+      description: "Trusted co-living and apartment directory in Indonesia.",
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "customer service",
-        availableLanguage: "English",
+        availableLanguage: ["English", "Indonesian"],
+        hoursAvailable: "Mo-Su 08:00-21:00",
       },
     },
     {
@@ -85,27 +105,11 @@ const jsonLd = {
       name: "Partner Livingku",
       publisher: { "@id": "https://partnerlivingku.id/#organization" },
       inLanguage: "en",
-    },
-    {
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "Is Partner Livingku's service free for seekers?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes, finding a home on Partner Livingku is 100% free for seekers.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Are all listings verified?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes, every listing shown has gone through a verification process by our team.",
-          },
-        },
-      ],
+      potentialAction: {
+        "@type": "SearchAction",
+        target: "https://partnerlivingku.id/#units",
+        "query-input": "required name=search_term_string",
+      },
     },
   ],
 };

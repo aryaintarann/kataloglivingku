@@ -1,28 +1,48 @@
 # Partner Livingku
 
-> Direktori kost-kostan dan apartemen terpercaya di Indonesia.
+> Trusted co-living and apartment directory in Indonesia.
 
-## Tentang Kami
+## About
 
-Partner Livingku adalah platform pencarian hunian (kost dan apartemen) di seluruh
-Indonesia. Kami menyediakan daftar hunian terverifikasi dengan harga transparan,
-foto real, dan kemudahan kontak langsung ke owner via WhatsApp.
+Partner Livingku is a property search platform for co-living spaces and apartments
+across Indonesia. We provide verified listings with transparent pricing, real on-site
+photos, and direct contact with property owners via WhatsApp — no hidden fees,
+no fake listings.
 
-## Layanan
+## Services
 
-- Kost eksklusif, kost putri, kost pria, kost campur
-- Apartemen studio, 1BR, dan 2BR
-- Sewa harian, mingguan, dan bulanan
-- Tersedia di: Jakarta, Bandung, Surabaya, Bali, Yogyakarta, Medan, dan kota lainnya
+- Exclusive co-living, women-only co-living, men-only co-living, mixed co-living
+- Studio, 1BR, and 2BR apartments
+- Daily, weekly, and monthly rental options
+- Available in: Jakarta, Bandung, Surabaya, Bali, Yogyakarta, Medan, and other cities
 
-## Cara Menggunakan
+## Property Management Services
 
-Pengguna dapat mencari listing hunian di halaman /services, memfilter berdasarkan
-kota dan tipe, lalu menghubungi kami via WhatsApp untuk informasi lebih lanjut.
+Partner Livingku also provides end-to-end property management for owners:
+- Operational management (housekeeping, maintenance, vendor coordination)
+- Financial management (rent collection, monthly reports, cost tracking)
+- Listing & marketing (branding, digital marketing on Instagram & TikTok, photography)
+- Tenant management (lease agreements, check-in/check-out, customer service)
 
-## Kontak
+## How It Works
 
-- WhatsApp: https://wa.me/6281234567890
+1. Browse listings on the homepage and filter by city or housing type
+2. Click Detail on any listing to view full information and photos
+3. Contact the team directly via WhatsApp for availability and booking
+
+## Target Users
+
+- Individuals and families looking for co-living spaces or apartments in Indonesia
+- Property owners seeking professional management services
+- Relocating professionals and students needing verified, affordable housing
+
+## Contact
+
 - Website: https://partnerlivingku.id
-- Email: halo@partnerlivingku.id
-- Jam Operasional: Senin–Minggu, 08.00–21.00 WIB
+- Operational hours: Monday–Sunday, 08:00–21:00 WIB (UTC+7)
+
+## Pages
+
+- Homepage / Listings: https://partnerlivingku.id
+- Privacy Policy: https://partnerlivingku.id/privacy-policy
+- Terms of Service: https://partnerlivingku.id/terms-of-service

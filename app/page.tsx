@@ -141,9 +141,57 @@ export default async function Home() {
   const extractCity = (loc: string) => loc.split("·")[0].split(",")[0].trim();
   const cityCount = new Set(c.listings.map((l) => extractCity(l.loc)).filter(Boolean)).size;
 
+  const faqJsonLd = c.faqs.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: c.faqs.map((f) => ({
+          "@type": "Question",
+          name: f.q,
+          acceptedAnswer: { "@type": "Answer", text: f.a },
+        })),
+      }
+    : null;
+
+  const listingsJsonLd = c.listings.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Co-living & Apartment Listings — Partner Livingku",
+        itemListElement: c.listings.map((l, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          item: {
+            "@type": "Accommodation",
+            name: l.title,
+            description: l.desc,
+            address: { "@type": "PostalAddress", addressLocality: l.loc, addressCountry: "ID" },
+            offers: {
+              "@type": "Offer",
+              name: `${l.price} / ${l.period}`,
+              priceCurrency: "IDR",
+              availability: "https://schema.org/InStock",
+            },
+          },
+        })),
+      }
+    : null;
+
   return (
     <>
       <ClientInteractions />
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
+      {listingsJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(listingsJsonLd) }}
+        />
+      )}
       <div className="scroll-progress" id="scrollProgress" aria-hidden="true" />
 
       {/* ========== NAVBAR ========== */}
