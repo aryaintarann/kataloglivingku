@@ -354,7 +354,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 </a>
               </div>
               <div className="trust-bar">
-                <span><b>{cityCount}</b> {t("cities")}</span>
+                <span><b>5+</b> {t("cities")}</span>
                 <span className="dot" />
                 <span>✓ {t("verified")}</span>
               </div>
@@ -419,7 +419,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
                 <p className="sub">{tAbout("statsSub")}</p>
                 <div className="stat-grid stat-grid-2">
                   <div className="stat">
-                    <div className="num"><span className="counter" data-count={String(cityCount)}>0</span><small>+</small></div>
+                    <div className="num"><span className="counter" data-count="5">0</span><small>+</small></div>
                     <div className="lbl">{tAbout("statsCities")}</div>
                   </div>
                   <div className="stat">
