@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panduan Admin Panel — Partner Livingku</title>
+  <style>
+    /* ── Fonts ─────────────────────────────────────────── */
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    /* ── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Variables ─────────────────────────────────────── */
+    :root {
+      --navy:   #1B3A4B;
+      --gold:   #C9A84C;
+      --gold-lt:#fdf6e3;
+      --ink:    #111827;
+      --ink2:   #374151;
+      --muted:  #6B7280;
+      --line:   #E5E7EB;
+      --bg:     #F9FAFB;
+      --white:  #ffffff;
+      --green:  #059669;
+      --red:    #DC2626;
+      --blue:   #1D4ED8;
+      --radius: 8px;
+    }
+
+    /* ── Page ──────────────────────────────────────────── */
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--ink);
+      background: var(--white);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ── Cover Page ─────────────────────────────────────── */
+    .cover {
+      background: var(--navy);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 72px;
+      position: relative;
+      overflow: hidden;
+      page-break-after: always;
+    }
+    .cover::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 80% 20%, rgba(201,168,76,.18) 0%, transparent 60%);
+    }
+    .cover-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+    .cover-logo {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 42px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .cover-logo em { color: var(--gold); font-style: italic; }
+    .cover h1 {
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 20px;
+      line-height: 1.3;
+    }
+    .cover-divider {
+      width: 64px; height: 3px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+    .cover p {
+      font-size: 15px;
+      color: rgba(255,255,255,.75);
+      max-width: 480px;
+      line-height: 1.7;
+      margin-bottom: 48px;
+    }
+    .cover-meta {
+      display: flex;
+      gap: 40px;
+    }
+    .cover-meta-item label {
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      display: block;
+      margin-bottom: 3px;
+    }
+    .cover-meta-item span {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,.85);
+    }
+    .cover-corner {
+      position: absolute;
+      bottom: 60px;
+      right: 72px;
+      width: 160px;
+      height: 160px;
+      border: 2px solid rgba(201,168,76,.25);
+      border-radius: 50%;
+    }
+    .cover-corner::before {
+      content: '';
+      position: absolute;
+      inset: 20px;
+      border: 1.5px solid rgba(201,168,76,.15);
+      border-radius: 50%;
+    }
+
+    /* ── Content Layout ─────────────────────────────────── */
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 48px;
+    }
+
+    /* ── Section ────────────────────────────────────────── */
+    .section {
+      margin-bottom: 52px;
+      page-break-inside: avoid;
+    }
+    .section-break {
+      page-break-before: always;
+    }
+
+    /* ── TOC ─────────────────────────────────────────────── */
+    .toc {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 32px 36px;
+      margin-bottom: 52px;
+    }
+    .toc h2 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 20px;
+      color: var(--navy);
+    }
+    .toc ol {
+      padding-left: 20px;
+    }
+    .toc ol li {
+      margin-bottom: 8px;
+      color: var(--ink2);
+      font-size: 13.5px;
+    }
+    .toc ol li a { color: var(--navy); text-decoration: none; font-weight: 600; }
+    .toc ol li span { color: var(--muted); font-size: 12px; margin-left: 6px; }
+    .toc-sub { margin-top: 4px; padding-left: 16px; list-style: none !important; }
+    .toc-sub li { font-size: 12.5px; color: var(--muted); margin-bottom: 4px; }
+    .toc-sub li::before { content: '—  '; color: var(--gold); }
+
+    /* ── Typography ─────────────────────────────────────── */
+    h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 19px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    h2 .num {
+      background: var(--navy);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 800;
+      width: 26px; height: 26px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 20px 0 8px;
+    }
+    p { margin-bottom: 12px; color: var(--ink2); }
+    ul, ol { padding-left: 22px; margin-bottom: 12px; color: var(--ink2); }
+    li { margin-bottom: 5px; }
+    strong { color: var(--ink); font-weight: 700; }
+    em { font-style: italic; color: var(--muted); }
+
+    /* ── Eyebrow ─────────────────────────────────────────── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* ── Cards ───────────────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+    }
+    .card-navy {
+      background: var(--navy);
+      color: #fff;
+      border: none;
+    }
+    .card-navy p, .card-navy li { color: rgba(255,255,255,.82); }
+    .card-navy h3 { color: var(--gold); }
+    .card-gold {
+      background: var(--gold-lt);
+      border: 1px solid rgba(201,168,76,.3);
+    }
+    .card-warn {
+      background: #FFF7ED;
+      border: 1px solid #FED7AA;
+    }
+    .card-warn p, .card-warn li { color: #92400E; }
+
+    /* ── Step List ───────────────────────────────────────── */
+    .steps { list-style: none; padding: 0; counter-reset: steps; }
+    .steps li {
+      counter-increment: steps;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 14px;
+      align-items: flex-start;
+    }
+    .steps li::before {
+      content: counter(steps);
+      background: var(--navy);
+      color: var(--gold);
+      font-weight: 800;
+      font-size: 11px;
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── Field Docs ─────────────────────────────────────── */
+    .field-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; font-size: 13px; }
+    .field-table th {
+      background: var(--navy);
+      color: var(--gold);
+      text-align: left;
+      padding: 9px 14px;
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .field-table th:first-child { border-radius: 8px 0 0 0; }
+    .field-table th:last-child { border-radius: 0 8px 0 0; }
+    .field-table td {
+      padding: 9px 14px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink2);
+      vertical-align: top;
+    }
+    .field-table tr:last-child td { border-bottom: none; }
+    .field-table tr:nth-child(even) td { background: var(--bg); }
+    .req {
+      background: #DCFCE7;
+      color: #166534;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+    .opt {
+      background: #F3F4F6;
+      color: #6B7280;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    /* ── Badge ───────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .badge-kost  { background: #FEF9C3; color: #854D0E; }
+    .badge-apart { background: #DBEAFE; color: #1D4ED8; }
+    .badge-hari  { background: #FCE7F3; color: #9D174D; }
+    .badge-ok    { background: #DCFCE7; color: #166534; }
+    .badge-err   { background: #FEE2E2; color: #991B1B; }
+
+    /* ── UI Mock ─────────────────────────────────────────── */
+    .ui-mock {
+      border: 1.5px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
+    .ui-header {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .ui-header-gold { color: var(--gold); }
+    .ui-logout {
+      border: 1px solid rgba(255,255,255,.25);
+      padding: 3px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      color: rgba(255,255,255,.7);
+    }
+    .ui-body { display: flex; background: var(--bg); }
+    .ui-sidebar {
+      width: 140px;
+      background: #fff;
+      border-right: 1px solid var(--line);
+      padding: 12px 8px;
+      flex-shrink: 0;
+    }
+    .ui-nav-item {
+      padding: 7px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--ink2);
+      margin-bottom: 2px;
+    }
+    .ui-nav-item.active {
+      background: var(--gold-lt);
+      color: var(--gold);
+      font-weight: 700;
+    }
+    .ui-main { flex: 1; padding: 16px 20px; }
+    .ui-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .ui-input {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 7px 10px;
+      font-size: 12px;
+      width: 100%;
+      background: #fafafa;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .ui-btn {
+      display: inline-block;
+      padding: 7px 16px;
+      border-radius: 7px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .ui-btn-gold { background: var(--gold); color: #fff; }
+    .ui-btn-dark { background: #1a1a1a; color: #fff; }
+    .ui-btn-outline { border: 1px solid var(--line); color: var(--ink2); background: #fff; }
+
+    /* ── Callout ─────────────────────────────────────────── */
+    .callout {
+      border-left: 3px solid var(--gold);
+      padding: 12px 16px;
+      background: var(--gold-lt);
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--ink2);
+    }
+    .callout-info {
+      border-color: var(--blue);
+      background: #EFF6FF;
+    }
+    .callout-warn {
+      border-color: #F59E0B;
+      background: #FFFBEB;
+      color: #92400E;
+    }
+    .callout-danger {
+      border-color: var(--red);
+      background: #FEF2F2;
+      color: #991B1B;
+    }
+    .callout strong { display: block; margin-bottom: 3px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+
+    /* ── Tip box ─────────────────────────────────────────── */
+    .tip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .tip-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-size: 12.5px;
+    }
+    .tip-box .tip-icon { font-size: 20px; margin-bottom: 6px; }
+    .tip-box .tip-title { font-weight: 700; font-size: 13px; color: var(--navy); margin-bottom: 4px; }
+    .tip-box p { font-size: 12px; color: var(--muted); margin: 0; }
+
+    /* ── Footer ──────────────────────────────────────────── */
+    .doc-footer {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      margin-top: 60px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .doc-footer strong { color: var(--navy); }
+
+    /* ── Print ───────────────────────────────────────────── */
+    @media print {
+      body { font-size: 13px; }
+      .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; min-height: auto; padding: 60px 60px; }
+      .content { padding: 40px 40px; }
+      .section { page-break-inside: avoid; }
+      .ui-mock { page-break-inside: avoid; }
+      .field-table { page-break-inside: avoid; }
+      .no-break { page-break-inside: avoid; }
+      @page { margin: 0; size: A4; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════════ -->
+<div class="cover">
+  <div class="cover-eyebrow">Dokumentasi Resmi</div>
+  <div class="cover-logo"><em>Partner</em> Livingku</div>
+  <h1>Panduan Penggunaan<br>Website &amp; Admin Panel</h1>
+  <div class="cover-divider"></div>
+  <p>Panduan lengkap untuk mengelola konten website Partner Livingku — mulai dari cara mengakses Admin Panel, menambahkan listing hunian, mengatur FAQ, hingga memperbarui informasi kontak.</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item">
+      <label>Versi Dokumen</label>
+      <span>1.0</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Tanggal</label>
+      <span>April 2026</span>
+    </div>
+    <div class="cover-meta-item">
+      <label>Website</label>
+      <span>partnerlivingku.id</span>
+    </div>
+  </div>
+  <div class="cover-corner"></div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     CONTENT
+════════════════════════════════════════════ -->
+<div class="content">
+
+  <!-- Daftar Isi -->
+  <div class="toc">
+    <h2 style="border: none; padding: 0; margin-bottom: 16px;">Daftar Isi</h2>
+    <ol>
+      <li>
+        <a href="#overview">Gambaran Umum Website</a>
+        <ul class="toc-sub">
+          <li>Struktur halaman</li>
+          <li>Cara mengganti bahasa</li>
+        </ul>
+      </li>
+      <li>
+        <a href="#akses-admin">Mengakses Admin Panel</a>
+        <ul class="toc-sub">
+          <li>Alamat URL admin</li>
+          <li>Cara login</li>
+          <li>Cara logout</li>
+        </ul>
+      </li>
+      <li>
+        <a href="#whatsapp">Menu: WhatsApp</a>
+      </li>
+      <li>
+        <a href="#hero">Menu: Hero Widgets</a>
+      </li>
+      <li>
+        <a href="#listing">Menu: Listing Hunian</a>
+        <ul class="toc-sub">
+          <li>Menambah listing baru</li>
+          <li>Mengedit listing</li>
+          <li>Menghapus listing</li>
+          <li>Panduan upload foto</li>
+        </ul>
+      </li>
+      <li>
+        <a href="#faq">Menu: FAQ</a>
+      </li>
+      <li>
+        <a href="#kontak">Menu: Kontak</a>
+      </li>
+      <li>
+        <a href="#testimoni">Mengelola Testimoni</a>
+      </li>
+      <li>
+        <a href="#tips">Tips &amp; Panduan Umum</a>
+      </li>
+    </ol>
+  </div>
+
+  <!-- ════════════
+       1. GAMBARAN UMUM
+  ════════════ -->
+  <div class="section" id="overview">
+    <span class="eyebrow">Bagian 1</span>
+    <h2><span class="num">1</span> Gambaran Umum Website</h2>
+
+    <p>Website <strong>Partner Livingku</strong> adalah direktori kost &amp; apartemen yang tersedia dalam dua bahasa: <strong>Bahasa Indonesia</strong> dan <strong>English</strong>. Semua konten yang tampil di website dikelola melalui Admin Panel.</p>
+
+    <h3>Struktur Halaman Utama</h3>
+    <table class="field-table">
+      <thead><tr><th>Bagian</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hero</strong></td><td>Banner utama dengan dua kartu mini (widget) yang menampilkan contoh listing unggulan.</td></tr>
+        <tr><td><strong>Tentang Kami</strong></td><td>Penjelasan layanan dan statistik (jumlah kota &amp; penghuni puas).</td></tr>
+        <tr><td><strong>Layanan</strong></td><td>Empat kategori layanan manajemen properti — konten statis.</td></tr>
+        <tr><td><strong>Unit / Listing</strong></td><td>Grid kartu hunian yang dapat difilter. Dikelola di menu <em>Listing Hunian</em>.</td></tr>
+        <tr><td><strong>Testimoni</strong></td><td>Slider testimoni dari penghuni dan owner. Dikelola langsung dari database Supabase.</td></tr>
+        <tr><td><strong>FAQ</strong></td><td>Daftar pertanyaan umum. Dikelola di menu <em>FAQ</em>.</td></tr>
+        <tr><td><strong>Kontak</strong></td><td>Nomor telepon, email, dan cakupan layanan. Dikelola di menu <em>Kontak</em>.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Cara Mengganti Bahasa</h3>
+    <p>Di pojok kanan atas navbar terdapat tombol <strong>ID | EN</strong>. Klik untuk berpindah antara Bahasa Indonesia dan English. URL akan berubah:</p>
+    <ul>
+      <li>Bahasa Indonesia → <code>partnerlivingku.id/</code></li>
+      <li>English → <code>partnerlivingku.id/en</code></li>
+    </ul>
+    <div class="callout">
+      <strong>Info</strong>
+      Konten listing dan FAQ akan otomatis diterjemahkan ke Bahasa Inggris menggunakan layanan terjemahan. Tidak perlu memasukkan konten dua kali.
+    </div>
+  </div>
+
+  <!-- ════════════
+       2. AKSES ADMIN
+  ════════════ -->
+  <div class="section section-break" id="akses-admin">
+    <span class="eyebrow">Bagian 2</span>
+    <h2><span class="num">2</span> Mengakses Admin Panel</h2>
+
+    <h3>Alamat URL Admin Panel</h3>
+    <div class="card card-navy">
+      <h3>🔗 URL Admin Panel</h3>
+      <p style="font-size:16px; font-weight:700; letter-spacing:.02em;">partnerlivingku.id<span style="color:var(--gold)">/admin</span></p>
+      <p style="font-size:12px; margin-top:8px;">Admin Panel hanya dapat diakses oleh orang yang memiliki password. Jangan bagikan password kepada siapapun yang tidak berwenang.</p>
+    </div>
+
+    <h3>Cara Login</h3>
+    <ul class="steps">
+      <li>Buka browser (Chrome, Safari, atau Edge disarankan) dan kunjungi alamat di atas.</li>
+      <li>Halaman login akan muncul. Masukkan <strong>password admin</strong> yang telah diberikan.</li>
+      <li>Klik tombol <strong>"Masuk →"</strong>.</li>
+      <li>Jika berhasil, Anda akan langsung masuk ke dashboard Admin Panel.</li>
+    </ul>
+
+    <div class="ui-mock">
+      <div class="ui-header">
+        <span><span class="ui-header-gold">Partner</span> Livingku</span>
+      </div>
+      <div style="padding: 40px; background: #F4F5F7; display:flex; justify-content:center;">
+        <div style="background:#fff; border-radius:14px; padding:32px; width:300px; box-shadow:0 4px 20px rgba(0,0,0,.08);">
+          <div style="font-weight:800; font-size:17px; margin-bottom:4px;"><span style="color:var(--gold)">Partner</span> Livingku</div>
+          <div style="font-size:12px; color:var(--muted); margin-bottom:22px;">Admin Panel – masuk untuk mengelola konten</div>
+          <div style="font-size:11px; font-weight:600; color:var(--muted); margin-bottom:5px;">PASSWORD ADMIN</div>
+          <div class="ui-input">••••••••••••</div>
+          <div class="ui-btn ui-btn-dark" style="width:100%; text-align:center; display:block; margin-top:14px;">Masuk →</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout callout-warn">
+      <strong>⚠ Perhatian</strong>
+      Jika password salah, akan muncul pesan error merah di bawah kolom password. Pastikan tidak ada spasi di awal atau akhir password.
+    </div>
+
+    <h3>Cara Logout</h3>
+    <p>Klik tombol <strong>"Logout"</strong> di pojok kanan atas header Admin Panel (berwarna putih outline). Selalu logout setelah selesai, terutama di komputer yang digunakan bersama.</p>
+  </div>
+
+  <!-- ════════════
+       3. TAMPILAN ADMIN
+  ════════════ -->
+  <div class="section" id="tampilan">
+    <h3>Tampilan Admin Panel</h3>
+    <p>Setelah login, Anda akan melihat tampilan seperti ini:</p>
+
+    <div class="ui-mock">
+      <div class="ui-header">
+        <span><span class="ui-header-gold">Partner</span> Livingku — Admin</span>
+        <span class="ui-logout">Logout</span>
+      </div>
+      <div class="ui-body">
+        <div class="ui-sidebar">
+          <div style="font-size:10px; color:var(--muted); font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:0 10px; margin-bottom:8px;">MENU</div>
+          <div class="ui-nav-item active">WhatsApp</div>
+          <div class="ui-nav-item">Hero Widgets</div>
+          <div class="ui-nav-item">Listing Hunian</div>
+          <div class="ui-nav-item">FAQ</div>
+          <div class="ui-nav-item">Kontak</div>
+          <div style="border-top:1px solid var(--line); margin:12px 0;"></div>
+          <div class="ui-nav-item" style="color:var(--muted);">↗ Lihat Website</div>
+        </div>
+        <div class="ui-main">
+          <div class="ui-card">
+            <div style="font-size:13px; font-weight:800; margin-bottom:12px;">Nomor untuk Semua Tombol WA</div>
+            <div style="font-size:11px; font-weight:600; color:var(--muted); margin-bottom:5px;">NOMOR WHATSAPP</div>
+            <div class="ui-input">6281234567890</div>
+            <div class="ui-btn ui-btn-gold" style="margin-top:4px;">Simpan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p>Di sebelah kiri terdapat <strong>sidebar navigasi</strong> dengan 5 menu utama. Di bagian bawah sidebar terdapat link <strong>"↗ Lihat Website"</strong> untuk membuka website di tab baru tanpa perlu logout.</p>
+
+    <div class="callout callout-info">
+      <strong>📱 Tampilan Mobile</strong>
+      Di perangkat mobile, sidebar akan berubah menjadi tab bar horizontal yang bisa di-scroll secara horizontal di bagian atas halaman.
+    </div>
+  </div>
+
+  <!-- ════════════
+       3. WHATSAPP
+  ════════════ -->
+  <div class="section section-break" id="whatsapp">
+    <span class="eyebrow">Bagian 3</span>
+    <h2><span class="num">3</span> Menu: WhatsApp</h2>
+
+    <p>Menu ini untuk mengatur nomor WhatsApp yang digunakan di <strong>seluruh tombol "Chat WhatsApp"</strong> pada website — termasuk tombol di navbar, hero section, setiap kartu listing, modal detail, dan tombol floating di pojok kanan bawah.</p>
+
+    <table class="field-table">
+      <thead><tr><th>Field</th><th>Format</th><th>Contoh</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Nomor WhatsApp</strong></td>
+          <td>Format internasional, tanpa tanda <code>+</code>, tanpa spasi atau tanda hubung</td>
+          <td><code>6281234567890</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-warn">
+      <strong>⚠ Format Penting</strong>
+      Nomor harus diawali kode negara Indonesia <strong>62</strong>, bukan 0. Contoh: nomor <em>0812-3456-7890</em> ditulis sebagai <em>6281234567890</em>.
+    </div>
+
+    <h3>Langkah-langkah</h3>
+    <ul class="steps">
+      <li>Klik menu <strong>WhatsApp</strong> di sidebar.</li>
+      <li>Hapus nomor lama dan ketik nomor baru.</li>
+      <li>Klik tombol <strong>"Simpan"</strong> berwarna emas.</li>
+      <li>Muncul notifikasi hijau <span class="badge badge-ok">Tersimpan!</span> berarti berhasil.</li>
+    </ul>
+  </div>
+
+  <!-- ════════════
+       4. HERO WIDGETS
+  ════════════ -->
+  <div class="section" id="hero">
+    <span class="eyebrow">Bagian 4</span>
+    <h2><span class="num">4</span> Menu: Hero Widgets</h2>
+
+    <p>Hero Widgets adalah dua kartu mini yang tampil di banner utama (hero section) sebagai contoh listing unggulan. Ada dua widget: <strong>Widget 1 (Kartu Utama)</strong> yang lebih besar di depan, dan <strong>Widget 2 (Kartu Kecil)</strong> di belakang.</p>
+
+    <table class="field-table">
+      <thead><tr><th>Field</th><th>Wajib</th><th>Keterangan</th><th>Contoh</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Label / Tipe (pill)</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Teks badge kecil di pojok foto</td>
+          <td>Kost Eksklusif</td>
+        </tr>
+        <tr>
+          <td><strong>Nama Hunian</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Nama properti yang ditampilkan</td>
+          <td>Kost Premium Seminyak</td>
+        </tr>
+        <tr>
+          <td><strong>Lokasi</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Teks lokasi di bawah nama</td>
+          <td>Seminyak, Bali · 5 min ke Pantai</td>
+        </tr>
+        <tr>
+          <td><strong>Harga</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Teks harga yang ditampilkan</td>
+          <td>Rp 2.500.000</td>
+        </tr>
+        <tr>
+          <td><strong>Periode</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Satuan waktu harga</td>
+          <td>bulan / hari</td>
+        </tr>
+        <tr>
+          <td><strong>Foto Hero Card</strong></td>
+          <td><span class="opt">Opsional</span></td>
+          <td>Gambar latar kartu. Jika kosong, tampil warna default.</td>
+          <td>Upload file JPG/PNG</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Panduan Foto Hero Widget</h3>
+    <div class="card card-gold">
+      <ul>
+        <li>Ukuran ideal: <strong>rasio 2:1 landscape</strong> — minimal 680×340 px, disarankan 1200×600 px</li>
+        <li>Widget 1 tampil dengan ukuran 340×170 px · Widget 2 tampil 260×120 px (crop tengah)</li>
+        <li>Foto portrait (tinggi &gt; lebar) akan terpotong banyak di sisi atas dan bawah</li>
+        <li>Format yang didukung: <strong>JPG, PNG, WebP</strong> — maksimal <strong>5 MB</strong> per foto</li>
+      </ul>
+    </div>
+
+    <h3>Langkah-langkah</h3>
+    <ul class="steps">
+      <li>Klik menu <strong>Hero Widgets</strong> di sidebar.</li>
+      <li>Isi semua field untuk <strong>Widget 1</strong> dan <strong>Widget 2</strong>.</li>
+      <li>Untuk upload foto, klik kotak dengan ikon <strong>+</strong> dan pilih file dari komputer.</li>
+      <li>Tunggu proses upload selesai (indikator "Uploading…" akan hilang).</li>
+      <li>Klik <strong>"Simpan Perubahan Hero"</strong> di bagian bawah.</li>
+    </ul>
+  </div>
+
+  <!-- ════════════
+       5. LISTING
+  ════════════ -->
+  <div class="section section-break" id="listing">
+    <span class="eyebrow">Bagian 5</span>
+    <h2><span class="num">5</span> Menu: Listing Hunian</h2>
+
+    <p>Menu ini adalah yang paling sering digunakan. Di sini Anda bisa menambah, mengedit, dan menghapus listing properti yang tampil di bagian <strong>Unit</strong> pada website.</p>
+
+    <!-- 5.1 Tambah Listing -->
+    <h3>5.1 — Menambah Listing Baru</h3>
+    <ul class="steps">
+      <li>Klik menu <strong>Listing Hunian</strong> di sidebar.</li>
+      <li>Klik tombol hitam <strong>"+ Tambah Listing"</strong> di pojok kanan atas.</li>
+      <li>Form baru akan muncul dengan border berwarna emas. Isi semua field yang diperlukan.</li>
+      <li>Upload foto listing (disarankan 3–6 foto).</li>
+      <li>Klik <strong>"Simpan Listing"</strong>. Listing akan langsung muncul di website.</li>
+    </ul>
+
+    <!-- Field table -->
+    <h3>5.2 — Penjelasan Field Listing</h3>
+    <table class="field-table">
+      <thead><tr><th>Field</th><th>Wajib</th><th>Keterangan</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>ID Listing</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Kode unik properti. Gunakan format: <strong>KOTA-NOMOR</strong>. Contoh: <code>DPS-001</code> (Denpasar), <code>CGG-001</code> (Canggu), <code>UBD-001</code> (Ubud). Tidak boleh ada dua listing dengan ID sama.</td>
+        </tr>
+        <tr>
+          <td><strong>Kategori</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>
+            Pilih salah satu:<br>
+            <span class="badge badge-kost">kost</span> — Kost bulanan<br>
+            <span class="badge badge-apart">apartemen</span> — Apartemen / unit sewa<br>
+            <span class="badge badge-hari">harian</span> — Sewa harian / villa
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Judul</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Nama properti yang muncul sebagai judul kartu. Contoh: <em>Kost Eksklusif Seminyak</em></td>
+        </tr>
+        <tr>
+          <td><strong>Tipe (badge)</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Label yang muncul di badge atas foto. Bisa lebih spesifik dari kategori. Contoh: <em>Kost Putri, Apartemen Studio, Villa Harian</em></td>
+        </tr>
+        <tr>
+          <td><strong>Lokasi</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Teks lokasi di bawah judul kartu. Gunakan format: <em>Area · Detail lokasi</em>. Contoh: <em>Canggu, Bali · 5 menit ke Echo Beach</em></td>
+        </tr>
+        <tr>
+          <td><strong>Harga</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Tulis dengan format rupiah lengkap. Contoh: <em>Rp 2.500.000</em> atau <em>Rp 350.000</em></td>
+        </tr>
+        <tr>
+          <td><strong>Periode</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Pilih: <em>Bulanan (bln)</em>, <em>Harian (hari)</em>, atau <em>Tahunan (thn)</em></td>
+        </tr>
+        <tr>
+          <td><strong>Fasilitas</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Daftar fasilitas dipisahkan koma. Contoh: <em>AC, WiFi, KM Dalam, Dapur Bersama, Parkir</em></td>
+        </tr>
+        <tr>
+          <td><strong>Deskripsi</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Deskripsi lengkap properti. Muncul di modal detail saat pengunjung klik tombol "Detail".</td>
+        </tr>
+        <tr>
+          <td><strong>Foto</strong></td>
+          <td><span class="req">Wajib</span></td>
+          <td>Upload 1–6 foto. Lihat panduan foto di bawah.</td>
+        </tr>
+        <tr>
+          <td><strong>Pesan WhatsApp</strong></td>
+          <td><span class="opt">Opsional</span></td>
+          <td>Pesan otomatis yang terkirim saat pengunjung klik "Chat WA". Jika kosong, sistem akan menggunakan pesan default. Format: URL-encoded teks. Contoh: <code>Halo,%20saya%20tertarik%20dengan%20Kost%20Seminyak</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 5.3 Foto -->
+    <h3>5.3 — Panduan Upload Foto Listing</h3>
+    <div class="card card-gold no-break">
+      <ul>
+        <li>Maksimal <strong>6 foto</strong> per listing</li>
+        <li>Ukuran ideal: <strong>rasio 16:9 landscape</strong> — minimal 800×450 px, disarankan 1200×675 px</li>
+        <li>Foto tampil di kartu listing (366×220 px) dan modal detail (680×300 px) — keduanya crop tengah</li>
+        <li><strong>Foto portrait</strong> (vertikal) akan terpotong banyak di sisi kiri-kanan — hindari</li>
+        <li>Format yang didukung: <strong>JPG, PNG, WebP</strong></li>
+        <li>Ukuran maksimal: <strong>5 MB per foto</strong></li>
+        <li>Urutan foto pertama = foto yang tampil di kartu listing dan sebagai foto utama modal</li>
+      </ul>
+    </div>
+
+    <div class="tip-grid">
+      <div class="tip-box">
+        <div class="tip-icon">✅</div>
+        <div class="tip-title">Foto yang Ideal</div>
+        <p>Foto landscape terang, tampak depan atau sudut kamar yang luas, 1200×675 px.</p>
+      </div>
+      <div class="tip-box">
+        <div class="tip-icon">❌</div>
+        <div class="tip-title">Hindari</div>
+        <p>Foto portrait (vertikal), gelap, buram, atau screenshot dari aplikasi lain.</p>
+      </div>
+    </div>
+
+    <!-- 5.4 Edit -->
+    <h3>5.4 — Mengedit Listing</h3>
+    <ul class="steps">
+      <li>Di daftar listing, cari listing yang ingin diedit.</li>
+      <li>Klik tombol <strong>"Edit"</strong> (outline abu-abu) di sebelah kanan listing tersebut.</li>
+      <li>Form edit akan muncul dengan data yang sudah terisi. Ubah field yang diperlukan.</li>
+      <li>Klik <strong>"Simpan Listing"</strong> untuk menyimpan perubahan, atau <strong>"Batal"</strong> untuk membatalkan.</li>
+    </ul>
+
+    <!-- 5.5 Hapus -->
+    <h3>5.5 — Menghapus Listing</h3>
+    <ul class="steps">
+      <li>Di daftar listing, cari listing yang ingin dihapus.</li>
+      <li>Klik tombol <strong>"Hapus"</strong> (outline merah).</li>
+      <li>Akan muncul konfirmasi: <em>"Hapus listing [nama]?"</em> — klik <strong>OK</strong> untuk konfirmasi.</li>
+      <li>Listing akan langsung dihapus dari website.</li>
+    </ul>
+
+    <div class="callout callout-danger">
+      <strong>🗑 Perhatian</strong>
+      Penghapusan listing bersifat permanen dan tidak bisa dibatalkan. Pastikan Anda yakin sebelum menghapus.
+    </div>
+  </div>
+
+  <!-- ════════════
+       6. FAQ
+  ════════════ -->
+  <div class="section section-break" id="faq">
+    <span class="eyebrow">Bagian 6</span>
+    <h2><span class="num">6</span> Menu: FAQ</h2>
+
+    <p>FAQ (Frequently Asked Questions) adalah daftar pertanyaan umum yang muncul di bagian bawah website. FAQ berguna untuk menjawab pertanyaan calon penyewa sebelum mereka menghubungi via WhatsApp.</p>
+
+    <h3>Menambah FAQ Baru</h3>
+    <ul class="steps">
+      <li>Klik menu <strong>FAQ</strong> di sidebar.</li>
+      <li>Klik tombol <strong>"+ Tambah FAQ"</strong>.</li>
+      <li>Isi kolom <strong>Pertanyaan</strong> — tulis seperti pertanyaan yang diajukan calon penyewa.</li>
+      <li>Isi kolom <strong>Jawaban</strong> — tulis jawaban yang lengkap dan jelas.</li>
+      <li>Klik <strong>"Simpan FAQ"</strong>.</li>
+    </ul>
+
+    <h3>Mengedit &amp; Menghapus FAQ</h3>
+    <p>Sama seperti listing — gunakan tombol <strong>Edit</strong> atau <strong>Hapus</strong> di sebelah kanan setiap FAQ.</p>
+
+    <div class="card card-gold">
+      <h3 style="margin-top:0;">Contoh FAQ yang Baik</h3>
+      <ul>
+        <li><em>"Apakah foto yang ditampilkan adalah foto asli properti?"</em></li>
+        <li><em>"Bagaimana cara mengecek ketersediaan kamar?"</em></li>
+        <li><em>"Apakah ada biaya deposit atau admin?"</em></li>
+        <li><em>"Berapa lama proses dari survey hingga check-in?"</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════
+       7. KONTAK
+  ════════════ -->
+  <div class="section" id="kontak">
+    <span class="eyebrow">Bagian 7</span>
+    <h2><span class="num">7</span> Menu: Kontak</h2>
+
+    <p>Menu ini mengatur informasi kontak yang tampil di bagian <strong>Contact</strong> di bagian bawah halaman website (bukan untuk tombol WhatsApp — nomor WA diatur di menu WhatsApp).</p>
+
+    <table class="field-table">
+      <thead><tr><th>Field</th><th>Keterangan</th><th>Contoh</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Nomor Telepon</strong></td>
+          <td>Teks nomor telepon yang ditampilkan (hanya tampilan, bukan untuk fungsi WA)</td>
+          <td>+62 812-3456-7890</td>
+        </tr>
+        <tr>
+          <td><strong>Email</strong></td>
+          <td>Alamat email bisnis</td>
+          <td>halo@partnerlivingku.id</td>
+        </tr>
+        <tr>
+          <td><strong>Cakupan Layanan</strong></td>
+          <td>Teks area layanan yang ditampilkan</td>
+          <td>Seluruh Bali</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Langkah-langkah</h3>
+    <ul class="steps">
+      <li>Klik menu <strong>Kontak</strong> di sidebar.</li>
+      <li>Perbarui field yang ingin diubah.</li>
+      <li>Klik <strong>"Simpan"</strong>.</li>
+    </ul>
+  </div>
+
+  <!-- ════════════
+       8. TESTIMONI
+  ════════════ -->
+  <div class="section section-break" id="testimoni">
+    <span class="eyebrow">Bagian 8</span>
+    <h2><span class="num">8</span> Mengelola Testimoni</h2>
+
+    <p>Testimoni dikelola langsung melalui dua cara: <strong>form di website</strong> (untuk penghuni/owner yang ingin mengirim testimoni) dan <strong>Supabase Dashboard</strong> (untuk admin yang ingin menyetujui atau menambah testimoni manual).</p>
+
+    <h3>8.1 — Testimoni dari Pengunjung Website</h3>
+    <p>Di bagian bawah section Testimoni terdapat tombol <strong>"Tambah Testimoni"</strong> (bintang emas) yang dapat diklik pengunjung untuk mengisi form testimoni. Testimoni yang dikirim akan masuk ke database dengan status <strong>menunggu persetujuan</strong> (is_approved = false) dan tidak akan muncul di website sampai disetujui.</p>
+
+    <h3>8.2 — Menyetujui Testimoni via Supabase</h3>
+    <ul class="steps">
+      <li>Buka <strong>supabase.com</strong> dan login ke akun Supabase Partner Livingku.</li>
+      <li>Masuk ke project, lalu pilih menu <strong>Table Editor</strong> di sidebar kiri.</li>
+      <li>Pilih tabel <strong>testimonials</strong>.</li>
+      <li>Cari baris testimoni yang ingin disetujui (kolom <code>is_approved</code> = false).</li>
+      <li>Klik baris tersebut, ubah kolom <code>is_approved</code> menjadi <strong>true</strong>.</li>
+      <li>Klik <strong>Save</strong>. Testimoni akan langsung muncul di website.</li>
+    </ul>
+
+    <div class="callout callout-info">
+      <strong>📋 Kolom Penting Tabel Testimoni</strong>
+      <ul style="margin-top:8px;">
+        <li><code>name</code> — Nama pengirim</li>
+        <li><code>city</code> — Kota/area</li>
+        <li><code>housing_type</code> — Tipe hunian (contoh: Kost Eksklusif, Owner · Villa 3 Unit)</li>
+        <li><code>rating</code> — Rating bintang (1–5)</li>
+        <li><code>content</code> — Isi testimoni</li>
+        <li><code>is_approved</code> — <strong>true</strong> = tampil di website, <strong>false</strong> = tersembunyi</li>
+      </ul>
+    </div>
+
+    <h3>8.3 — Menambah Testimoni Manual</h3>
+    <p>Untuk menambah testimoni langsung (misalnya dari WhatsApp atau telepon), masuk ke Supabase Table Editor → tabel testimonials, klik <strong>"Insert row"</strong>, isi semua kolom, dan set <code>is_approved</code> = <strong>true</strong>.</p>
+  </div>
+
+  <!-- ════════════
+       9. TIPS
+  ════════════ -->
+  <div class="section section-break" id="tips">
+    <span class="eyebrow">Bagian 9</span>
+    <h2><span class="num">9</span> Tips &amp; Panduan Umum</h2>
+
+    <h3>Notifikasi Simpan</h3>
+    <p>Setelah menekan tombol Simpan, akan muncul notifikasi pop-up di pojok kanan bawah layar:</p>
+    <div style="display:flex; gap:12px; margin-bottom:16px;">
+      <div style="background:#059669; color:#fff; padding:10px 18px; border-radius:8px; font-weight:700; font-size:13px;">✓ Tersimpan!</div>
+      <div style="background:#DC2626; color:#fff; padding:10px 18px; border-radius:8px; font-weight:700; font-size:13px;">✗ Gagal menyimpan</div>
+    </div>
+    <p>Jika muncul notifikasi merah, coba periksa koneksi internet dan ulangi. Jika terus gagal, hubungi pengembang.</p>
+
+    <h3>Browser yang Disarankan</h3>
+    <div class="tip-grid">
+      <div class="tip-box">
+        <div class="tip-icon">✅</div>
+        <div class="tip-title">Disarankan</div>
+        <p>Google Chrome (terbaru), Microsoft Edge, Safari (Mac/iPhone)</p>
+      </div>
+      <div class="tip-box">
+        <div class="tip-icon">⚠️</div>
+        <div class="tip-title">Kurang Disarankan</div>
+        <p>Internet Explorer, browser lama, atau browser bawaan HP yang jarang diperbarui</p>
+      </div>
+    </div>
+
+    <h3>Urutan Foto Listing</h3>
+    <p>Foto pertama yang diupload akan menjadi <strong>foto utama</strong> yang tampil di kartu listing dan sebagai gambar pertama di slider modal detail. Urutan foto tidak bisa diatur ulang setelah upload — hapus dan upload ulang jika ingin mengubah urutan.</p>
+
+    <h3>Perubahan Langsung Tampil</h3>
+    <div class="callout">
+      <strong>⚡ Real-time</strong>
+      Semua perubahan yang disimpan di Admin Panel akan <strong>langsung tampil di website</strong> tanpa perlu reload halaman atau proses tambahan. Pengunjung yang sedang membuka website perlu me-refresh halaman untuk melihat perubahan terbaru.
+    </div>
+
+    <h3>Keamanan</h3>
+    <ul>
+      <li>Jangan bagikan password admin kepada siapapun yang tidak berwenang</li>
+      <li>Selalu klik <strong>Logout</strong> setelah selesai, terutama di perangkat yang digunakan bersama</li>
+      <li>Jika curiga password bocor, hubungi pengembang untuk reset password</li>
+      <li>Admin Panel hanya untuk pengelolaan konten — tidak ada akses ke data pembayaran atau data pribadi penghuni</li>
+    </ul>
+
+    <h3>Jika Ada Masalah</h3>
+    <table class="field-table">
+      <thead><tr><th>Masalah</th><th>Solusi</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Tidak bisa login</td>
+          <td>Pastikan password benar (tidak ada spasi). Coba di browser lain.</td>
+        </tr>
+        <tr>
+          <td>Foto gagal upload</td>
+          <td>Pastikan ukuran foto &lt; 5 MB dan format JPG/PNG/WebP. Coba kompres foto terlebih dahulu.</td>
+        </tr>
+        <tr>
+          <td>Perubahan tidak tersimpan</td>
+          <td>Periksa koneksi internet. Ulangi proses simpan.</td>
+        </tr>
+        <tr>
+          <td>Website error / blank</td>
+          <td>Coba refresh halaman (Ctrl+R). Jika masih error, hubungi pengembang.</td>
+        </tr>
+        <tr>
+          <td>Listing tidak muncul di website</td>
+          <td>Pastikan sudah klik "Simpan Listing" dan muncul notifikasi hijau.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Footer -->
+  <div class="doc-footer">
+    <p><strong>Partner Livingku</strong> — Dokumen Panduan Admin Panel v1.0</p>
+    <p style="margin-top:4px;">Untuk bantuan teknis, hubungi pengembang website.</p>
+    <p style="margin-top:4px; font-size:11px;">© 2026 Partner Livingku. Dokumen ini bersifat rahasia dan hanya untuk penggunaan internal.</p>
+  </div>
+
+</div>
+
+</body>
+</html>
