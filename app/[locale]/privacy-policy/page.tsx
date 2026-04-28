@@ -8,10 +8,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   return locale === "id"
     ? {
+        metadataBase: new URL("https://partnerlivingku.id"),
         title: "Kebijakan Privasi | Partner Livingku",
         description: "Kebijakan privasi Partner Livingku — bagaimana kami mengumpulkan, menggunakan, dan melindungi data pribadi Anda.",
       }
     : {
+        metadataBase: new URL("https://partnerlivingku.id"),
         title: "Privacy Policy | Partner Livingku",
         description: "Partner Livingku privacy policy — how we collect, use, and protect your personal data.",
       };

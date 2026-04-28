@@ -8,10 +8,12 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const { locale } = await params;
   return locale === "id"
     ? {
+        metadataBase: new URL("https://partnerlivingku.id"),
         title: "Syarat & Ketentuan | Partner Livingku",
         description: "Syarat dan ketentuan penggunaan layanan Partner Livingku — direktori kost dan apartemen terpercaya di Indonesia.",
       }
     : {
+        metadataBase: new URL("https://partnerlivingku.id"),
         title: "Terms & Conditions | Partner Livingku",
         description: "Terms and conditions for using Partner Livingku — Indonesia's trusted co-living and apartment directory.",
       };
