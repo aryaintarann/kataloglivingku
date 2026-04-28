@@ -163,25 +163,35 @@ p { margin: 0; }
 
 .nav-cta { display: flex; align-items: center; gap: 12px; }
 
-.lang-btn {
+.lang-toggle {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 8px 14px;
+  gap: 2px;
+  padding: 3px;
   border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: transparent;
-  color: var(--ink-2);
-  font-size: .88rem;
-  font-weight: 600;
-  font-family: var(--mono);
-  letter-spacing: .06em;
+  border: 1.5px solid var(--line-strong);
+  background: var(--surface);
   cursor: pointer;
-  transition: background .2s, color .2s, border-color .2s;
   flex-shrink: 0;
+  transition: border-color .2s;
 }
-.lang-btn:hover { background: var(--surface); color: var(--primary); border-color: var(--primary); }
-.lang-btn:disabled { opacity: .5; cursor: wait; }
+.lang-toggle:hover { border-color: var(--primary); }
+.lang-toggle:disabled { cursor: wait; }
+.lang-opt {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: .78rem;
+  font-weight: 700;
+  font-family: var(--mono);
+  letter-spacing: .08em;
+  color: var(--muted);
+  transition: background .2s, color .2s;
+  line-height: 1;
+}
+.lang-opt.active {
+  background: var(--primary);
+  color: #fff;
+}
 
 /* =========================================================
    BUTTONS
@@ -1752,7 +1762,7 @@ footer .legal .links { display: flex; gap: 24px; }
   .modal-content { padding: 22px 22px 28px; }
   .modal-title { font-size: 1.35rem; }
   .modal-actions .btn { min-width: 0; }
-  .nav-links, .nav-cta .btn-wa { display: none; }
+  .nav-links, .nav-cta .btn-wa, .lang-toggle { display: none; }
   .hamburger { display: flex; }
   .city-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
   .city-card { height: 220px; }
