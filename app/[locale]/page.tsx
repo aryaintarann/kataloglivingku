@@ -3,7 +3,6 @@ import { createServerClient } from "@/lib/supabase";
 import { translateToEn, translateArrayToEn } from "@/lib/translate";
 import ClientInteractions from "@/components/ClientInteractions";
 import TestimonialModal from "@/components/TestimonialModal";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -292,7 +291,14 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
             </ul>
           </nav>
           <div className="nav-cta">
-            <LanguageSwitcher />
+            <a
+              href={locale === "id" ? "/en" : "/"}
+              className="lang-toggle"
+              aria-label={locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
+            >
+              <span className={`lang-opt${locale === "id" ? " active" : ""}`}>ID</span>
+              <span className={`lang-opt${locale === "en" ? " active" : ""}`}>EN</span>
+            </a>
             <a href={WA_DEFAULT} className="btn btn-wa" target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp">
               <WhatsAppIcon size={16} />
               Chat WhatsApp
@@ -315,6 +321,13 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <a href={WA_BASE} className="btn btn-wa" target="_blank" rel="noopener noreferrer">
           <WhatsAppIcon size={16} />
           Chat WhatsApp
+        </a>
+        <a
+          href={locale === "id" ? "/en" : "/"}
+          className="drawer-lang"
+          aria-label={locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
+        >
+          🌐 {locale === "id" ? "Switch to English" : "Ganti ke Bahasa Indonesia"}
         </a>
       </aside>
 

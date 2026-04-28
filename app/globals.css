@@ -283,6 +283,13 @@ p { margin: 0; }
 }
 .drawer a:hover { background: var(--surface); }
 .drawer .btn-wa { margin-top: 18px; justify-content: center; }
+.drawer-lang {
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 20px; font-size: .93rem; font-weight: 600;
+  color: var(--muted); border-top: 1px solid var(--line);
+  margin-top: 8px;
+}
+.drawer-lang:hover { background: var(--surface); color: var(--primary); }
 .scrim {
   position: fixed;
   inset: 0;
