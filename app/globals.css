@@ -1762,7 +1762,7 @@ footer .legal .links { display: flex; gap: 24px; }
   .modal-content { padding: 22px 22px 28px; }
   .modal-title { font-size: 1.35rem; }
   .modal-actions .btn { min-width: 0; }
-  .nav-links, .nav-cta .btn-wa, .lang-toggle { display: none; }
+  .nav-links, .nav-cta .btn-wa { display: none; }
   .hamburger { display: flex; }
   .city-grid { grid-template-columns: repeat(2,1fr); gap: 14px; }
   .city-card { height: 220px; }
